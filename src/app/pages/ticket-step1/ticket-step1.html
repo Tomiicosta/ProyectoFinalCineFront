@@ -1,0 +1,15 @@
+<main>
+  <section class="galeria">
+    <ul class="lista-pelis">
+        @for (peli of peliculas; track $index) {
+            <li class="item" #item>
+                <img [src]="peli.img" [alt]="peli.titulo">
+                <h3>{{ peli.titulo }}</h3>
+            </li>
+        }
+
+      <button id="prev" (click)="prevSlide()"><</button>
+      <button id="next" (click)="nextSlide()">></button>
+    </ul>
+  </section>
+</main>
