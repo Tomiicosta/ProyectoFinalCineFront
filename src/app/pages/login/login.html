@@ -1,1 +1,27 @@
-<p>login works!</p>
+
+<div class="container">
+    <h2>Iniciar sesión</h2>
+  
+    <form [formGroup]="formLogin" (ngSubmit)="onSubmit()" class="formLogin">
+  
+      <div class="fields">
+        <fieldset class="UserField">
+          <label for="User">Usuario</label>
+          <input type="text" id="User" formControlName="User">
+        </fieldset>
+  
+        <fieldset class="PasswordField">
+          <label for="Password">Contraseña</label>
+          <input type="password" id="Password" formControlName="Password">
+        </fieldset>
+      </div>
+  
+      <div>
+        <p>¿No tienes una cuenta?</p>
+        <p>Regístrate</p>
+      </div>
+  
+      <button type="submit">Iniciar sesión</button>
+    </form>
+  </div>
+  

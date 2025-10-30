@@ -5,8 +5,10 @@
     box-sizing: border-box;
 }
 
-body {
-    min-height: 100dvh;
+
+
+main{
+  min-height: 100dvh;
   margin: 0;
   background-color: #000;
   background-image:
@@ -29,5 +31,4 @@ body {
   background-size: cover, cover, cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-    
 }

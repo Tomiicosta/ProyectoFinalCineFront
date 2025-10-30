@@ -1,0 +1,26 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #fff9f9;
+    border-radius: 32px ;
+    align-items: center;
+    width: 550px;
+    height: fit-content;
+    gap: 48px;
+    padding: 64px 48px;
+}
+
+.formLogin{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+}
+
+.container h2{
+    font-size: 32px;
+    color: white;
+}
+.container p{
+    color: white;
+}
