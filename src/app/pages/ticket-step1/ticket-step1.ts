@@ -55,7 +55,7 @@ export class TicketStep1 implements AfterViewInit {
         // ESTILOS PARA ELEMENTOS VISIBLES (offset: -2, -1, 0, 1, 2)
         const translateX = 120 * offset;
         const scale = 1 - 0.1 * stt;
-        const opacity = stt === 0 ? 1 : stt === 1 ? 0.3 : 0.075;
+        const opacity = stt === 0 ? 1 : stt === 1 ? 0.6 : 0.2;
         const rotateY = offset > 0 ? -4 : offset < 0 ? 4 : 0;
 
         el.style.transition = 'transform 0.4s ease-in-out, opacity 0.4s ease-in-out, filter 0.4s ease-in-out'; // ¡Añadir transición!
