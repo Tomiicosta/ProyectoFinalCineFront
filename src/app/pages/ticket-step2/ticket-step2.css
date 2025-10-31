@@ -1,0 +1,140 @@
+main {
+  padding-top: 125px;
+}
+
+.ticket-info {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  gap: 3em;
+
+  color: #fff;
+  width: 100%;
+  border-bottom: 2px solid #fff;
+  padding: 5px 25px;
+
+  font-size: 1.4rem;
+}
+
+.color {
+  color: rgb(255, 228, 78);
+}
+
+.step {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 20px;
+
+  margin-bottom: -2px;
+
+  font-size: 2.5rem;
+  font-weight: lighter;
+}
+
+.step-num {
+  margin-bottom: -8px;
+
+  font-size: 4rem;
+  font-weight: normal;
+}
+
+/* FUNCIONES -------------------------------------------------------------------- */
+
+.funciones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  margin: 3em 3em 0 3em;
+}
+
+.div-img img {
+  height: 350px;
+  border-radius: 10px;
+}
+
+.div-tabla {
+  height: 400px;
+  
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 1em;
+}
+
+.div-funciones {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+
+  margin-top: 1em;
+}
+
+.div-dias {
+  padding: 0 1em;
+}
+
+.dias {
+  padding: 1em 2em;
+}
+
+.div-horarios {
+  padding: 0 1em;
+  border-left: 1px solid #000000;
+}
+
+.horarios {
+  padding: 1em 2em;
+}
+
+/* BANNER -------------------------------------------------------------------- */
+
+.banner {
+  width: 100%;
+  height: 125px;
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 15px;
+}
+
+.btns-ticket {
+  position: absolute;
+  right: 75px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#btn-step {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 50px;
+  background-color: rgb(255, 228, 78);
+  color: #000000;
+
+  font-weight: 700;
+  font-size: 1.1rem;
+
+  transition: all 0.2s;
+}
+
+#btn-step:hover {
+  background-color: rgb(255, 233, 108);
+  color: #221c29;
+  box-shadow: 0 0 20px rgba(255, 228, 78, 0.85);
+}
+
+#btn-back {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 25px;
+  background-color: rgb(255, 255, 255);
+  color: #000000;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
