@@ -1,5 +1,5 @@
-
-<div class="container">
+<section class="loginPage">
+  <div class="container">
     <h2>Iniciar sesión</h2>
   
     <form [formGroup]="formLogin" (ngSubmit)="onSubmit()" class="formLogin">
@@ -7,21 +7,22 @@
       <div class="fields">
         <fieldset class="UserField">
           <label for="User">Usuario</label>
-          <input type="text" id="User" formControlName="User">
+          <input type="text" id="User" formControlName="User" placeholder="Ingrese su usuario">
         </fieldset>
   
         <fieldset class="PasswordField">
           <label for="Password">Contraseña</label>
-          <input type="password" id="Password" formControlName="Password">
+          <input type="password" id="Password" formControlName="Password" placeholder="ingrese su contraseña">
         </fieldset>
       </div>
   
-      <div>
+      <div class="registerText">
         <p>¿No tienes una cuenta?</p>
-        <p>Regístrate</p>
+        <p class="registrate"><a routerLink="/register" class="registrate">Regístrate</a></p>
       </div>
   
-      <button type="submit">Iniciar sesión</button>
+      <button class="btnLogin" type="submit">Iniciar sesión</button>
     </form>
   </div>
   
+</section>
