@@ -1,13 +1,9 @@
-main {
-  margin-top: 125px;
-}
 
 .ticket-info {
   display: flex;
   justify-content: end;
   align-items: end;
   gap: 3em;
-
   color: #fff;
   width: 100%;
   border-bottom: 2px solid #fff;
