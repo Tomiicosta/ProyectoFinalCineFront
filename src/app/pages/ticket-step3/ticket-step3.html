@@ -1,1 +1,40 @@
-<p>ticket-step3 works!</p>
+<main>
+    <section class="ticket-info font-open-sans">
+        <h1 class="info"><span class="color">SELECCIONE</span> SUS <span class="color">BUTACAS</span></h1>
+        <h1 class="step">PASO <span class="step-num">3</span></h1>
+    </section>
+
+    <section class="butacas">
+        <!--@if (peliculaSeleccionada$ | async; as peli) {-->
+        <div class="div-info">
+            INFO PELICULA
+        </div>
+        <div class="div-sala">
+            <h2>Pantalla</h2>
+
+            @for (fila of mapaButacas; track $index) {
+            <div class="fila-butacas">
+                <span class="etiqueta-fila">{{ fila[0].fila }}</span>
+
+                @for (butaca of fila; track butaca.id) {
+                <div class="butaca" [ngClass]="{
+                                'ocupada': butaca.estado === 'ocupada',
+                                'seleccionada': butaca.estado === 'seleccionada',
+                                'disponible-hover': butaca.hover && butaca.estado === 'disponible'
+                            }" (click)="seleccionarButaca(butaca)" (mouseenter)="onMouseEnter(butaca)"
+                    (mouseleave)="onMouseLeave(butaca)">
+                </div>
+                }
+            </div>
+            }
+        </div>
+    <!--}-->
+    </section>
+
+    <aside class="banner">
+        <div class="btns-ticket">
+            <button id="btn-step" class=" font-inter" (click)="confirmarPaso3()">SIGUIENTE</button>
+            <button id="btn-back" class=" font-inter" (click)="volverPaso2()">ATRÁS</button>
+        </div>
+    </aside>
+</main>

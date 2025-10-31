@@ -47,9 +47,13 @@ export class TicketStep1 implements OnInit, AfterViewInit {
 
   // Boton para seleccionar pelicula y pasar al paso 2
   confirmarPaso1(peliculaId: number | undefined) {
-    // Es crucial validar que el ID exista antes de navegar
-    if (peliculaId) {
-      // Llama al Router para navegar al Step 2 con el ID
+    // 1. Encontrar la película (o simplemente el ID)
+    const peli = this.peliculas.find(p => p.id === peliculaId);
+
+    // 2. Usar el servicio para establecer la película como la "actual"
+    if (peli) {
+      this.ticketService.setPeliculaActual(peli);
+      // 3. Navegar al paso 2
       this.router.navigate(['/ticket/step2', peliculaId]);
     } else {
       console.error('No hay película seleccionada para navegar.');
@@ -58,7 +62,7 @@ export class TicketStep1 implements OnInit, AfterViewInit {
 
   // Boton para volver a Home
   volverHome() {
-      this.router.navigate(['/']);
+    this.router.navigate(['/']);
   }
 
   cargarGaleria() {
@@ -112,12 +116,16 @@ export class TicketStep1 implements OnInit, AfterViewInit {
   nextSlide() {
     this.cardActive = (this.cardActive + 1) % this.peliculas.length;
     this.cargarGaleria();
+    // Cargar la película seleccionada
+    this.selectedPelicula = this.peliculas[this.cardActive];
   }
 
   // Boton para pasar a la tarjeta anterior
   prevSlide() {
     this.cardActive = (this.cardActive - 1 + this.peliculas.length) % this.peliculas.length;
     this.cargarGaleria();
+    // Cargar la película seleccionada
+    this.selectedPelicula = this.peliculas[this.cardActive];
   }
 
   // Funcion que actualiza la informacion del banner con la pelicula seleccionada

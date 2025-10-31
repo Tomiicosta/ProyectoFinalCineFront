@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Pelicula } from '../models/pelicula';
-
-interface Compra {
-  movieId: number;
-  fecha: string;
-  hora: string;
-  butacas: { fila: number, columna: number }[];
-}
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Compra } from '../models/compra';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
+
+  // BehaviorSubject para almacenar la película seleccionada actualmente.
+  // Se inicializa a 'undefined' (o 'null' si es preferido)
+  private peliculaActualSubject = new BehaviorSubject<Pelicula | undefined>(undefined);
+  
+  // Observable público que los componentes pueden suscribir
+  peliculaActual$: Observable<Pelicula | undefined> = this.peliculaActualSubject.asObservable();
 
   private compraActual: Compra | null = null;
 
@@ -33,6 +35,23 @@ export class TicketService {
 
   getCompra(): Compra | null {
     return this.compraActual;
+  }
+
+  // Método ÚNICO para establecer la película seleccionada
+  // Usado principalmente por TicketStep1
+  setPeliculaActual(pelicula: Pelicula | undefined): void {
+    this.peliculaActualSubject.next(pelicula);
+  }
+
+  // Método para encontrar y establecer la película (usado en Step 2)
+  loadPeliculaActual(id: number): void {
+    const pelicula = this.peliculas.find(p => p.id === id);
+    this.setPeliculaActual(pelicula);
+  }
+
+  // Método que solo necesitas si no usas el Observable (pero es útil)
+  getPeliculaSnapshot(): Pelicula | undefined {
+    return this.peliculaActualSubject.getValue();
   }
 
   getPeliculas(): Pelicula[] {

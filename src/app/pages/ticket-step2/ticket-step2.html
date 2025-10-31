@@ -1,17 +1,42 @@
 <main>
-  <section class="ticket-info">
-    <h1 class="info"><span class="color">ELIGE</span> EL <span class="color">DÍA</span> Y <span class="color">HORARIO</span></h1>
+  <section class="ticket-info font-open-sans">
+    <h1 class="info"><span class="color">ELIGE</span> EL <span class="color">DÍA</span> Y <span
+        class="color">HORARIO</span></h1>
     <h1 class="step">PASO <span class="step-num">2</span></h1>
   </section>
-  <section class="funciones">
 
-  </section>
-  <aside class="banner">
-    <div class="about-peli">
+  <section class="funciones">
+    @if (peliculaSeleccionada$ | async; as peli) {
+    <div class="div-img">
+      <img [src]="peli.img" [alt]="peli.titulo">
     </div>
+    <div class="div-tabla">
+      <div class="titulo-peli">
+        <h2>{{ peli.titulo }}</h2>
+      </div>
+      <div class="div-funciones">
+        <div class="div-dias">
+          <h3>Elige el DÍA</h3>
+          <div class="dias">
+            [Días disponibles de función]
+          </div>
+        </div>
+
+        <div class="div-horarios">
+          <h3>HORARIOS</h3>
+          <div class="horarios">
+            [Horarios disponibles]
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </section>
+
+  <aside class="banner">
     <div class="btns-ticket">
-      <button id="btn-step2" class="" (click)="confirmarPaso2()">SIGUIENTE</button>
-      <button id="btn-back" class="">VOLVER</button>
+      <button id="btn-step" class=" font-inter" (click)="confirmarPaso2()">SIGUIENTE</button>
+      <button id="btn-back" class=" font-inter"  (click)="volverPaso1()">ATRÁS</button>
     </div>
   </aside>
 </main>
