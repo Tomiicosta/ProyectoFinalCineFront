@@ -1,0 +1,92 @@
+main {
+  padding-top: 125px;
+}
+
+.ticket-info {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  gap: 3em;
+
+  color: #fff;
+  width: 100%;
+  border-bottom: 2px solid #fff;
+  padding: 5px 25px;
+
+  font-size: 1.25rem;
+}
+
+.color {
+  color: rgb(255, 228, 78);
+}
+
+.info {
+  font-family: monospace;
+}
+
+.step {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 20px;
+
+  font-family: monospace;
+
+}
+
+.step-num {
+  font-size: 4rem;
+  margin-bottom: -10px;
+}
+
+
+.banner {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 50px;
+
+  font-family: monospace;
+
+}
+
+.btns-ticket {
+  position: absolute;
+  right: 100px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#btn-step2 {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 50px;
+  background-color: rgb(255, 228, 78);
+  color: #000000;
+  font-weight: 900;
+  font-size: 1rem;
+
+  transition: all 0.2s;
+}
+
+#btn-step2:hover {
+  background-color: rgb(255, 233, 108);
+  color: #221c29;
+  box-shadow: 0 0 20px rgba(255, 228, 78, 0.85);
+}
+
+#btn-back {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 25px;
+  background-color: rgb(255, 255, 255);
+  color: #000000;
+  font-weight: 900;
+  font-size: 0.75rem;
+}
