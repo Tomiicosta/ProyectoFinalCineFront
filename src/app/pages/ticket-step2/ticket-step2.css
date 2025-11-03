@@ -56,7 +56,7 @@ main {
 
 .div-tabla {
   height: 400px;
-  
+
   background-color: #fff;
   border-radius: 5px;
   padding: 1em;
@@ -104,11 +104,15 @@ main {
   right: 75px;
 
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   gap: 5px;
 }
 
 #btn-step {
+  width: 225px;
+
   cursor: pointer;
   border: none;
   border-radius: 5px;
@@ -129,6 +133,7 @@ main {
 }
 
 #btn-back {
+  width: 225px;
   cursor: pointer;
   border: none;
   border-radius: 5px;

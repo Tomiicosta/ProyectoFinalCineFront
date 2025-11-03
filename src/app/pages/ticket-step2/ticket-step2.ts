@@ -15,7 +15,7 @@ export class TicketStep2 implements OnInit, AfterViewInit {
 
   movieId: number | undefined;
 
-  peliculaSeleccionada$!: Observable<Pelicula | undefined>;
+  peliculaSeleccionada: Pelicula | undefined;
 
   fechaSeleccionada: string = '2025-11-15'; // Ejemplo
   horaSeleccionada: string = '20:00';      // Ejemplo
@@ -32,15 +32,15 @@ export class TicketStep2 implements OnInit, AfterViewInit {
       this.movieId = +params['id'];
       
       if (this.movieId) {
-          // 3. Pide al servicio que busque y almacene la peli
-          this.ticketService.loadPeliculaActual(this.movieId); 
-          
-          // Llamar a la función que cargaría la fecha y hora
-          this.mostrarFunciones();
+        // 3. Pide al servicio que busque y almacene la peli
+        this.ticketService.loadPeliculaActual(this.movieId); 
+        
+        // Llamar a la función que cargaría la fecha y hora
+        this.mostrarFunciones();
 
-        } else {
-          console.error('No hay película seleccionada para navegar.');
-        }
+      } else {
+        console.error('No hay película seleccionada para navegar.');
+      }
     });
   }
 
@@ -49,7 +49,7 @@ export class TicketStep2 implements OnInit, AfterViewInit {
     // Ejecuta la lógica en el siguiente ciclo de detección de cambios para asegurar que @ViewChildren esté listo
     setTimeout(() => {
       // 4. Asignar el observable público del servicio a la propiedad local
-      this.peliculaSeleccionada$ = this.ticketService.peliculaActual$;
+      this.peliculaSeleccionada = this.ticketService.getPeliculaSnapshot();
     }, 0);
   }
 
