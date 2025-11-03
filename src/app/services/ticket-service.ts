@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Pelicula } from '../models/pelicula';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Compra } from '../models/compra';
@@ -8,14 +8,11 @@ import { Compra } from '../models/compra';
 })
 export class TicketService {
 
-  // BehaviorSubject para almacenar la película seleccionada actualmente.
-  // Se inicializa a 'undefined' (o 'null' si es preferido)
-  private peliculaActualSubject = new BehaviorSubject<Pelicula | undefined>(undefined);
-  
-  // Observable público que los componentes pueden suscribir
-  peliculaActual$: Observable<Pelicula | undefined> = this.peliculaActualSubject.asObservable();
+  private peliculaActual = signal<Pelicula | undefined>(undefined);
+  private compraActual = signal<Compra | undefined>(undefined);
 
-  private compraActual: Compra | null = null;
+  peliculaSeleccionada = this.peliculaActual.asReadonly();
+  compra = this.compraActual.asReadonly();
 
   // Lista de peliculas (TRAER DESDE LA API PELICULAS)
   private peliculas: Pelicula[] = [
@@ -29,29 +26,27 @@ export class TicketService {
     { id: 8, titulo: 'Good Time', img: 'https://m.media-amazon.com/images/M/MV5BMTg4MjQ1YjktMWUyMi00N2NjLWFiMWMtOTAyOWVjZDM2NGY2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg', descripcion: 'Un hombre se lanza en una odisea a través del inframundo de Nueva York para liberar a su hermano. Un hombre se lanza en una odisea a través del inframundo de Nueva York para liberar a su hermano. Un hombre se lanza en una odisea a través del inframundo de Nueva York para liberar a su hermano. ' }
   ];
 
-  setCompra(data: Compra) {
-    this.compraActual = data;
+  setCompra(compra: Compra): void {
+    this.compraActual.set(compra);
+    console.log('Compra guardada:', compra);
   }
 
-  getCompra(): Compra | null {
-    return this.compraActual;
+  getCompraSnapshot(): Compra | undefined {
+    return this.compraActual();
   }
 
   // Método ÚNICO para establecer la película seleccionada
-  // Usado principalmente por TicketStep1
   setPeliculaActual(pelicula: Pelicula | undefined): void {
-    this.peliculaActualSubject.next(pelicula);
+    this.peliculaActual.set(pelicula);
+  }
+  
+  loadPeliculaActual(movieId: number): void {
+    const mockMovie = this.peliculas.find(p => p.id === movieId);
+    this.peliculaActual.set(mockMovie);
   }
 
-  // Método para encontrar y establecer la película (usado en Step 2)
-  loadPeliculaActual(id: number): void {
-    const pelicula = this.peliculas.find(p => p.id === id);
-    this.setPeliculaActual(pelicula);
-  }
-
-  // Método que solo necesitas si no usas el Observable (pero es útil)
   getPeliculaSnapshot(): Pelicula | undefined {
-    return this.peliculaActualSubject.getValue();
+    return this.peliculaActual();
   }
 
   getPeliculas(): Pelicula[] {

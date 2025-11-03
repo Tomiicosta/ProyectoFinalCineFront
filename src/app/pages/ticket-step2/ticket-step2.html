@@ -6,7 +6,7 @@
   </section>
 
   <section class="funciones">
-    @if (peliculaSeleccionada$ | async; as peli) {
+    @if (peliculaSeleccionada; as peli) {
     <div class="div-img">
       <img [src]="peli.img" [alt]="peli.titulo">
     </div>
