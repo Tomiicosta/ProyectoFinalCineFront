@@ -1,14 +1,14 @@
 <section class="registerPage">
     <div class="container">
         <h2>Registro</h2>
-        <form class = "registerForm">
-            <input type="text" placeholder="🧑 Ingrese su nombre">
-            <input type="text" placeholder="🧑 Ingrese su apellido">
-            <input type="text" placeholder="📎 Ingrese su nombre de usuario">
-            <input type="text" placeholder="✉️ Ingrese su email">
-            <input type="text"placeholder="🔗 Ingrese su contraseña" >
+        <form class = "registerForm" [formGroup]="formRegister" (ngSubmit)="onSubmit()">
+            <input type="text" id="Name" formControlName="name" placeholder="🧑 Ingrese su nombre">
+            <input type="text" id="Surname" formControlName="surname" placeholder="🧑 Ingrese su apellido">
+            <input type="text" id="Username" formControlName="username" placeholder="📎 Ingrese su nombre de usuario">
+            <input type="text" id="Email" formControlName="email" placeholder="✉️ Ingrese su email">
+            <input type="text" id="Password" formControlName="password" placeholder="🔗 Ingrese su contraseña" >
 
-            <button class="btnRegister">Registrarse</button>
+            <button class="btnRegister" type="submit">Registrarse</button>
         </form>
     </div>
 

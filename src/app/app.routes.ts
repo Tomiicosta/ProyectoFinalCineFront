@@ -8,9 +8,9 @@ import { Register } from './pages/register/register';
 import { AuthGuard } from './guards/AuthGuard';
 
 export const routes: Routes = [
-    {path: '', component: Home, canActivate: [AuthGuard]},
-    {path: 'billboard', component: Home, canActivate: [AuthGuard]},
-    {path: 'cinemas', component: Home, canActivate: [AuthGuard]},
+    {path: '', component: Home},
+    {path: 'billboard', component: Home},
+    {path: 'cinemas', component: Home /*canActivate: [AuthGuard]*/},
     {path: 'login', component: Login},
     {path: 'register', component: Register},
     {path: 'ticket/step1', component: TicketStep1},
