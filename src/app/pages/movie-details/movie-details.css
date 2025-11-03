@@ -1,0 +1,62 @@
+.section-img {
+    /* Es crucial para que .marco-peli (position: absolute)
+       se posicione respecto a este contenedor. */
+    position: relative;
+    /* Define un tamaño para el área de la imagen, ajusta según necesites */
+    width: 400px; 
+    height: 600px;
+    margin: 20px;
+}
+
+/* --- ESTILO DE LA IMAGEN DE LA PELÍCULA (Base) --- */
+.img-peli {
+    /* Debe estar en la capa inferior */
+    z-index: 1;
+    /* Asegura que ocupe todo el espacio del contenedor padre */
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Opcional: para que se vea bien si es más grande o pequeña */
+    overflow: hidden; 
+}
+
+.img-peli img {
+    width: 100%;
+    height: 100%;
+    /* Ajusta la imagen para cubrir el div sin distorsión */
+    object-fit: cover; 
+    display: block;
+}
+
+/* --- ESTILO DEL MARCO PNG (Superpuesto) --- */
+.marco-peli {
+    /* Colocación encima de todo */
+    position: absolute;
+    z-index: 10; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Asegura que el div .marco-peli no se interponga con el cursor,
+       aunque la sombra seguiría visible. */
+    pointer-events: none; 
+}
+
+.marco-peli img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Para que la imagen del marco no se corte ni distorsione */
+    display: block;
+    
+    /* ¡La clave de tu requerimiento! */
+    /* La sombra se aplica a la imagen PNG. Gracias a la transparencia,
+       solo el borde visible del marco proyectará la sombra sobre la imagen de la película. */
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8)); 
+    
+    /* Opcional: También podrías usar box-shadow si el PNG tiene un borde sólido que
+       quieres que proyecte la sombra, pero 'filter: drop-shadow' es lo ideal para
+       imágenes PNG con formas irregulares o transparencia. */
+    /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.8); */
+}
