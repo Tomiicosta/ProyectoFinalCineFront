@@ -1,3 +1,12 @@
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    padding: 1em;
+
+}
+
 .section-img {
     /* Es crucial para que .marco-peli (position: absolute)
        se posicione respecto a este contenedor. */
@@ -9,7 +18,7 @@
 }
 
 /* --- ESTILO DE LA IMAGEN DE LA PELÍCULA (Base) --- */
-.img-peli {
+.div-img {
     /* Debe estar en la capa inferior */
     z-index: 1;
     /* Asegura que ocupe todo el espacio del contenedor padre */
@@ -22,7 +31,7 @@
     overflow: hidden; 
 }
 
-.img-peli img {
+.img-peli {
     width: 100%;
     height: 100%;
     /* Ajusta la imagen para cubrir el div sin distorsión */
@@ -31,7 +40,7 @@
 }
 
 /* --- ESTILO DEL MARCO PNG (Superpuesto) --- */
-.marco-peli {
+.div-marco {
     /* Colocación encima de todo */
     position: absolute;
     z-index: 10; 
@@ -44,7 +53,7 @@
     pointer-events: none; 
 }
 
-.marco-peli img {
+.img-marco {
     width: 100%;
     height: 100%;
     object-fit: contain; /* Para que la imagen del marco no se corte ni distorsione */
@@ -59,4 +68,8 @@
        quieres que proyecte la sombra, pero 'filter: drop-shadow' es lo ideal para
        imágenes PNG con formas irregulares o transparencia. */
     /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.8); */
+}
+
+.section-details {
+    width: 800px;
 }

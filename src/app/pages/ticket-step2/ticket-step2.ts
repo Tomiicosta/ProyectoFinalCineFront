@@ -2,12 +2,10 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pelicula } from '../../models/pelicula';
 import { TicketService } from '../../services/ticket-service';
-import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-step2',
-  imports: [AsyncPipe],
+  imports: [],
   templateUrl: './ticket-step2.html',
   styleUrl: './ticket-step2.css',
 })
