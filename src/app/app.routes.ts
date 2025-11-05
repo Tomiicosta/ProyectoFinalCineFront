@@ -9,9 +9,9 @@ import { AuthGuard } from './guards/AuthGuard';
 import { MovieDetails } from './pages/movie-details/movie-details';
 
 export const routes: Routes = [
-    {path: '', component: Home/*, canActivate: [AuthGuard]*/},
-    {path: 'billboard', component: Home/*, canActivate: [AuthGuard]*/},
-    {path: 'cinemas', component: Home /*, canActivate: [AuthGuard] */},
+    {path: '', component: Home},
+    {path: 'billboard', component: Home},
+    {path: 'cinemas', component: Home /*canActivate: [AuthGuard]*/},
     {path: 'login', component: Login},
     {path: 'register', component: Register},
     {path: 'ticket/step1', component: TicketStep1},
