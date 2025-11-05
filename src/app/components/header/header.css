@@ -27,8 +27,9 @@ header{
     width:fit-content;
     margin: 0 auto;
     position: sticky;
-    top: 20px;             
-  
+    top: 20px;          
+    
+    z-index: 10; /* solucion: para mantener header por encima de todo */
 }
 
 .container {
@@ -81,6 +82,7 @@ header{
   background: rgba(255,255,255,0.10);
   transform: scale(1.07); 
 }
+
 .list a:active{
   transform: translateY(1px);
 }

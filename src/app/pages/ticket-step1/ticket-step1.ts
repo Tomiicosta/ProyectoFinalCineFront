@@ -2,6 +2,7 @@ import { Component, ElementRef, QueryList, ViewChildren, AfterViewInit, OnInit }
 import { Router } from '@angular/router';
 import { Pelicula } from '../../models/pelicula';
 import { TicketService } from '../../services/ticket-service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-step1',
@@ -25,6 +26,7 @@ export class TicketStep1 implements OnInit, AfterViewInit {
   @ViewChildren('item') items!: QueryList<ElementRef<HTMLElement>>;
 
   constructor(
+    private location: Location,
     private router: Router,
     private ticketService: TicketService
   ) { }
@@ -60,9 +62,24 @@ export class TicketStep1 implements OnInit, AfterViewInit {
     }
   }
 
-  // Boton para volver a Home
-  volverHome() {
-    this.router.navigate(['/']);
+  volverAtras(): void {
+    // El método back() simula hacer clic en el botón "Atrás" del navegador
+    this.location.back();
+  }
+
+  // Boton para ver detalles de la pelicula seleccionada
+  verDetalles(peliculaId: number | undefined) {
+    // 1. Encontrar la película (o simplemente el ID)
+    const peli = this.peliculas.find(p => p.id === peliculaId);
+
+    // 2. Usar el servicio para establecer la película como la "actual"
+    if (peli) {
+      this.ticketService.setPeliculaActual(peli);
+      // 3. Navegar a detalles de la peli
+      this.router.navigate(['/details', peliculaId]);
+    } else {
+      console.error('No hay película seleccionada para navegar.');
+    }
   }
 
   cargarGaleria() {

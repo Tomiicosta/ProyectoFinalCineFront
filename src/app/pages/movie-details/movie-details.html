@@ -1,31 +1,46 @@
 <main>
-    <section class="section-img">
-        <div class="div-marco">
-            <img class="img-marco" src="/img/details/marco_movie.png" alt="Imagen del marco png">
+    <div class="div-sections">
+        <!-- Panel de Información (INFO PELICULA) -->
+        @if (peliculaSeleccionada; as peli) {
+            <section class="section-img">
+                <div class="div-marco">
+                    <img class="img-marco" src="/img/details/marco_movie.png" alt="Imagen del marco png">
+                </div>
+                <div class="div-img">
+                    <img class="img-peli" src="{{ peli.img }}" alt="{{ peli.titulo }}">
+                </div>
+            </section>
+            <section class="section-details font-open-sans">
+                <div class="div-details">
+                    <h1 class="title-peli" title="{{ peli.titulo }}"> {{ peli.titulo }} </h1>
+                    <h3 class="genre-peli">AVENTURA - ACCION</h3>
+                    <p class="description-peli">{{ peli.descripcion }}</p>
+                </div>
+                <div class="div-funciones">
+                    <h1 class="title-function">PROYECCIONES</h1>
+                    <h4 class="age-peli">APTA PARA MAYORES DE +13</h4>
+                    <ul class="lista-funciones">
+                        <li>LUNES 14 DE JUNIO 2026</li>
+                        <li>MARTES 15 DE JUNIO 2026</li>
+                        <li>JUEVES 17 DE JUNIO 2026</li>
+                        <li>VIERNES 18 DE JUNIO 2026</li>
+                    </ul>
+                </div>
+            </section>
+        }
+    </div>
+
+    <aside class="banner">
+        <div class="btns-ticket font-inter">
+            <button id="btn-step" class=" " (click)="comprarEntrada()">COMPRAR ENTRADA</button>
+            <button id="btn-back" class=" " (click)="volverAtras()">ATRÁS</button>
+            
+            <!-- DIV DE ERRORES -->
+            @if (errorMessage()) {
+                <div class="div-error">
+                    {{ errorMessage() }}
+                </div>
+            }
         </div>
-        <div class="div-img">
-            <img class="img-peli" src="https://m.media-amazon.com/images/I/913O+HYQbKL._AC_UF894,1000_QL80_.jpg" alt="Imagen de la pelicula">
-        </div>
-    </section>
-    <section class="section-details">
-        <div class="div-details">
-            <h1>Tomb Raider, la pelicula</h1>
-            <h2>AVENTURA - ACCION</h2>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Culpa magnam ipsum delectus, sint vitae nostrum quis perferendis possimus odit maxime rerum recusandae ullam qui deserunt voluptates esse molestiae maiores! Libero.
-            Non quos earum deserunt deleniti, error magnam nulla id veniam animi ipsa hic magni ducimus possimus eaque. Voluptas obcaecati commodi animi harum in, minus cupiditate dicta, consectetur non aliquam ex!
-            Quod perspiciatis nesciunt ab enim sed laborum quos debitis ad doloremque harum, veritatis deserunt dicta ea id tenetur, explicabo a labore aspernatur quis dolorem nisi pariatur fugiat. Ex, harum dolore!
-            Doloremque quas doloribus aliquam delectus ducimus non molestias, sequi laborum, magni atque incidunt exercitationem assumenda omnis veritatis repudiandae deserunt reprehenderit pariatur tempora ipsam. Facere ab voluptas, iste qui unde eius?</p>
-            <p>Actores: Lara Croft, Ryan Goslin, Paul Walker</p>
-        </div>
-        <div class="div-funciones">
-            <h1>PROYECCIONES</h1>
-            <h2>APTA PARA MAYORES DE +13</h2>
-            <ul class="lista-funciones">
-                <li>LUNES 14 DE JUNIO 2026</li>
-                <li>MARTES 15 DE JUNIO 2026</li>
-                <li>JUEVES 17 DE JUNIO 2026</li>
-                <li>VIERNES 18 DE JUNIO 2026</li>
-            </ul>
-        </div>
-    </section>
+    </aside>
 </main>

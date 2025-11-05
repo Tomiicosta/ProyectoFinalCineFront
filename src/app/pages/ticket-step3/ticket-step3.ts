@@ -4,6 +4,7 @@ import { TicketService } from '../../services/ticket-service';
 import { NgClass } from '@angular/common';
 import { Pelicula } from '../../models/pelicula';
 import { Butaca } from '../../models/butaca';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -162,6 +163,7 @@ export class TicketStep3 implements OnInit {
   hora: string | null = null;
 
   constructor(
+    private location: Location,
     private route: ActivatedRoute,
     private router: Router,
     private ticketService: TicketService
@@ -217,13 +219,9 @@ export class TicketStep3 implements OnInit {
     this.router.navigate(['/ticket/step4']);
   }
 
-  volverPaso2() {
-    // Para obtener el ID para la navegación, puedes usar el snapshot del servicio:
-    const peli = this.ticketService.getPeliculaSnapshot();
-
-    if (!peli) return;
-
-    this.router.navigate(['/ticket/step2', peli.id]);
+  volverAtras(): void {
+    // El método back() simula hacer clic en el botón "Atrás" del navegador
+    this.location.back();
   }
 
   listaButacasSeleccionadas = computed(() => 

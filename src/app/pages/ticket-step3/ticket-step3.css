@@ -43,7 +43,7 @@ main {
 
 .ticket-section {
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     gap: 2em;
     margin: 3em 3em 0 3em;

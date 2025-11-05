@@ -2,9 +2,17 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
-    padding: 1em;
 
+    flex-direction: column;
+
+}
+
+.div-sections {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+    padding: 1em;
 }
 
 .section-img {
@@ -12,9 +20,8 @@ main {
        se posicione respecto a este contenedor. */
     position: relative;
     /* Define un tamaño para el área de la imagen, ajusta según necesites */
-    width: 400px; 
-    height: 600px;
-    margin: 20px;
+    width: 300px;
+    height: 395px;
 }
 
 /* --- ESTILO DE LA IMAGEN DE LA PELÍCULA (Base) --- */
@@ -22,20 +29,24 @@ main {
     /* Debe estar en la capa inferior */
     z-index: 1;
     /* Asegura que ocupe todo el espacio del contenedor padre */
-    position: absolute; 
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     /* Opcional: para que se vea bien si es más grande o pequeña */
-    overflow: hidden; 
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .img-peli {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
     /* Ajusta la imagen para cubrir el div sin distorsión */
-    object-fit: cover; 
+    object-fit: cover;
     display: block;
 }
 
@@ -43,27 +54,29 @@ main {
 .div-marco {
     /* Colocación encima de todo */
     position: absolute;
-    z-index: 10; 
+    z-index: 2;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     /* Asegura que el div .marco-peli no se interponga con el cursor,
        aunque la sombra seguiría visible. */
-    pointer-events: none; 
+    pointer-events: none;
+
 }
 
 .img-marco {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Para que la imagen del marco no se corte ni distorsione */
+    object-fit: contain;
+    /* Para que la imagen del marco no se corte ni distorsione */
     display: block;
-    
+
     /* ¡La clave de tu requerimiento! */
     /* La sombra se aplica a la imagen PNG. Gracias a la transparencia,
        solo el borde visible del marco proyectará la sombra sobre la imagen de la película. */
-    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8)); 
-    
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+
     /* Opcional: También podrías usar box-shadow si el PNG tiene un borde sólido que
        quieres que proyecte la sombra, pero 'filter: drop-shadow' es lo ideal para
        imágenes PNG con formas irregulares o transparencia. */
@@ -71,5 +84,93 @@ main {
 }
 
 .section-details {
+    display: flex;
+    justify-content: center;
     width: 800px;
+    min-height: 470px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.div-details {
+    width: 500px;
+    padding: 1em;
+}
+
+.title-peli {
+    color: blueviolet;
+    text-transform: uppercase;
+}
+
+.div-funciones {
+    width: 300px;
+    padding: 1em;
+    border-left: 1px solid black;
+}
+
+.title-function {
+    color: blueviolet;
+    text-transform: uppercase;
+}
+
+.lista-funciones {
+    list-style: none;
+}
+
+/* BANNER -------------------------------------------------------------------- */
+
+.banner {
+    width: 100%;
+    height: 125px;
+
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 15px;
+}
+
+.btns-ticket {
+    position: absolute;
+    right: 75px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#btn-step {
+    width: 300px;
+
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 50px;
+    background-color: rgb(255, 228, 78);
+    color: #000000;
+
+    font-weight: 700;
+    font-size: 1.1rem;
+
+    transition: all 0.2s;
+}
+
+#btn-step:hover {
+    background-color: rgb(255, 233, 108);
+    color: #221c29;
+    box-shadow: 0 0 20px rgba(255, 228, 78, 0.85);
+}
+
+#btn-back {
+    width: 300px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 25px;
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+    font-weight: 600;
+    font-size: 0.95rem;
 }
