@@ -1,3 +1,49 @@
-<section>
-    hola
-</section>
+<main>
+    <section id="carrucelPrincipal">
+
+        <div class="imagen-contenedor">
+
+            <!-- Imagen de fondo (pantalla de cine) -->
+
+            <img id="pantalla" src="img/home/PantallaCine.png" alt="Pantalla de cine">
+
+            <!-- Carrusel encima -->
+            <div id="bannerCarrusel">
+                @for (imagen of imagenes; track $index) {
+                <img [src]="imagen.src" [class.mostrar]="indiceActual === $index" alt="Imagen carrusel">
+                }
+
+                <div class="info-pelicula">
+                    <p class="titulo">{{ nombrePelicula }}</p>
+                    <button class="btn-info">Más info</button>
+                </div>
+
+                <button class="anterior" (click)="anterior()">&#10094;</button>
+                <button class="siguiente" (click)="siguiente()">&#10095;</button>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <section id="proximosEstrenos">
+        <h2>PRÓXIMOS ESTRENOS</h2>
+
+        <div class="carrusel-container">
+            <button class="flecha izquierda" (click)="moverIzquierda()">&#10094;</button>
+
+            <div class="carrusel" #carrusel>
+                @for (pelicula of peliculas; track $index) {
+                <div class="pelicula">
+                    <img [src]="pelicula.img" [alt]="pelicula.titulo">
+                    <p>{{ pelicula.titulo }}</p>
+                </div>
+                }
+            </div>
+
+            <button class="flecha derecha" (click)="moverDerecha()">&#10095;</button>
+        </div>
+    </section>
+
+</main>
