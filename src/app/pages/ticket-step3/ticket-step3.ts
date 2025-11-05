@@ -4,6 +4,7 @@ import { TicketService } from '../../services/ticket-service';
 import { NgClass } from '@angular/common';
 import { Pelicula } from '../../models/pelicula';
 import { Butaca } from '../../models/butaca';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -17,22 +18,22 @@ export class TicketStep3 implements OnInit {
   // Estado del Mapa de Butacas (Usando Signal)
   mapaButacas: WritableSignal<Butaca[][]> = signal([
     // Fila A
-    [{ id: 'A1', fila: 'A', columna: 1, estado: 'ocupada', hover: false },
+    [{ id: 'A1', fila: 'A', columna: 1, estado: 'disponible', hover: false },
     { id: 'A2', fila: 'A', columna: 2, estado: 'disponible', hover: false },
     { id: 'A3', fila: 'A', columna: 3, estado: 'disponible', hover: false },
     { id: 'A4', fila: 'A', columna: 4, estado: 'disponible', hover: false },
-    { id: 'A5', fila: 'A', columna: 5, estado: 'disponible', hover: false },
+    { id: 'A5', fila: 'A', columna: 5, estado: 'ocupada', hover: false },
     { id: 'A6', fila: 'A', columna: 6, estado: 'ocupada', hover: false },
     { id: 'A7', fila: 'A', columna: 7, estado: 'disponible', hover: false },
     { id: 'A8', fila: 'A', columna: 8, estado: 'disponible', hover: false },
     { id: 'A9', fila: 'A', columna: 9, estado: 'disponible', hover: false },
     { id: 'A10', fila: 'A', columna: 10, estado: 'disponible', hover: false },
-    { id: 'A11', fila: 'A', columna: 11, estado: 'ocupada', hover: false },
+    { id: 'A11', fila: 'A', columna: 11, estado: 'disponible', hover: false },
     { id: 'A12', fila: 'A', columna: 12, estado: 'disponible', hover: false },
     { id: 'A13', fila: 'A', columna: 13, estado: 'disponible', hover: false },
     { id: 'A14', fila: 'A', columna: 14, estado: 'disponible', hover: false },
     { id: 'A15', fila: 'A', columna: 15, estado: 'disponible', hover: false },
-    { id: 'A16', fila: 'A', columna: 16, estado: 'ocupada', hover: false },
+    { id: 'A16', fila: 'A', columna: 16, estado: 'disponible', hover: false },
     { id: 'A17', fila: 'A', columna: 17, estado: 'disponible', hover: false },
     { id: 'A18', fila: 'A', columna: 18, estado: 'disponible', hover: false },
     { id: 'A19', fila: 'A', columna: 19, estado: 'disponible', hover: false },
@@ -71,9 +72,9 @@ export class TicketStep3 implements OnInit {
     { id: 'C10', fila: 'C', columna: 10, estado: 'disponible', hover: false },
     { id: 'C11', fila: 'C', columna: 11, estado: 'disponible', hover: false },
     { id: 'C12', fila: 'C', columna: 12, estado: 'disponible', hover: false },
-    { id: 'C13', fila: 'C', columna: 13, estado: 'disponible', hover: false },
-    { id: 'C14', fila: 'C', columna: 14, estado: 'disponible', hover: false },
-    { id: 'C15', fila: 'C', columna: 15, estado: 'disponible', hover: false },
+    { id: 'C13', fila: 'C', columna: 13, estado: 'ocupada', hover: false },
+    { id: 'C14', fila: 'C', columna: 14, estado: 'ocupada', hover: false },
+    { id: 'C15', fila: 'C', columna: 15, estado: 'ocupada', hover: false },
     { id: 'C16', fila: 'C', columna: 16, estado: 'disponible', hover: false },
     { id: 'C17', fila: 'C', columna: 17, estado: 'disponible', hover: false },
     { id: 'C18', fila: 'C', columna: 18, estado: 'disponible', hover: false },
@@ -83,10 +84,10 @@ export class TicketStep3 implements OnInit {
     [{ id: 'D1', fila: 'D', columna: 1, estado: 'disponible', hover: false },
     { id: 'D2', fila: 'D', columna: 2, estado: 'disponible', hover: false },
     { id: 'D3', fila: 'D', columna: 3, estado: 'disponible', hover: false },
-    { id: 'D4', fila: 'D', columna: 4, estado: 'disponible', hover: false },
-    { id: 'D5', fila: 'D', columna: 5, estado: 'disponible', hover: false },
-    { id: 'D6', fila: 'D', columna: 6, estado: 'disponible', hover: false },
-    { id: 'D7', fila: 'D', columna: 7, estado: 'disponible', hover: false },
+    { id: 'D4', fila: 'D', columna: 4, estado: 'ocupada', hover: false },
+    { id: 'D5', fila: 'D', columna: 5, estado: 'ocupada', hover: false },
+    { id: 'D6', fila: 'D', columna: 6, estado: 'ocupada', hover: false },
+    { id: 'D7', fila: 'D', columna: 7, estado: 'ocupada', hover: false },
     { id: 'D8', fila: 'D', columna: 8, estado: 'disponible', hover: false },
     { id: 'D9', fila: 'D', columna: 9, estado: 'disponible', hover: false },
     { id: 'D10', fila: 'D', columna: 10, estado: 'disponible', hover: false },
@@ -120,7 +121,7 @@ export class TicketStep3 implements OnInit {
     { id: 'E17', fila: 'E', columna: 17, estado: 'disponible', hover: false },
     { id: 'E18', fila: 'E', columna: 18, estado: 'disponible', hover: false },
     { id: 'E19', fila: 'E', columna: 19, estado: 'disponible', hover: false },
-    { id: 'E20', fila: 'E', columna: 20, estado: 'disponible', hover: false },],
+    { id: 'E20', fila: 'E', columna: 20, estado: 'ocupada', hover: false },],
     // Fila F
     [{ id: 'F1', fila: 'F', columna: 1, estado: 'disponible', hover: false },
     { id: 'F2', fila: 'F', columna: 2, estado: 'disponible', hover: false },
@@ -132,10 +133,10 @@ export class TicketStep3 implements OnInit {
     { id: 'F8', fila: 'F', columna: 8, estado: 'disponible', hover: false },
     { id: 'F9', fila: 'F', columna: 9, estado: 'disponible', hover: false },
     { id: 'F10', fila: 'F', columna: 10, estado: 'disponible', hover: false },
-    { id: 'F11', fila: 'F', columna: 11, estado: 'disponible', hover: false },
-    { id: 'F12', fila: 'F', columna: 12, estado: 'disponible', hover: false },
-    { id: 'F13', fila: 'F', columna: 13, estado: 'disponible', hover: false },
-    { id: 'F14', fila: 'F', columna: 14, estado: 'disponible', hover: false },
+    { id: 'F11', fila: 'F', columna: 11, estado: 'ocupada', hover: false },
+    { id: 'F12', fila: 'F', columna: 12, estado: 'ocupada', hover: false },
+    { id: 'F13', fila: 'F', columna: 13, estado: 'ocupada', hover: false },
+    { id: 'F14', fila: 'F', columna: 14, estado: 'ocupada', hover: false },
     { id: 'F15', fila: 'F', columna: 15, estado: 'disponible', hover: false },
     { id: 'F16', fila: 'F', columna: 16, estado: 'disponible', hover: false },
     { id: 'F17', fila: 'F', columna: 17, estado: 'disponible', hover: false },
@@ -162,6 +163,7 @@ export class TicketStep3 implements OnInit {
   hora: string | null = null;
 
   constructor(
+    private location: Location,
     private route: ActivatedRoute,
     private router: Router,
     private ticketService: TicketService
@@ -217,13 +219,9 @@ export class TicketStep3 implements OnInit {
     this.router.navigate(['/ticket/step4']);
   }
 
-  volverPaso2() {
-    // Para obtener el ID para la navegación, puedes usar el snapshot del servicio:
-    const peli = this.ticketService.getPeliculaSnapshot();
-
-    if (!peli) return;
-
-    this.router.navigate(['/ticket/step2', peli.id]);
+  volverAtras(): void {
+    // El método back() simula hacer clic en el botón "Atrás" del navegador
+    this.location.back();
   }
 
   listaButacasSeleccionadas = computed(() => 

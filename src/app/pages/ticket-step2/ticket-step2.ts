@@ -2,12 +2,11 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pelicula } from '../../models/pelicula';
 import { TicketService } from '../../services/ticket-service';
-import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-step2',
-  imports: [AsyncPipe],
+  imports: [],
   templateUrl: './ticket-step2.html',
   styleUrl: './ticket-step2.css',
 })
@@ -21,6 +20,7 @@ export class TicketStep2 implements OnInit, AfterViewInit {
   horaSeleccionada: string = '20:00';      // Ejemplo
 
   constructor(
+    private location: Location,
     private ticketService: TicketService, 
     private route: ActivatedRoute, 
     private router: Router
@@ -70,8 +70,9 @@ export class TicketStep2 implements OnInit, AfterViewInit {
     );
   }
 
-  volverPaso1() {
-    this.router.navigate(['/ticket/step1']); 
+  volverAtras(): void {
+    // El método back() simula hacer clic en el botón "Atrás" del navegador
+    this.location.back();
   }
 
   mostrarFunciones() {

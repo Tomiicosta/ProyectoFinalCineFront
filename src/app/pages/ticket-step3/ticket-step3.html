@@ -4,7 +4,7 @@
         <h1 class="step">PASO <span class="step-num">3</span></h1>
     </section>
 
-    <section class="ticket-section">
+    <section class="ticket-section font-inter">
         <!-- Panel de Información (INFO PELICULA) -->
         @if (peliculaSeleccionada; as peli) {
           <div class="div-info">
@@ -56,13 +56,13 @@
         <!-- Mapa de la Sala -->
         <div class="div-sala">
             <div class="div-pantalla">
-                <h2 class="title-pantalla">PANTALLA</h2>
+                <h2 class="title-pantalla font-open-sans">PANTALLA</h2>
                 <div class="pantalla"></div>
             </div>
             <div class="div-butacas">
                 @for (fila of mapaButacas(); track $index) {
                     <div class="fila-butacas">
-                        <span class="etiqueta-fila">{{ fila[0].fila }}</span>
+                        <span class="etiqueta-fila font-inter">{{ fila[0].fila }}</span>
 
                         @for (butaca of fila; track butaca.id) {
                         <div class="butaca" [ngClass]="{
@@ -81,18 +81,19 @@
     </section>
 
     <aside class="banner">
-        <div class="btns-ticket">
-            <button id="btn-step" class=" font-inter" (click)="confirmarPaso3()">SIGUIENTE</button>
-            <button id="btn-back" class=" font-inter" (click)="volverPaso2()">ATRÁS</button>
+        <div class="btns-ticket font-inter">
+            <button id="btn-step" class="" (click)="confirmarPaso3()">SIGUIENTE</button>
+            <button id="btn-back" class="" (click)="volverAtras()">ATRÁS</button>
+            
+            <!-- DIV DE ERRORES -->
             @if (errorMessage()) {
-                <div class="div-error">
+                <div class="div-error ">
                     {{ errorMessage() }}
                 </div>
             }
+
         </div>
         
     </aside>
 
-    <!-- DIV DE ERRORES -->
-    
 </main>

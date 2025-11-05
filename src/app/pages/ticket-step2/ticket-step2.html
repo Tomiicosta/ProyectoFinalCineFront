@@ -10,7 +10,7 @@
     <div class="div-img">
       <img [src]="peli.img" [alt]="peli.titulo">
     </div>
-    <div class="div-tabla">
+    <div class="div-tabla font-open-sans">
       <div class="titulo-peli">
         <h2>{{ peli.titulo }}</h2>
       </div>
@@ -33,10 +33,10 @@
     }
   </section>
 
-  <aside class="banner">
+  <aside class="banner font-inter">
     <div class="btns-ticket">
-      <button id="btn-step" class=" font-inter" (click)="confirmarPaso2()">SIGUIENTE</button>
-      <button id="btn-back" class=" font-inter"  (click)="volverPaso1()">ATRÁS</button>
+      <button id="btn-step" class=" " (click)="confirmarPaso2()">SIGUIENTE</button>
+      <button id="btn-back" class=" "  (click)="volverAtras()">ATRÁS</button>
     </div>
   </aside>
 </main>
