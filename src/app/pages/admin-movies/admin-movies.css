@@ -1,0 +1,63 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+main{
+    display: grid;
+    grid-template-areas: "cartelera cartelera"
+                        "peliculas buscar"
+                        "peliculas agregar";
+    grid-template-columns: 60% 40%;  
+    grid-template-rows: 10% 45% 45%;  
+    margin: 10px;             
+}
+
+#textoCartelera{
+    grid-area: cartelera;
+    background-color: rgb(0,0,0,0.5);
+    border: 1px solid white;
+}
+
+#sectionPeliculasCartelera{
+    grid-area: peliculas;
+    background-color: rgb(0,0,0,0.5);
+    border: 1px solid white;
+    
+}
+
+#buscarId{
+    grid-area: buscar;
+    background-color: rgb(0,0,0,0.5);
+    border: 1px solid white;
+    
+}
+
+#agregarId{
+    grid-area: agregar;
+    background-color: rgb(0,0,0,0.5);
+    border: 1px solid white;
+}
+
+label{
+    color: white;
+}
+
+
+
+h3,h4,h2,p{
+    color: white;
+}
+
+#buscarMovie {
+  max-height: 100%; 
+  overflow-y: auto;  
+  border: 1px solid #ccc; 
+  padding: 10px;           
+}
+
+#buscarMovie::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 4px;
+}
+
