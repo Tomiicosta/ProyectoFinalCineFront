@@ -7,6 +7,7 @@ import { TicketStep3 } from './pages/ticket-step3/ticket-step3';
 import { Register } from './pages/register/register';
 import { AuthGuard } from './guards/AuthGuard';
 import { MovieDetails } from './pages/movie-details/movie-details';
+import { AdminMovies } from './pages/admin-movies/admin-movies';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -18,6 +19,7 @@ export const routes: Routes = [
     {path: 'ticket/step2/:id', component: TicketStep2},
     {path: 'ticket/step3/:id', component: TicketStep3},
     {path: 'details/:id', component: MovieDetails},
+    {path: 'adminMovies',component: AdminMovies},
     {path: '', redirectTo: '/inicio', pathMatch: 'full' }, // Si está logueado, va a 'inicio'
     {path: '**', redirectTo: '/inicio' }, // Manejo de rutas no encontradas
     

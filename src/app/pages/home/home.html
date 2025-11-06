@@ -9,12 +9,12 @@
 
             <!-- Carrusel encima -->
             <div id="bannerCarrusel">
-                @for (imagen of imagenes; track $index) {
-                <img [src]="imagen.src" [class.mostrar]="indiceActual === $index" alt="Imagen carrusel">
+                @for (movie of movieService.moviesCartelera ; track $index) {
+                <img [src]="movie.bannerUrl" [class.mostrar]="indiceActual === $index" alt="movie.title">
                 }
 
                 <div class="info-pelicula">
-                    <p class="titulo">{{ nombrePelicula }}</p>
+                    <p class="titulo">{{ movieService.moviesCartelera[indiceActual]?.title }}</p>
                     <button class="btn-info">Más info</button>
                 </div>
 
@@ -34,11 +34,14 @@
             <button class="flecha izquierda" (click)="moverIzquierda()">&#10094;</button>
 
             <div class="carrusel" #carrusel>
-                @for (pelicula of peliculas; track $index) {
-                <div class="pelicula">
-                    <img [src]="pelicula.img" [alt]="pelicula.titulo">
-                    <p>{{ pelicula.titulo }}</p>
-                </div>
+                @for (movie of movieService.moviesCartelera ; track $index) {
+                    @if(isUpcoming(movie.releaseDate)){
+                      <div class="pelicula">
+                    <img [src]="movie.posterUrl" [class.mostrar]="indiceActual === $index" alt="movie.title">
+                    <p>{{ movie.title }}</p>
+                </div>  
+                    }
+                
                 }
             </div>
 

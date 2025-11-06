@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MovieService } from '../../services/movie/movie-service';
 
 @Component({
   selector: 'app-home',
@@ -8,56 +9,35 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class Home implements OnInit{
 
-  imagenes = [
-    { src: 'img/home/PruebaCarrucel.png', titulo: 'Chainsaw - Man' },
-    { src: 'img/home/Batman.png', titulo: 'Batman' },
-    { src: 'img/home/Panda.png', titulo: 'Kung Fu Panda' },
-    { src: 'img/home/Kimetsu.png', titulo: 'Kimetsu no Yaiba' }
-  ];
+  localDate: Date = new Date();
+  indiceActual = 0; 
 
-  indiceActual = 0;
 
-  // 🔹 Retorna el título actual
-  get nombrePelicula(): string {
-    return this.imagenes[this.indiceActual].titulo;
+  constructor(public movieService:MovieService){
+
   }
+ 
 
   // 🔹 Avanza una imagen
   siguiente() {
-    this.indiceActual = (this.indiceActual + 1) % this.imagenes.length;
-  }
+  if(this.movieService.moviesCartelera.length === 0) return;
 
-  // 🔹 Retrocede una imagen
-  anterior() {
-    this.indiceActual = (this.indiceActual - 1 + this.imagenes.length) % this.imagenes.length;
-  }
+  this.indiceActual = (this.indiceActual + 1) % this.movieService.moviesCartelera.length;
+}
+
+anterior() {
+  if(this.movieService.moviesCartelera.length === 0) return;
+
+  this.indiceActual =
+    (this.indiceActual - 1 + this.movieService.moviesCartelera.length) % this.movieService.moviesCartelera.length;
+}
 
 
 
 
   
 
-  peliculas = [
-    { titulo: 'Tomb Raider', img: 'img/home/portadas/tomb.png' },
-    { titulo: 'Ponte en mi lugar', img: 'img/home/portadas/ponteEnMiLugar.png' },
-    { titulo: 'Matrix', img: 'img/home/portadas/matrix.png' },
-    { titulo: 'Tomb Raider', img: 'img/home/portadas/tomb.png' },
-    { titulo: 'Ponte en mi lugar', img: 'img/home/portadas/ponteEnMiLugar.png' },
-    { titulo: 'Matrix', img: 'img/home/portadas/matrix.png' },
-    { titulo: 'Tomb Raider', img: 'img/home/portadas/tomb.png' },
-    { titulo: 'Ponte en mi lugar', img: 'img/home/portadas/ponteEnMiLugar.png' },
-    { titulo: 'Matrix', img: 'img/home/portadas/matrix.png' },
-    { titulo: 'Tomb Raider', img: 'img/home/portadas/tomb.png' },
-    { titulo: 'Ponte en mi lugar', img: 'img/home/portadas/ponteEnMiLugar.png' },
-    { titulo: 'Matrix', img: 'img/home/portadas/matrix.png' },
-    { titulo: 'Tomb Raider', img: 'img/home/portadas/tomb.png' },
-    { titulo: 'Ponte en mi lugar', img: 'img/home/portadas/ponteEnMiLugar.png' },
-    { titulo: 'Matrix', img: 'img/home/portadas/matrix.png' },
-    { titulo: 'Tomb Raider', img: 'img/home/portadas/tomb.png' },
-    { titulo: 'Ponte en mi lugar', img: 'img/home/portadas/ponteEnMiLugar.png' },
-    { titulo: 'Matrix', img: 'img/home/portadas/matrix.png' }
-    
-  ];
+ 
 
   @ViewChild('carrusel', { static: false }) carrusel!: ElementRef;
 
@@ -81,8 +61,25 @@ export class Home implements OnInit{
 
   
 
+
+  getAllMovies(){
+    this.movieService.getMovies().subscribe({
+      next: (data) => {this.movieService.moviesCartelera = data},
+      error: (e) => {console.log(e)}
+    })
+  }
+
+
+isUpcoming(movieReleaseDate: string): boolean {
+    const release = new Date(movieReleaseDate);
+    return release >= this.localDate;
+  }
+
+
+
   // 🔹 Cambio automático cada 4 segundos (opcional)
   ngOnInit() {
+    this.getAllMovies();
     setInterval(() => this.siguiente(), 8000);
     setInterval(() => this.moverDerecha(), 6000);
   }
