@@ -1,58 +1,68 @@
 <main>
-    <section id="textoCartelera">
-        <h3>Cartelera: </h3>
-    </section>
+  <section id="textoCartelera">
+    <h3>Cartelera:</h3>
+  </section>
 
-    <section id="sectionPeliculasCartelera">
-        <div id="peliculasCartelera">
-            @if (movieService.moviesCartelera.length){
-            @for (movie of movieService.moviesCartelera ; track $index){
-            <section id="tarjeta">
-                <h3>{{movie.title}}</h3>
-                <h4>{{movie.id}}</h4>
-                <h4>{{movie.releaseDate}}</h4>
+  <section id="sectionPeliculasCartelera">
+    
+    <div id="peliculasCartelera">
+      @if (movieService.moviesCartelera.length) {
+        @for (movie of movieService.moviesCartelera; track $index) {
+          <section id="tarjeta">
+            <h3>{{ movie.title }}</h3>
+            <h4>ID: {{ movie.id }}</h4>
+            <h4>Estreno: {{ movie.releaseDate }}</h4>
 
-            </section>
-            }
-            }
-        </div>
-        
-        <div id="buscarMovie">
-            @if (movieService.movies.length){
-            @for (movie of movieService.movies ; track $index){
-            <section id="tarjeta">
-                <h3>{{movie.title}}</h3>
-                <h4>{{movie.id}}</h4>
-                <h4>{{movie.releaseDate}}</h4>
+            <div class="botones-tarjeta">
+              <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id.toString())">
+                Eliminar
+              </button>
+            </div>
+          </section>
+        }
+      }
+    </div>
 
-            </section>
+    
+    <div id="buscarMovie">
+      @if (movieService.movies.length) {
+        @for (movie of movieService.movies; track $index) {
+          <section id="tarjeta">
+            <h3>{{ movie.title }}</h3>
+            <h4>ID: {{ movie.id }}</h4>
+            <h4>Estreno: {{ movie.releaseDate }}</h4>
 
-            }
-            }
-        </div>
-        
+            <div class="botones-tarjeta">
+              <button class="btn-agregar" (click)="manejarEnvio(movie.id.toString())">Agregar</button>
+            </div>
+          </section>
+        }
+      }
+    </div>
+  </section>
 
+  <section id="buscarId">
+    <h3>Busque la id por nombre de la película</h3>
 
-    </section>
+    <form>
+      <label for="inputId">Ingrese el nombre: </label>
+      <input id="inputNombre" name="nombreInput" type="string" [(ngModel)]="nombreInput"/>
+      <button type="button" (click)="getMoviesByName(nombreInput)">
+        Buscar
+      </button>
+      <button class="btn-agregar" (click)="getAllMovies()">Volver</button>
+    </form>
+  </section>
 
-    <section id="buscarId">
-        <h4>Busque la id por nombre de la pelicula</h4>
+  <section id="agregarId">
+    <h3>Agregar película por id:</h3>
 
-        <form>
-            <label for="inputId">Ingrese el nombre: </label>
-            <input id="inputNombre" name="nombreInput" type="string" [(ngModel)]="nombreInput">
-            <button type="button" (click)="getMoviesByName(nombreInput)">Buscar</button>
-        </form>
-
-    </section>
-
-    <section id="agregarId">
-        <h4>Agregar pelicula por id :</h4>
-
-        <form>
-            <label for="inputId">Ingrese ID: </label>
-            <input id="inputId" name="idInput" type="number" [(ngModel)]="idInput">
-            <button type="button" (click)="manejarEnvio(idInput)">Agregar</button>
-        </form>
-    </section>
+    <form>
+      <label for="inputId">Ingrese ID: </label>
+      <input id="inputId" name="idInput" type="number" [(ngModel)]="idInput">
+      <button type="button" (click)="manejarEnvio(idInput)">
+        Agregar
+      </button>
+    </form>
+  </section>
 </main>
