@@ -14,7 +14,7 @@
             <h4>Estreno: {{ movie.releaseDate }}</h4>
 
             <div class="botones-tarjeta">
-              <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id.toString())">
+              <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id.toString())" [disabled] = "!authService.isAdmin()">
                 Eliminar
               </button>
             </div>
@@ -33,7 +33,7 @@
             <h4>Estreno: {{ movie.releaseDate }}</h4>
 
             <div class="botones-tarjeta">
-              <button class="btn-agregar" (click)="manejarEnvio(movie.id.toString())">Agregar</button>
+              <button class="btn-agregar" (click)="manejarEnvio(movie.id.toString())" [disabled] = "!authService.isAdmin()">Agregar</button>
             </div>
           </section>
         }
@@ -47,7 +47,7 @@
     <form>
       <label for="inputId">Ingrese el nombre: </label>
       <input id="inputNombre" name="nombreInput" type="string" [(ngModel)]="nombreInput"/>
-      <button type="button" (click)="getMoviesByName(nombreInput)">
+      <button type="button" (click)="getMoviesByName(nombreInput)" [disabled] = "!authService.isAdmin()" >
         Buscar
       </button>
       <button class="btn-agregar" (click)="getAllMovies()">Volver</button>
@@ -60,7 +60,7 @@
     <form>
       <label for="inputId">Ingrese ID: </label>
       <input id="inputId" name="idInput" type="number" [(ngModel)]="idInput">
-      <button type="button" (click)="manejarEnvio(idInput)">
+      <button type="button" (click)="manejarEnvio(idInput)" [disabled] = "!authService.isAdmin()">
         Agregar
       </button>
     </form>
