@@ -19,6 +19,7 @@
 }
 
 main{
+  padding-top: 120px; /* espacio para dejar lugar al header*/
   min-height: 100dvh;
   margin: 0;
   background-color: #000;
