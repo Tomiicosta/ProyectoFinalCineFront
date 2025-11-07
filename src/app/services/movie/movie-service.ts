@@ -36,6 +36,6 @@ export class MovieService {
   }
 
   deleteMovie(id:string){
-    return this.http.delete<Movie>(`${this.API_URL}/delete/${id}`)
+    //return this.http.delete<Movie>(`${this.API_URL}/delete/${id}`)
   }
 }

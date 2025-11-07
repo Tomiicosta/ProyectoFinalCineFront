@@ -57,10 +57,7 @@ export class AdminMovies implements OnInit{
 
 
   eliminarDeCartelera(id : string){
-    this.movieService.deleteMovie(id).subscribe({
-      next: ()=> this.getAllMovies(),
-      error:(e)=>console.error(e)
-    })
+    this.movieService.deleteMovie(id);
     this.nombreInput = ''
     this.idInput = ""
   }
