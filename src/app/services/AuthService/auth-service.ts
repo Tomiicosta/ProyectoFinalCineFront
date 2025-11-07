@@ -9,8 +9,11 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   
   private loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
+  private administrador = new BehaviorSubject<boolean>(this.isLoggedIn());
 
   isLoggedIn$ = this.loggedIn.asObservable();
+
+  isAdmin$ = this.administrador.asObservable();
 
   constructor(private http: HttpClient) {}
 

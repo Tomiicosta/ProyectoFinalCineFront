@@ -3,6 +3,7 @@ import { Component, input, OnInit } from '@angular/core';
 import Movie from '../../models/movie';
 import { MovieService } from '../../services/movie/movie-service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/AuthService/auth-service';
 
 @Component({
   selector: 'app-admin-movies',
@@ -15,10 +16,7 @@ export class AdminMovies implements OnInit{
   idInput: string = '';
   nombreInput: string = '';
 
-  constructor(public movieService: MovieService) {
-
-
-  }
+  constructor(public movieService: MovieService, public authService: AuthService) {}
 
 
 

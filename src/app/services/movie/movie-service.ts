@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import Movie from '../../models/movie';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../AuthService/auth-service';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
-
-  readonly API_URL = "http://localhost:8080/api/movies"
   
   movies : Movie[]
   moviesCartelera: Movie[]
@@ -15,18 +15,18 @@ export class MovieService {
 
   moviesBd: Movie[]
 
-  constructor (private http: HttpClient){
+  constructor (private http: HttpClient, private authService: AuthService){
     this.movies = []
     this.moviesCartelera = []
     this.moviesBd = []
   }
 
   getMovie(id:string){
-    return this.http.get<Movie>(`${this.API_URL}/${id}`);
+    return this.http.get<Movie>(`/api/movies/${id}`);
   }
   
   getMovieByName(name:string){
-    return this.http.get<Movie[]>(`${this.API_URL}/search?title=${name}`);
+    return this.http.get<Movie[]>(`/api/movies/search?title=${name}`);
   }
 
   vaciarMovies(){
@@ -34,15 +34,24 @@ export class MovieService {
   }
 
   postMovie(id : string){
-    return this.http.post<Movie>(`${this.API_URL}/save/${id}`,null);
+    if(!this.authService.isAdmin()){
+      // Si no es admin, lanza un error inmediatamente y no hace la petición.
+      console.error('Se requiere rol ADMIN.');
+      return throwError(() => new Error('Acceso Denegado: Rol insuficiente.'));
+    }
+    return this.http.post<Movie>(`/api/movies/save/${id}`,null);
   }
 
   getMovies(){
-    return this.http.get<Movie[]>(this.API_URL)
+    return this.http.get<Movie[]>('/api/movies')
   }
 
   deleteMovie(id:string){
-    return this.http.delete<Movie>(`${this.API_URL}/delete/${id}`)
+    if(!this.authService.isAdmin()){
+      console.error('Se requiere rol ADMIN.');
+      return throwError(() => new Error('Acceso Denegado: Rol insuficiente.'));
+    }
+    return this.http.delete<Movie>(`/api/movies/delete/${id}`)
   }
 
   selectedMovie(movie : Movie){
@@ -50,11 +59,11 @@ export class MovieService {
   }
 
   getAllMoviesBd(){
-    return this.http.get<Movie[]>(`${this.API_URL}/bd`)
+    return this.http.get<Movie[]>(`/api/movies/bd`)
   }
 
   getMovieBd(id:number){
-    return this.http.get<Movie>(`${this.API_URL}/bd/${id}`);
+    return this.http.get<Movie>(`/api/movies/bd/${id}`);
   }
 
 
