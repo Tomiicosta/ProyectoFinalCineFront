@@ -11,10 +11,14 @@ export class MovieService {
   
   movies : Movie[]
   moviesCartelera: Movie[]
+  selectedPelicula: Movie | undefined;
+
+  moviesBd: Movie[]
 
   constructor (private http: HttpClient){
     this.movies = []
     this.moviesCartelera = []
+    this.moviesBd = []
   }
 
   getMovie(id:string){
@@ -40,4 +44,19 @@ export class MovieService {
   deleteMovie(id:string){
     return this.http.delete<Movie>(`${this.API_URL}/delete/${id}`)
   }
+
+  selectedMovie(movie : Movie){
+    this.selectedPelicula = movie;
+  }
+
+  getAllMoviesBd(){
+    return this.http.get<Movie[]>(`${this.API_URL}/bd`)
+  }
+
+  getMovieBd(id:number){
+    return this.http.get<Movie>(`${this.API_URL}/bd/${id}`);
+  }
+
+
+
 }
