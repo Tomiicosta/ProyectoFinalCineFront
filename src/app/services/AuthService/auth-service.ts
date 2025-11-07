@@ -37,8 +37,11 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
-  }
+  localStorage.removeItem('token');
+  this.loggedIn.next(false);   
+  this.administrador.next(false); 
+}
+
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
