@@ -25,13 +25,14 @@ export class MovieDetails {
   ) { }
 
   ngOnInit(): void {
-    // 1. Obtener el parámetro de la ruta (movieId)
+    // Obtener el parámetro de la ruta (movieId)
     this.route.params.subscribe(params => {
       this.movieId = +params['id'];
       if (this.movieId) {
-        // 3. Pide al servicio que busque y almacene la peli
-        this.ticketService.loadPeliculaActual(this.movieId);
-        this.peliculaSeleccionada = this.ticketService.getPeliculaSnapshot();
+
+        this.ticketService.actualizarListaPeliculas();
+        // Pide al servicio que busque la peli
+        this.peliculaSeleccionada = this.ticketService.getPeliculaById(this.movieId);
 
       } else {
         console.error('No hay película seleccionada para navegar.');
@@ -41,14 +42,14 @@ export class MovieDetails {
 
   // Boton para comprar una entrada de la pelicula
   comprarEntrada() {
-    // 1. Encontrar la película (o simplemente el ID)
+    // Encontrar la película
     const peli = this.peliculaSeleccionada;
 
-    // 2. Usar el servicio para establecer la película como la "actual"
+    // Usar el servicio para establecer la película como la "actual"
     if (peli) {
       this.ticketService.setPeliculaActual(peli);
-      // 3. Navegar al paso 2
-      this.router.navigate(['/ticket/step2', peli.id]);
+      // Navegar al paso 2
+      this.router.navigate(['/ticket/step2']);
     } else {
       console.error('No hay película seleccionada para navegar.');
     }
