@@ -47,11 +47,7 @@ export class MovieService {
   }
 
   deleteMovie(id:string){
-    if(!this.authService.isAdmin()){
-      console.error('Se requiere rol ADMIN.');
-      return throwError(() => new Error('Acceso Denegado: Rol insuficiente.'));
-    }
-    return this.http.delete<Movie>(`/api/movies/delete/${id}`)
+    return this.http.delete<Movie>(`${this.API_URL}/delete/${id}`)
   }
 
   selectedMovie(movie : Movie){

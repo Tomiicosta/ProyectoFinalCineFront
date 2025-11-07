@@ -5,6 +5,8 @@
   flex-direction: column;
   align-items: center;
   padding: 10px 0 50px 0;
+  padding-top: 125px;
+  font-family: sans-serif;
   /* arriba derecha abajo izquierda */
 }
 
@@ -23,7 +25,7 @@
       /* negro translúcido arriba */
       rgba(0, 0, 0, 0.7) 70%,
       /* mantiene la opacidad */
-      rgba(179, 0, 0, 0.7) 100%
+      rgba(179, 0, 0, 0.6) 100%
       /* rojo translúcido abajo */
 
     )
@@ -40,22 +42,23 @@
 .fields {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 }
 
 .UserField,
 .PasswordField {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   border: none;
+  
 }
 
 label {
   color: #eaeaea;
   font-weight: 500;
   letter-spacing: .2px;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 input {
@@ -87,14 +90,14 @@ input:focus {
   display: flex;
   flex-direction: row;
   gap: 8px;
-  color: white;
+  color: rgb(255, 255, 255, 0.5);
   font-size: 14px;
   padding-bottom: 15px;
 }
 
 .registrate {
   text-decoration: underline;
-  color: rgb(217, 26, 26);
+  color: rgb(254, 254, 254);
 }
 
 .btnLogin {

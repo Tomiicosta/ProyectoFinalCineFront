@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Movie from '../../models/movie';
 import { MovieService } from '../../services/movie/movie-service';
 import { FormsModule } from '@angular/forms';
@@ -15,11 +15,16 @@ export class AdminMovies implements OnInit{
 
   idInput: string = '';
   nombreInput: string = '';
+  selectedMovie?: Movie; 
+  mostrarAgregar : boolean = false;
 
   constructor(public movieService: MovieService, public authService: AuthService) {}
 
 
-
+  seleccionar(movie: Movie) {
+    this.selectedMovie = movie;
+    this.mostrarAgregar = true;
+  }
 
   getMoviesByName(name:string){
     this.movieService.moviesCartelera = [];
@@ -29,6 +34,7 @@ export class AdminMovies implements OnInit{
     })
     this.nombreInput = ''
     this.idInput = ""
+    this.mostrarAgregar = false;
     
   }
 
@@ -40,6 +46,7 @@ export class AdminMovies implements OnInit{
     })
     this.nombreInput = ''
     this.idInput = ""
+    this.mostrarAgregar = false;
   
   }
 
@@ -49,16 +56,27 @@ export class AdminMovies implements OnInit{
       next: (data) => {this.movieService.moviesCartelera = data},
       error: (e) => {console.log(e)}
     })
+
     this.nombreInput = ''
     this.idInput = ""
+    this.selectedMovie = undefined;
+    this.mostrarAgregar = false;
+  }
+
+  esArray(valor: any): boolean {
+    return Array.isArray(valor);
   }
 
 
   eliminarDeCartelera(id : string){
-    this.movieService.deleteMovie(id);
-    this.nombreInput = ''
-    this.idInput = ""
-  }
+    this.movieService.deleteMovie(id).subscribe({
+      next: () => {
+        this.getAllMovies();
+      },
+      error: (e) => console.log(e)
+  })
+}
+  
 
   ngOnInit(): void {
     this.getAllMovies();
