@@ -29,13 +29,20 @@ export class AdminMovies implements OnInit{
       next: (data) => { this.movieService.movies = data },
       error: (e) => { console.log(e) }
     })
+    this.nombreInput = ''
+    this.idInput = ""
+    
   }
 
   manejarEnvio(id:string){
     this.movieService.postMovie(id).subscribe({
-      next: (data) => {console.log(data)},
+      next: (data) => {console.log(data);
+      this.getAllMovies();},
       error:(e)=>{console.log(e)}
     })
+    this.nombreInput = ''
+    this.idInput = ""
+  
   }
 
   getAllMovies(){
@@ -44,6 +51,18 @@ export class AdminMovies implements OnInit{
       next: (data) => {this.movieService.moviesCartelera = data},
       error: (e) => {console.log(e)}
     })
+    this.nombreInput = ''
+    this.idInput = ""
+  }
+
+
+  eliminarDeCartelera(id : string){
+    this.movieService.deleteMovie(id).subscribe({
+      next: ()=> this.getAllMovies(),
+      error:(e)=>console.error(e)
+    })
+    this.nombreInput = ''
+    this.idInput = ""
   }
 
   ngOnInit(): void {

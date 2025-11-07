@@ -5,10 +5,11 @@ import { RouterOutlet } from '@angular/router';
 import { AuthService } from './services/AuthService/auth-service';
 import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
+import { HeaderAdmin } from './components/header-admin/header-admin';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,Header,Footer],
+  imports: [RouterOutlet,Header,Footer,HeaderAdmin],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
