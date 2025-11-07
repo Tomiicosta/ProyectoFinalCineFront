@@ -7,14 +7,14 @@
                     <img class="img-marco" src="/img/details/marco_movie.png" alt="Imagen del marco png">
                 </div>
                 <div class="div-img">
-                    <img class="img-peli" src="{{ peli.img }}" alt="{{ peli.titulo }}">
+                    <img class="img-peli" [src]="peli.posterUrl" alt=" peli.title ">
                 </div>
             </section>
             <section class="section-details font-open-sans">
                 <div class="div-details">
-                    <h1 class="title-peli" title="{{ peli.titulo }}"> {{ peli.titulo }} </h1>
+                    <h1 class="title-peli" title="{{ peli.title }}"> {{ peli.title }} </h1>
                     <h3 class="genre-peli">AVENTURA - ACCION</h3>
-                    <p class="description-peli">{{ peli.descripcion }}</p>
+                    <p class="description-peli">{{ peli.overview }}</p>
                 </div>
                 <div class="div-funciones">
                     <h1 class="title-function">PROYECCIONES</h1>

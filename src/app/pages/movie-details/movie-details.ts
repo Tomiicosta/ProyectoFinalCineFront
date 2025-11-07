@@ -3,6 +3,8 @@ import { Pelicula } from '../../models/pelicula';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TicketService } from '../../services/ticket-service';
 import { Location } from '@angular/common';
+import { MovieService } from '../../services/movie/movie-service';
+import Movie from '../../models/movie';
 
 @Component({
   selector: 'app-movie-details',
@@ -13,7 +15,7 @@ import { Location } from '@angular/common';
 export class MovieDetails {
 
   movieId: number | undefined;
-  peliculaSeleccionada: Pelicula | undefined;
+  peliculaSeleccionada: Movie | undefined;
   // Signal para mostrar mensajes de error en la UI (reemplaza alert)
   errorMessage: WritableSignal<string | null> = signal(null);
 
@@ -21,18 +23,16 @@ export class MovieDetails {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
-    private ticketService: TicketService
+    public movieService:MovieService
   ) { }
 
   ngOnInit(): void {
-    // Obtener el parámetro de la ruta (movieId)
+    // 1. Obtener el parámetro de la ruta (movieId)
     this.route.params.subscribe(params => {
       this.movieId = +params['id'];
       if (this.movieId) {
-
-        this.ticketService.actualizarListaPeliculas();
-        // Pide al servicio que busque la peli
-        this.peliculaSeleccionada = this.ticketService.getPeliculaById(this.movieId);
+        // 3. Pide al servicio que busque y almacene la peli
+        this.getSelectecMovieBd(this.movieId)
 
       } else {
         console.error('No hay película seleccionada para navegar.');
@@ -40,16 +40,21 @@ export class MovieDetails {
     });
   }
 
+  getSelectecMovieBd(id:number){
+    this.movieService.getMovieBd(id).subscribe({
+      next:(data)=>{this.peliculaSeleccionada = data},
+      error: (e)=> {console.log(e)}
+    })
+  }
+
   // Boton para comprar una entrada de la pelicula
   comprarEntrada() {
-    // Encontrar la película
-    const peli = this.peliculaSeleccionada;
 
-    // Usar el servicio para establecer la película como la "actual"
-    if (peli) {
-      this.ticketService.setPeliculaActual(peli);
-      // Navegar al paso 2
-      this.router.navigate(['/ticket/step2']);
+    // 2. Usar el servicio para establecer la película como la "actual"
+    if (this.peliculaSeleccionada) {
+   
+      // 3. Navegar al paso 2
+      this.router.navigate(['/ticket/step2', this.peliculaSeleccionada.id]);
     } else {
       console.error('No hay película seleccionada para navegar.');
     }

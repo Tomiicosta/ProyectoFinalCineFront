@@ -1,31 +1,36 @@
 <main>
   <section class="ticket-info font-open-sans">
-    <h1 class="info"><span class="color">SELECCIONA</span> TU <span class="color">PELICULA</span></h1>
+    <h1 class="info">
+      <span class="color">SELECCIONA</span> TU <span class="color">PELICULA</span>
+    </h1>
     <h1 class="step">PASO <span class="step-num">1</span></h1>
   </section>
+
   <section class="galeria">
     <ul class="lista-pelis">
-        @for (peli of peliculas; track $index) {
-            <li class="item" #item 
-              style="background-image: url('{{ peli.img }}');" 
-                [attr.aria-label]="peli.titulo">
-            </li> 
-        }
-      <button id="prev" (click)="btnIzquierda()"><</button>
-      <button id="next" (click)="btnDerecha()">></button>
+      @for (peli of movieService.moviesCartelera; track $index) {
+        <li
+          class="item"
+          #item
+          [style.backgroundImage]="'url(' + peli.posterUrl + ')'"
+          [attr.aria-label]="peli.title">
+        </li>
+      }
+      <button id="prev" (click)="prevSlide()"><</button>
+      <button id="next" (click)="nextSlide()">></button>
     </ul>
   </section>
+
   <aside class="banner font-inter">
     <div class="about-peli">
-      <h1>{{ peliculaSeleccionada?.titulo }}</h1>
+      <h1>{{ movieService.selectedPelicula?.title }}</h1>
       <p>{{ displayedDescription }}</p>
-
-      <button id="btn-ver" (click)="btnVerDetalles()">Ver más</button>
+      <button id="btn-ver" (click)="verDetalles(movieService.selectedPelicula!.id)">Ver más</button>
     </div>
+
     <div class="btns-ticket font-inter">
-      <button id="btn-step" class=" " (click)="btnConfirmarPaso1()">SIGUIENTE</button>
-      <button id="btn-back" class=" " (click)="btnVolverAtras()">ATRÁS</button>
+      <button id="btn-step" (click)="confirmarPaso1(movieService.selectedPelicula!.id.toString())">SIGUIENTE</button>
+      <button id="btn-back" (click)="volverAtras()">ATRÁS</button>
     </div>
   </aside>
-
 </main>
