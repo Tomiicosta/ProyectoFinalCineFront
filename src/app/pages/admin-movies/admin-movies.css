@@ -21,6 +21,7 @@ main {
   grid-template-rows: 10% auto auto;
   gap: 15px;
   padding: 20px;
+  padding-top: 50px;
 }
 
 /* 🔹 Secciones */
