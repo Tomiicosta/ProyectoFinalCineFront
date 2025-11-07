@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import Movie from '../../models/movie';
 import { MovieService } from '../../services/movie/movie-service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/AuthService/auth-service';
 
 @Component({
   selector: 'app-admin-movies',
@@ -17,10 +18,7 @@ export class AdminMovies implements OnInit{
   selectedMovie?: Movie; 
   mostrarAgregar : boolean = false;
 
-  constructor(public movieService: MovieService) {
-
-
-  }
+  constructor(public movieService: MovieService, public authService: AuthService) {}
 
 
   seleccionar(movie: Movie) {

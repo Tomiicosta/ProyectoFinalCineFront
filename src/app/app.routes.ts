@@ -10,6 +10,7 @@ import { MovieDetails } from './pages/movie-details/movie-details';
 import { AdminMovies } from './pages/admin-movies/admin-movies';
 import { AdminFunciones } from './pages/admin-funciones/admin-funciones';
 import { AdminSalas } from './pages/admin-salas/admin-salas';
+import { RoleGuard } from './guards/roleGuard';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -21,9 +22,9 @@ export const routes: Routes = [
     {path: 'ticket/step2/:id', component: TicketStep2},
     {path: 'ticket/step3/:id', component: TicketStep3},
     {path: 'details/:id', component: MovieDetails},
-    {path: 'adminMovies',component: AdminMovies},
-    {path: 'adminFunciones',component: AdminFunciones},
-    {path: 'adminSalas',component:AdminSalas},
+    {path: 'adminMovies',component: AdminMovies, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
+    {path: 'adminFunciones',component: AdminFunciones, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
+    {path: 'adminSalas',component:AdminSalas, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: '', redirectTo: '/inicio', pathMatch: 'full' }, // Si está logueado, va a 'inicio'
     {path: '**', redirectTo: '/inicio' }, // Manejo de rutas no encontradas
     
