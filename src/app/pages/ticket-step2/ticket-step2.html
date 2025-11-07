@@ -7,29 +7,39 @@
 
   <section class="funciones">
     @if (peliculaSeleccionada; as peli) {
-    <div class="div-img">
-      <img [src]="peli.img" [alt]="peli.titulo">
-    </div>
-    <div class="div-tabla font-open-sans">
-      <div class="titulo-peli">
-        <h2>{{ peli.titulo }}</h2>
+      <div class="div-img">
+        <img [src]="peli.img" [alt]="peli.titulo">
       </div>
-      <div class="div-funciones">
-        <div class="div-dias">
-          <h3>Elige el DÍA</h3>
-          <div class="dias">
-            [Días disponibles de función]
-          </div>
+      <div class="div-tabla font-open-sans">
+        <div class="titulo-peli">
+          <h2>{{ peli.titulo }}</h2>
         </div>
-
-        <div class="div-horarios">
-          <h3>HORARIOS</h3>
-          <div class="horarios">
-            [Horarios disponibles]
+        <div class="div-funciones">
+          <div class="div-dias">
+            <h3>Elige tu FUNCIÓN preferida</h3>
+            <div class="dias">
+              [Días disponibles de función]
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    } @else {
+      <div class="div-img">
+        <img [src]="" [alt]="">
+      </div>
+      <div class="div-tabla font-open-sans">
+        <div class="titulo-peli">
+          <h2>Pelicula no disponible</h2>
+        </div>
+        <div class="div-funciones">
+          <div class="div-dias">
+            <h3>Elige tu FUNCIÓN preferida</h3>
+            <div class="dias">
+              No hay funciones disponibles..
+            </div>
+          </div>
+        </div>
+      </div>
     }
   </section>
 

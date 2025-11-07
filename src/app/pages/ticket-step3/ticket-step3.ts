@@ -5,6 +5,7 @@ import { NgClass } from '@angular/common';
 import { Pelicula } from '../../models/pelicula';
 import { Butaca } from '../../models/butaca';
 import { Location } from '@angular/common';
+import { Funcion } from '../../models/funcion';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -156,48 +157,34 @@ export class TicketStep3 implements OnInit {
   // Propiedades computadas para la UI
   totalButacasSeleccionadas = computed(() => this.butacasSeleccionadas().length);
 
-  movieId: number | undefined;
   peliculaSeleccionada: Pelicula | undefined;
-
-  fecha: string | null = null;
-  hora: string | null = null;
+  funcionSeleccionada: Funcion | undefined;
 
   constructor(
     private location: Location,
-    private route: ActivatedRoute,
     private router: Router,
     private ticketService: TicketService
   ) { }
 
   ngOnInit(): void {
-    // 1. Obtener el parámetro de la ruta (movieId)
-    this.route.params.subscribe(params => {
-      this.movieId = +params['id'];
+    
+    this.peliculaSeleccionada = this.ticketService.getPeliculaSnapshot();
+    this.funcionSeleccionada = this.ticketService.getFuncionSnapshot();
 
-      if (this.movieId) {
-        // 3. Pide al servicio que busque y almacene la peli
-        this.ticketService.loadPeliculaActual(this.movieId);
-        this.peliculaSeleccionada = this.ticketService.getPeliculaSnapshot();
+    if (this.peliculaSeleccionada && this.funcionSeleccionada) {
+      
+      
 
-      } else {
-        console.error('No hay película seleccionada para navegar.');
-      }
-    });
-
-    // 2. Obtener los Query Parameters (fecha, hora)
-    this.route.queryParams.subscribe(params => {
-      this.fecha = params['fecha'];
-      this.hora = params['hora'];
-      console.log(`Película: ${this.movieId}, Función: ${this.fecha} a las ${this.hora}`);
-
-      // Aquí podrías cargar el mapa de butacas para esa función
-    });
+    } else {
+      console.error('Debe haber una pelicula y una funcion seleccionada para navegar.');
+    }
   }
 
   confirmarPaso3() {
     this.errorMessage.set(null); // Limpiar cualquier error previo
 
-    if (!this.movieId || !this.fecha || !this.hora) return;
+    if (!this.peliculaSeleccionada) return;
+    if (!this.funcionSeleccionada) return;
 
     if (this.totalButacasSeleccionadas() === 0) { 
       // Reemplazo de alert() por el signal de error
@@ -207,9 +194,9 @@ export class TicketStep3 implements OnInit {
 
     // Guardar todos los datos en el servicio
     this.ticketService.setCompra({
-      movieId: this.movieId,
-      fecha: this.fecha,
-      hora: this.hora,
+      movieId: this.peliculaSeleccionada.id,
+      fecha: this.funcionSeleccionada.fecha,
+      hora: this.funcionSeleccionada.hora,
       butacas: this.butacasSeleccionadas(), 
       cantButacas: this.totalButacasSeleccionadas(),
       precioUnidad: 2500 // hardcodeo (CAMBIAR)

@@ -2,17 +2,16 @@ import { Injectable, signal } from '@angular/core';
 import { Pelicula } from '../models/pelicula';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Compra } from '../models/compra';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Funcion } from '../models/funcion';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
 
-  private peliculaActual = signal<Pelicula | undefined>(undefined);
-  private compraActual = signal<Compra | undefined>(undefined);
-
-  peliculaSeleccionada = this.peliculaActual.asReadonly();
-  compra = this.compraActual.asReadonly();
+  // URL base de tu API de Spring Boot
+  private apiUrl = 'http://localhost:8080/api/peliculas';
 
   // Lista de peliculas (TRAER DESDE LA API PELICULAS)
   private peliculas: Pelicula[] = [
@@ -26,6 +25,17 @@ export class TicketService {
     { id: 8, titulo: 'Good Time', img: 'https://m.media-amazon.com/images/M/MV5BMTg4MjQ1YjktMWUyMi00N2NjLWFiMWMtOTAyOWVjZDM2NGY2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg', descripcion: 'Un hombre se lanza en una odisea a través del inframundo de Nueva York para liberar a su hermano. Un hombre se lanza en una odisea a través del inframundo de Nueva York para liberar a su hermano. Un hombre se lanza en una odisea a través del inframundo de Nueva York para liberar a su hermano. ' }
   ];
 
+  private peliculaActual = signal<Pelicula | undefined>(undefined);
+  peliculaSeleccionada = this.peliculaActual.asReadonly();
+
+  private compraActual = signal<Compra | undefined>(undefined);
+  compraSeleccionada = this.compraActual.asReadonly();
+
+  private funcionActual = signal<Funcion | undefined>(undefined);
+  funcionSeleccionada = this.funcionActual.asReadonly();
+
+  constructor(private http: HttpClient) { }
+
   setCompra(compra: Compra): void {
     this.compraActual.set(compra);
     console.log('Compra guardada:', compra);
@@ -35,27 +45,65 @@ export class TicketService {
     return this.compraActual();
   }
 
-  // Método ÚNICO para establecer la película seleccionada
+  setFuncionActual(funcion: Funcion | undefined): void {
+    this.funcionActual.set(funcion);
+  }
+
+  getFuncionSnapshot(): Funcion | undefined {
+    return this.funcionActual();
+  }
+
   setPeliculaActual(pelicula: Pelicula | undefined): void {
     this.peliculaActual.set(pelicula);
   }
   
-  loadPeliculaActual(movieId: number): void {
-    const mockMovie = this.peliculas.find(p => p.id === movieId);
-    this.peliculaActual.set(mockMovie);
-  }
-
   getPeliculaSnapshot(): Pelicula | undefined {
     return this.peliculaActual();
   }
 
+  // Realiza un fetch GET a la API y retorna un Observable: que emite un array de Pelicula.
+  public getPeliculasApi(): Observable<Pelicula[]> {
+    // 1. Obtener el token del localStorage (ajusta la clave si es diferente)
+    const token = localStorage.getItem('jwt_token');
+
+    if (!token) {
+      // Manejo de error si no hay token (puedes lanzar un error o retornar un Observable vacío)
+      console.error('No se encontró el token.');
+      // En un caso real, podrías redirigir al login
+      return new Observable<Pelicula[]>(); 
+    }
+
+    // 2. Crear los encabezados de la solicitud, incluyendo el Bearer Token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // 3. Realizar la solicitud GET
+    return this.http.get<Pelicula[]>(this.apiUrl, { headers: headers });
+  }
+
+  // Realiza un llamado a getPeliculasApi() y lo guarda en el array
+  public actualizarListaPeliculas(): void {
+    this.getPeliculasApi().subscribe({
+      next: (data) => {
+        // Almacena los datos recibidos en la variable privada
+        this.peliculas = data;
+        console.log('Películas cargadas y almacenadas:', this.peliculas);
+      },
+      error: (error) => {
+        console.error('Error al obtener las películas:', error);
+        // Manejo de errores de la API (ej. token expirado, 403 Forbidden, 404 Not Found)
+      }
+    });
+  }
+
   getPeliculas(): Pelicula[] {
-    // CAMBIAR: LLAMAR al HttpClient para obtener data de la API
-    // return this.http.get<Pelicula[]>('/api/peliculas');
     return this.peliculas;
   }
 
+  // Funcion IDEAL para URLs que vengan con un parametro /:id
   getPeliculaById(id: number): Pelicula | undefined {
     return this.peliculas.find(p => p.id === id);
   }
+
 }
