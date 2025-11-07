@@ -1,124 +1,132 @@
-.loginPage{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 150px;
+.loginPage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 50px 0;
+  /* arriba derecha abajo izquierda */
 }
 
-.container{
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #fff9f9;
-    border-radius: 32px ;
-    align-items: center;
-    width: 550px;
-    height: fit-content;
-    gap: 48px;
-    padding: 64px 48px;
-    background: linear-gradient(to bottom, 
-    rgba(0, 0, 0, 0.8) 0%,     /* negro translúcido arriba */
-    rgba(0, 0, 0, 0.7) 70%,    /* mantiene la opacidad */
-    rgba(179, 0, 0, 0.7) 100%  /* rojo translúcido abajo */
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #fff9f9;
+  border-radius: 32px;
+  align-items: center;
+  width: 550px;
+  height: fit-content;
+  gap: 48px;
+  padding: 64px 48px;
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.8) 0%,
+      /* negro translúcido arriba */
+      rgba(0, 0, 0, 0.7) 70%,
+      /* mantiene la opacidad */
+      rgba(179, 0, 0, 0.7) 100%
+      /* rojo translúcido abajo */
 
     )
-    
 }
 
-.formLogin{
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 80%;
+.formLogin {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 80%;
 
 }
 
-.fields{
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
+
 .UserField,
-.PasswordField{
+.PasswordField {
   display: flex;
   flex-direction: column;
   gap: 16px;
   border: none;
 }
 
-label{
-    color: #eaeaea;
-    font-weight: 500;
-    letter-spacing: .2px;
-    font-size: 24px;
-  }
-
-  input{
-    width: 100%;
-    height: 44px;
-    padding: 0 14px;
-    color: #eaeaea;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 10px;
-    outline: none;
-    transition: border-color .2s, box-shadow .2s, background .2s;
-  }
-  input::placeholder{
-    color: rgba(234,234,234,.55);
-  }
-  
-  input:hover{
-    background: rgba(255,255,255,0.08);
-  }
-  
-  input:focus{
-    border-color: rgba(249, 249, 249, 0.8);
-    box-shadow: 0 0 0 3px rgba(236, 224, 246, 0.2);
-  }
-  
-.registerText{
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    color: white;
-    font-size: 14px;
-    padding-bottom: 15px;
-}
-.registrate{
-    text-decoration: underline;
-    color: rgb(217, 26, 26);
-}
-.btnLogin{
-    display: flex;
-    flex-direction: row;
-    width: 40%;
-    align-self: center;
-    height: 40px;
-    border-radius: 20px;
-    padding: 16px;
-    gap: 8px;
-    border: 2px solid black;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 14px;
-
-    
+label {
+  color: #eaeaea;
+  font-weight: 500;
+  letter-spacing: .2px;
+  font-size: 24px;
 }
 
-.btnLogin:hover{
-    background-color: #676464;
-    color: white;
-    border: 2px solid white;
+input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  color: #eaeaea;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
 }
-.container h2{
-    font-size: 32px;
-    color: white;
-    border-bottom: 2px solid white;
-    padding-bottom: 14px;
-    width: 90%;
-    text-align: center;
-    
+
+input::placeholder {
+  color: rgba(234, 234, 234, .55);
+}
+
+input:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+input:focus {
+  border-color: rgba(249, 249, 249, 0.8);
+  box-shadow: 0 0 0 3px rgba(236, 224, 246, 0.2);
+}
+
+.registerText {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  color: white;
+  font-size: 14px;
+  padding-bottom: 15px;
+}
+
+.registrate {
+  text-decoration: underline;
+  color: rgb(217, 26, 26);
+}
+
+.btnLogin {
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+  align-self: center;
+  height: 40px;
+  border-radius: 20px;
+  padding: 16px;
+  gap: 8px;
+  border: 2px solid black;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px;
+
+
+}
+
+.btnLogin:hover {
+  background-color: #676464;
+  color: white;
+  border: 2px solid white;
+}
+
+.container h2 {
+  font-size: 32px;
+  color: white;
+  border-bottom: 2px solid white;
+  padding-bottom: 14px;
+  width: 90%;
+  text-align: center;
+
 }
