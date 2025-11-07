@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Registro } from '../../models/registro';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -41,4 +42,26 @@ export class AuthService {
     // Implementación más completa verificaría la expiración del token
     return !!token; 
   }
+
+  // Función para obtener el rol del token
+  getRol(): string[] | null {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const helper = new JwtHelperService();
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken.roles; // Asumiendo que el rol está en 'role'
+    }
+    return null;
+  }
+
+  // Función para verificar si el usuario es admin
+  isAdmin(): boolean {
+    const userRoles = this.getRol();
+    if(userRoles){
+      return userRoles.includes('ADMIN');
+    }
+
+    return false;
+  }
+
 }
