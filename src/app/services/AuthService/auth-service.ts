@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Registro } from '../../models/registro';
 
@@ -15,11 +14,11 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   register(userData: Registro): Observable <any>{
-    return this.http.post(`${environment.urlApi}auth/register`, userData, {responseType: 'text'});
+    return this.http.post(`/api/auth/register`, userData, {responseType: 'text'});
   }
 
   login(username: string, password: string) {
-    return this.http.post<{ token: string }>(`${environment.urlApi}auth/login`, { username, password })
+    return this.http.post<{ token: string }>(`/api/auth/login`, { username, password })
       .pipe(
         tap(response => {
           localStorage.setItem('token', response.token);
