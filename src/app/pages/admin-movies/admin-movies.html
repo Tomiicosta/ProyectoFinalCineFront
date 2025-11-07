@@ -34,7 +34,7 @@
     <div id="buscarMovie">
       @if (movieService.movies.length) {
         @for (movie of movieService.movies; track $index) {
-          <section id="tarjeta" (click)="seleccionar(movie)" [disabled] = "!authService.isAdmin()">
+          <section id="tarjeta" (click)="seleccionar(movie)" >
             <h3>{{ movie.title }}</h3>
             <h4>Estreno: {{ movie.releaseDate }}</h4>
           

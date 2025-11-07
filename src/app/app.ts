@@ -16,7 +16,7 @@ import { HeaderAdmin } from './components/header-admin/header-admin';
 export class App implements OnInit {
   isLoggedIn$!: boolean; // Variable para el estado de login
   
-  constructor(private authService: AuthService) {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit() {
     // Suscribirse al estado de login expuesto por el servicio
@@ -26,4 +26,7 @@ export class App implements OnInit {
   onLogout() {
     this.authService.logout();
   }
+
+  
+  
 }
