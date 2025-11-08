@@ -29,14 +29,17 @@ export class SalaService {
     return this.http.get<Sala>(`${this.API_URL}/${id}`);
   }
 
+  getSalasByEnabled(enabled: boolean) {
+    return this.http.get<Sala[]>(`${this.API_URL}/enabled/${enabled}`);
+  }
   
   getSalaByName(name: string): Observable<Sala[]> {
     return this.http.get<Sala[]>(`${this.API_URL}/search?name=${encodeURIComponent(name)}`);
   }
 
  
-  postSala(id: string | number): Observable<Sala> {
-    return this.http.post<Sala>(`${this.API_URL}/create/${id}`, null);
+  postSala(sala : Sala): Observable<Sala> {
+    return this.http.post<Sala>(`${this.API_URL}/create`, sala);
   }
 
 

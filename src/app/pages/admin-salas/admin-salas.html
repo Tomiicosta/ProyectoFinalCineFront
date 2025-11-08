@@ -1,11 +1,77 @@
 <main>
     <section id = "salasPage">
-        <div class="verSalas">
-        </div>
+        <section id ="verSalas">
+            <div class="headerVerSalas">
+                <h2>Salas</h2>
+                <label>
+                    <input 
+                      type="checkbox" 
+                      name="filtroHabilitadas"
+                      [(ngModel)]="filtroHabilitadas"
+                      (change)="actualizarFiltroHabilitadas()"
+                    >
+                    Habilitadas
+                  </label>
+            </div>
+            
+            <div id="salas">
+                @if (salasService.salas.length) {
+                  @for (sala of salasService.salas; track $index) {
+                    <section id="tarjeta" >
+                      <h3>{{ sala.name }}</h3>
+                      <h4>Capacidad: {{ sala.seatCapacity }}</h4>
+          
+                      <div class="botones-tarjeta">
+                        <button class="btn-eliminar">
+                          Eliminar
+                        </button>
+                      </div>
+                    </section>
+                  }
+                }
+              </div>
+        </section>
         
-        <div class="agregarSala">
-
-        </div>
+        <section id = "agregarSala">
+            <h2>Agregar nueva sala</h2>
+            <form [formGroup]="salaForm" (ngSubmit)="agregarSala()">
+                <fieldset>
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" placeholder="Nombre" formControlName="name" required>
+                </fieldset>
+                
+                <fieldset>
+                    <label for="screenType">Tipo de Pantalla</label>
+                    <select id="screenType" formControlName="screenType" required>
+                      <option value="" disabled selected>Seleccionar tipo</option>
+                      <option value="STANDARD">2D</option>
+                      <option value="THREE_D">3D</option>
+                      <option value="FOUR_D">4D</option>
+                      <option value="IMAX">IMAX</option>
+                    </select>
+                </fieldset>
+               
+              
+                <fieldset>
+                    <label for="rowSeat">Filas</label>
+                    <input type="number" id="rowSeat" placeholder="Filas" formControlName="rowSeat" min="1">
+                </fieldset>
+                
+                <fieldset>
+                    <label for="columnSeat">Columnas</label>
+                    <input type="number" id="columnSeat" placeholder="Columnas" formControlName="columnSeat" min="1">
+                </fieldset>
+                
+              
+                <div class="checkbox-group">
+                  <label><input type="checkbox" formControlName="atmos"> Atmos</label>
+                  <label><input type="checkbox" formControlName="enabled"> Habilitada</label>
+                </div>
+              
+                <button type="submit">Agregar</button>
+              </form>
+              
+        </section>
             
         
     

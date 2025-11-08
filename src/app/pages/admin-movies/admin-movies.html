@@ -16,7 +16,7 @@
     <div id="peliculasCartelera">
       @if (movieService.moviesCartelera.length) {
         @for (movie of movieService.moviesCartelera; track $index) {
-          <section id="tarjeta">
+          <section id="tarjeta" (click)="seleccionar(movie)">
             <h3>{{ movie.title }}</h3>
             <h4>Estreno: {{ movie.releaseDate }}</h4>
 
@@ -37,7 +37,7 @@
           <section id="tarjeta" (click)="seleccionar(movie)" >
             <h3>{{ movie.title }}</h3>
             <h4>Estreno: {{ movie.releaseDate }}</h4>
-          
+
             <div class="botones-tarjeta">
               <button class="btn-agregar" (click)="$event.stopPropagation(); seleccionar(movie)" [disabled] = "!authService.isAdmin()">
                 Ver info
@@ -61,10 +61,10 @@
           {{ selectedMovie.genres && selectedMovie.genres.length ? selectedMovie.genres.join(', ') : 'No especificado' }}
         </p>
         <p><strong>⭐ Promedio de votos:</strong> {{ selectedMovie.voteAverage }} ({{ selectedMovie.voteCount }} votos)</p>
-        <p><strong>🔗 IMDb:</strong> 
+        <p><strong>🔗 IMDb: </strong> 
           @if(selectedMovie.imdbId){
             <a  href="https://www.imdb.com/title/{{ selectedMovie.imdbId }}" target="_blank">
-              Ver en IMDb
+            Ver en IMDb
             </a>
           }
           @if(!selectedMovie.imdbId){
