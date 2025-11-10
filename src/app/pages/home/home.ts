@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MovieService } from '../../services/movie/movie-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,10 +14,15 @@ export class Home implements OnInit{
   indiceActual = 0; 
 
 
-  constructor(public movieService:MovieService){
-
-  }
+  constructor(
+    private router: Router, 
+    public movieService:MovieService
+  ) {}
  
+  // boton de "Mas info"
+  verDetalles(id: number | undefined) {
+    this.router.navigate(['/details', id]);
+  }
 
   // 🔹 Avanza una imagen
   siguiente() {

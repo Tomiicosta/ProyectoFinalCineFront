@@ -8,7 +8,7 @@
 
   <section class="galeria">
     <ul class="lista-pelis">
-      @for (peli of movieService.moviesCartelera; track $index) {
+      @for (peli of ticketService.peliculas; track $index) {
         <li
           class="item"
           #item
@@ -23,13 +23,13 @@
 
   <aside class="banner font-inter">
     <div class="about-peli">
-      <h1>{{ movieService.selectedPelicula?.title }}</h1>
+      <h1>{{ ticketService.peliculaSeleccionada?.title }}</h1>
       <p>{{ displayedDescription }}</p>
-      <button id="btn-ver" (click)="verDetalles(movieService.selectedPelicula!.id)">Ver más</button>
+      <button id="btn-ver" (click)="verDetalles()">Ver más</button>
     </div>
 
     <div class="btns-ticket font-inter">
-      <button id="btn-step" (click)="confirmarPaso1(movieService.selectedPelicula!.id.toString())">SIGUIENTE</button>
+      <button id="btn-step" (click)="confirmarPaso1()">SIGUIENTE</button>
       <button id="btn-back" (click)="volverAtras()">ATRÁS</button>
     </div>
   </aside>

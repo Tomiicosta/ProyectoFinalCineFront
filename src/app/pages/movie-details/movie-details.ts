@@ -1,7 +1,7 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { Pelicula } from '../../models/pelicula';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TicketService } from '../../services/ticket-service';
+import { TicketService } from '../../services/ticket/ticket-service';
 import { Location } from '@angular/common';
 import { MovieService } from '../../services/movie/movie-service';
 import Movie from '../../models/movie';
@@ -23,7 +23,8 @@ export class MovieDetails {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
-    public movieService:MovieService
+    public movieService: MovieService,
+    public ticketService: TicketService
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +33,7 @@ export class MovieDetails {
       this.movieId = +params['id'];
       if (this.movieId) {
         // 3. Pide al servicio que busque y almacene la peli
-        this.getSelectecMovieBd(this.movieId)
+        this.getSelectedMovieBd(this.movieId)
 
       } else {
         console.error('No hay película seleccionada para navegar.');
@@ -40,10 +41,10 @@ export class MovieDetails {
     });
   }
 
-  getSelectecMovieBd(id:number){
+  getSelectedMovieBd(id:number){
     this.movieService.getMovieBd(id).subscribe({
-      next:(data)=>{this.peliculaSeleccionada = data},
-      error: (e)=> {console.log(e)}
+      next:(data)=>{ this.peliculaSeleccionada = data },
+      error: (e)=> { console.log(e) }
     })
   }
 
@@ -52,9 +53,12 @@ export class MovieDetails {
 
     // 2. Usar el servicio para establecer la película como la "actual"
     if (this.peliculaSeleccionada) {
-   
+      
+      // MANEJAR EXCEPCION SI NO HAY FUNCIONES DE LA PELICULA
+
       // 3. Navegar al paso 2
-      this.router.navigate(['/ticket/step2', this.peliculaSeleccionada.id]);
+      this.ticketService.setPeliculaSeleccionada(this.peliculaSeleccionada);
+      this.router.navigate(['/ticket/step2']);
     } else {
       console.error('No hay película seleccionada para navegar.');
     }

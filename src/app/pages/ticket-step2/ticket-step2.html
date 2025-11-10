@@ -8,11 +8,11 @@
   <section class="funciones">
     @if (peliculaSeleccionada; as peli) {
       <div class="div-img">
-        <img [src]="peli.img" [alt]="peli.titulo">
+        <img [src]="peli.posterUrl" [alt]="peli.title">
       </div>
       <div class="div-tabla font-open-sans">
         <div class="titulo-peli">
-          <h2>{{ peli.titulo }}</h2>
+          <h2>{{ peli.title }}</h2>
         </div>
         <div class="div-funciones">
           <div class="div-dias">

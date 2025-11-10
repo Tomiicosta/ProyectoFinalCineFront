@@ -1,11 +1,12 @@
 import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TicketService } from '../../services/ticket-service';
+import { TicketService } from '../../services/ticket/ticket-service';
 import { NgClass } from '@angular/common';
 import { Pelicula } from '../../models/pelicula';
 import { Butaca } from '../../models/butaca';
 import { Location } from '@angular/common';
 import { Funcion } from '../../models/funcion';
+import Movie from '../../models/movie';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -157,7 +158,7 @@ export class TicketStep3 implements OnInit {
   // Propiedades computadas para la UI
   totalButacasSeleccionadas = computed(() => this.butacasSeleccionadas().length);
 
-  peliculaSeleccionada: Pelicula | undefined;
+  peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
 
   constructor(
@@ -168,8 +169,8 @@ export class TicketStep3 implements OnInit {
 
   ngOnInit(): void {
     
-    this.peliculaSeleccionada = this.ticketService.getPeliculaSnapshot();
-    this.funcionSeleccionada = this.ticketService.getFuncionSnapshot();
+    this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
+    this.funcionSeleccionada = this.ticketService.getFuncion();
 
     if (this.peliculaSeleccionada && this.funcionSeleccionada) {
       

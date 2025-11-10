@@ -15,7 +15,7 @@
 
                 <div class="info-pelicula">
                     <p class="titulo">{{ movieService.moviesCartelera[indiceActual]?.title }}</p>
-                    <button class="btn-info">Más info</button>
+                    <button class="btn-info" (click)="verDetalles(movieService.moviesCartelera[indiceActual]?.id)">Más info</button>
                 </div>
 
                 <button class="anterior" (click)="anterior()">&#10094;</button>

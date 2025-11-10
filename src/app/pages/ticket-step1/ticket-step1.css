@@ -1,5 +1,8 @@
 main {
   margin-top: -35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .ticket-info {
