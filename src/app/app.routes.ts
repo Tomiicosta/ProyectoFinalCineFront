@@ -22,11 +22,11 @@ export const routes: Routes = [
     {path: 'ticket/step1', component: TicketStep1},
     {path: 'ticket/step2', component: TicketStep2},
     {path: 'ticket/step3', component: TicketStep3},
+    {path: 'ticket/step4', component: TicketStep4},
     {path: 'details/:id', component: MovieDetails},
     {path: 'adminMovies',component: AdminMovies, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminFunciones',component: AdminFunciones, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminSalas',component:AdminSalas, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: '', redirectTo: '/inicio', pathMatch: 'full' }, // Si está logueado, va a 'inicio'
     {path: '**', redirectTo: '/inicio' }, // Manejo de rutas no encontradas
-    {path: 'ticket/step4', component: TicketStep4}
 ];
