@@ -13,7 +13,11 @@
             <section class="section-details font-open-sans">
                 <div class="div-details">
                     <h1 class="title-peli" title="{{ peli.title }}"> {{ peli.title }} </h1>
-                    <h3 class="genre-peli">AVENTURA - ACCION</h3>
+                    <h3 class="genre-peli">
+                        @for (g of peli.genres; track $index) {
+                            {{ g.toString() }}
+                        }
+                    </h3>
                     <p class="description-peli">{{ peli.overview }}</p>
                 </div>
                 <div class="div-funciones">

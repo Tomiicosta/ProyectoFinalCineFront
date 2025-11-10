@@ -5,7 +5,33 @@
     </section>
 
     <section class="ticket-section font-inter">
+        <div *ngIf="compraInfo">
+            <h3>Resumen de la Compra</h3>
+            <p>Producto: {{ compraInfo.nombre }}</p>
+            <!--
+            <p>Total: {{ compraInfo.precio | currency }}</p>
+            -->
+            <hr>
+            
+            <ng-container *ngIf="usuarioLogueado; else mensajeNoLogueado">
+                <button 
+                    (click)="iniciarPago()" 
+                    class="btn btn-primary"
+                    [disabled]="!compraInfo.preferenceId">
+                    Ir a Pagar
+                </button>
+                <small class="form-text text-muted">Serás redirigido al entorno seguro de Mercado Pago.</small>
+            </ng-container>
         
+            <ng-template #mensajeNoLogueado>
+                <div class="alert alert-warning" role="alert">
+                    🚨 **Debes iniciar sesión** para continuar con la compra.
+                </div>
+                <button (click)="redirigirALogin()" class="btn btn-success">
+                    Iniciar Sesión
+                </button>
+            </ng-template>
+        </div>
     </section>
 
 </main>

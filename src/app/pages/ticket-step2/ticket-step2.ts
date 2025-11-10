@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pelicula } from '../../models/pelicula';
-import { TicketService } from '../../services/ticket-service';
+import { TicketService } from '../../services/ticket/ticket-service';
 import { Location } from '@angular/common';
 import { Funcion } from '../../models/funcion';
+import Movie from '../../models/movie';
 
 @Component({
   selector: 'app-ticket-step2',
@@ -13,7 +14,7 @@ import { Funcion } from '../../models/funcion';
 })
 export class TicketStep2 implements OnInit {
 
-  peliculaSeleccionada: Pelicula | undefined;
+  peliculaSeleccionada: Movie | undefined;
 
   constructor(
     private location: Location,
@@ -23,7 +24,7 @@ export class TicketStep2 implements OnInit {
 
   ngOnInit(): void {
 
-    this.peliculaSeleccionada = this.ticketService.getPeliculaSnapshot();
+    this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     
     if (this.peliculaSeleccionada) {
       
@@ -39,11 +40,7 @@ export class TicketStep2 implements OnInit {
 
   }
 
-  seleccionarFuncionFecha() {
-
-  }
-
-  seleccionarFuncionHora() {
+  seleccionarFuncion() {
 
   }
 
@@ -52,7 +49,7 @@ export class TicketStep2 implements OnInit {
     if (!this.peliculaSeleccionada) return;
 
     // Setear la funcion elegida
-    this.ticketService.setFuncionActual({ 
+    this.ticketService.setFuncion({ 
       id: 1, 
       fecha: '02-06-2026', 
       hora: '20:00' 

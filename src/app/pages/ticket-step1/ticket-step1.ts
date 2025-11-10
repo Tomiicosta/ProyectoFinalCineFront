@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MovieService } from '../../services/movie/movie-service';
 import Movie from '../../models/movie';
+import { TicketService } from '../../services/ticket/ticket-service';
 
 @Component({
   selector: 'app-ticket-step1',
@@ -12,50 +13,40 @@ import Movie from '../../models/movie';
 })
 export class TicketStep1 implements OnInit, AfterViewInit {
 
-  cardActive = 2;
   displayedDescription: string = '';
   @ViewChildren('item') items!: QueryList<ElementRef<HTMLElement>>;
 
   constructor(
     private location: Location,
     private router: Router,
-    public movieService: MovieService
-  ) {}
+    public movieService: MovieService,
+    public ticketService: TicketService
+  ) { }
 
   ngOnInit() {
-  this.movieService.getMovies().subscribe({
-    next: (data) => {
-      this.movieService.moviesCartelera = data;
-      this.movieService.selectedPelicula = data[this.cardActive];
-      this.displayedDescription = this.processDescription(this.movieService.selectedPelicula.overview);
-    }
-  });
-}
-
+    this.movieService.getMovies().subscribe({
+      next: (data) => {
+        // Carga las peliculas en el Ticket Service
+        this.ticketService.peliculas = data;
+        // Setea la pelicula seleccionada segun el index y las peliculas
+        this.ticketService.setPeliculaSeleccionada(data[this.ticketService.indexPelicula]);
+        // Setea la descripcion segun la pelicula seleccionada
+        this.displayedDescription = this.processDescription(this.ticketService.getPeliculaSeleccionada()?.overview);
+      }
+    });
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => this.cargarGaleria(), 0);
     this.items.changes.subscribe(() => this.cargarGaleria());
   }
 
-  confirmarPaso1(peliculaId: string) {
-    this.movieService.getMovie(peliculaId).subscribe({
-      next: (data) => {
-        this.movieService.selectedPelicula = data;
-        this.router.navigate(['/ticket/step2', peliculaId]);
-      },
-      error: (e) => console.error(e)
-    });
+  confirmarPaso1() {
+    this.router.navigate(['/ticket/step2']);
   }
 
-  verDetalles(peliculaId: number) {
-    this.movieService.getMovieBd(peliculaId).subscribe({
-      next: (data) => {
-        this.movieService.selectedPelicula = data;
-        this.router.navigate(['/details', peliculaId]);
-      },
-      error: (e) => console.error(e)
-    });
+  verDetalles() {
+    this.router.navigate(['/details', this.ticketService.peliculaSeleccionada?.id]);
   }
 
   volverAtras(): void {
@@ -66,14 +57,16 @@ export class TicketStep1 implements OnInit, AfterViewInit {
     const elements = this.items.toArray().map(ref => ref.nativeElement);
     const total = elements.length;
 
-    if (!this.movieService.moviesCartelera?.length) return;
+    if (!this.ticketService.peliculas?.length) return;
 
-    this.movieService.selectedPelicula = this.movieService.moviesCartelera[this.cardActive];
-    this.displayedDescription = this.processDescription(this.movieService.selectedPelicula.overview);
+    // Setea la pelicula seleccionada, segun la lista de peliculas, y segun el index de indexPelicula
+    this.ticketService.setPeliculaSeleccionada(this.ticketService.peliculas[this.ticketService.indexPelicula]);
+
+    this.displayedDescription = this.processDescription(this.ticketService.getPeliculaSeleccionada()?.overview);
 
     for (let i = 0; i < total; i++) {
       const el = elements[i];
-      let offset = i - this.cardActive;
+      let offset = i - this.ticketService.indexPelicula;
       if (offset > total / 2) offset -= total;
       if (offset <= -total / 2) offset += total;
 
@@ -101,16 +94,16 @@ export class TicketStep1 implements OnInit, AfterViewInit {
   }
 
   nextSlide() {
-    this.cardActive = (this.cardActive + 1) % this.movieService.moviesCartelera.length;
+    this.ticketService.indexPelicula = (this.ticketService.indexPelicula + 1) % this.ticketService.peliculas.length;
     this.cargarGaleria();
   }
 
   prevSlide() {
-    this.cardActive = (this.cardActive - 1 + this.movieService.moviesCartelera.length) % this.movieService.moviesCartelera.length;
+    this.ticketService.indexPelicula = (this.ticketService.indexPelicula - 1 + this.ticketService.peliculas.length) % this.ticketService.peliculas.length;
     this.cargarGaleria();
   }
 
-  private processDescription(description: string): string {
+  private processDescription(description: string | undefined): string {
     const MAX_CHARS = 175;
     if (!description) return '';
     if (description.length > MAX_CHARS) {
