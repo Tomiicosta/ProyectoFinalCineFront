@@ -44,3 +44,46 @@ main{
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+#toast-container > div {
+  position: fixed; 
+  z-index: 99999; 
+  bottom: 20px;  
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.95; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+
+  transition: all 0.3s ease-in-out;
+  padding: 15px; 
+  max-width: 350px; 
+}
+
+#toast-container > div:hover {
+  opacity: 1;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.toast-title {
+  font-weight: 700;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+}
+
+.toast-message {
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.toast-success {
+  background-color: #28a745 !important; 
+  color: #ffffff; 
+  border: 1px solid #218838; 
+}
+
+.toast-error {
+  background-color: #dc3545 !important; 
+  color: #ffffff;
+  border: 1px solid #c82333; 
+}

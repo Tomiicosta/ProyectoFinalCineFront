@@ -99,3 +99,7 @@ input:focus {
   color: white;
   border: 2px solid white;
 }
+
+.error-message{
+  color: white;
+}

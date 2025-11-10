@@ -3,13 +3,44 @@
     <div class="container">
         <h2>Registro</h2>
         <form class = "registerForm" [formGroup]="formRegister" (ngSubmit)="onSubmit()">
-            <input type="text" id="Name" formControlName="name" placeholder="🧑 Ingrese su nombre">
-            <input type="text" id="Surname" formControlName="surname" placeholder="🧑 Ingrese su apellido">
-            <input type="text" id="Username" formControlName="username" placeholder="📎 Ingrese su nombre de usuario">
-            <input type="text" id="Email" formControlName="email" placeholder="✉️ Ingrese su email">
-            <input type="text" id="Password" formControlName="password" placeholder="🔗 Ingrese su contraseña" >
+            <input type="text" id="name" formControlName="name" placeholder="🧑 Ingrese su nombre">
+                @if(name.hasError('required') && name.touched){
+                    <p class="error-message"> El nombre es obligatorio.</p>
+                }@else if (name.hasError('minlength')){
+                    <p class="error-message"> El nombre debe tener minimo 3 caracteres. </p>
+                }       
+            
+            <input type="text" id="surname" formControlName="surname" placeholder="🧑 Ingrese su apellido">
+                @if(surname.hasError('required') && surname.touched){
+                    <p class="error-message"> El apellido es obligatorio.</p>
+                }@else if(surname.hasError('minlength')){
+                    <p class="error-message"> El apellido debe tener minimo 3 caracteres. </p>
+                }
 
-            <button class="btnRegister" type="submit">Registrarse</button>
+            <input type="text" id="username" formControlName="username" placeholder="📎 Ingrese su nombre de usuario">
+                @if(username.hasError('required') && username.touched){
+                    <p class="error-message"> El nombre de usuario es obligatorio.</p>
+                }@else if(username.hasError('minlength')){
+                    <p class="error-message"> El nombre de usuario debe tener minimo 3 caracteres. </p>
+                }
+            
+            <input type="email" id="email" formControlName="email" placeholder="✉️ Ingrese su email">
+                @if(email.hasError('required') && email.touched){
+                    <p class="error-message"> El Email es obligatorio.</p>
+                }@else if(email.hasError('email')){
+                    <p class="error-message">El texto debe tener formato de Email.</p>
+                }
+
+            <input type="password" id="password" formControlName="password" placeholder="🔗 Ingrese su contraseña" >
+                @if(password.hasError('required') && password.touched){
+                    <p class="error-message"> La contraseña es obligatoria.</p>
+                }@else if(password.hasError('minlength')){
+                    <p class="error-message">La contraseña debe tener minimo 6 caracteres. </p>
+                }@else if(password.hasError('pattern')){
+                    <p class="error-message">La contraseña debe contener minimo una mayúscula, una minúscula, un carácter especial y un número. </p>
+                }
+               
+            <button class="btnRegister" type="submit" [disabled] ="formRegister.invalid" >Registrarse</button>
         </form>
     </div>
 </section>
