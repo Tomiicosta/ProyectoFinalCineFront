@@ -9,11 +9,17 @@
         <fieldset class="UserField">
           <label for="User">Usuario</label>
           <input type="text" id="User" formControlName="User" placeholder="Ingrese su usuario">
+          @if(User.invalid && User.touched){
+            <p class = "error-message"> Este campo no puede estar vacío.</p>
+          }
         </fieldset>
   
         <fieldset class="PasswordField">
           <label for="Password">Contraseña</label>
           <input type="password" id="Password" formControlName="Password" placeholder="ingrese su contraseña">
+          @if(Password.invalid && Password.touched){
+            <p class = "error-message"> Este campo no puede estar vacío.</p>
+          }
         </fieldset>
       </div>
   
@@ -22,7 +28,7 @@
         <p class="registrate"><a routerLink="/register" class="registrate">Regístrate</a></p>
       </div>
   
-      <button class="btnLogin" type="submit">Iniciar sesión</button>
+      <button class="btnLogin" type="submit" [disabled] = "formLogin.invalid">Iniciar sesión</button>
     </form>
   </div>
   
