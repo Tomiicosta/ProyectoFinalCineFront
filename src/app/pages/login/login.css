@@ -134,3 +134,7 @@ input:focus {
   text-align: center;
 
 }
+
+.error-message{
+  color: white;
+}
