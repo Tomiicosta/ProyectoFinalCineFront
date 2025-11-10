@@ -27,6 +27,7 @@
     grid-area: info;
 }
 
+
 #verSalas, #agregarSala {
     background-color: #141414;
     border: 1px solid #ff1e1e;
@@ -95,6 +96,7 @@ label {
     top: -1px;
   }
 
+
 #salas{
 display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -102,9 +104,10 @@ display: grid;
   padding: 10px;
   overflow-y: auto;
   max-height: 70vh;
+  scrollbar-gutter: stable both-edges;
 }
 
-#tarjeta {
+.tarjeta {
     background-color: #1a1a1a;
     border: 1px solid #ff2b2b;
     border-radius: 12px;
@@ -113,16 +116,20 @@ display: grid;
     display: flex;
     flex-direction: column;
     cursor: pointer;
-  
+
+  }
+  .tarjeta:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(255, 30, 30, 0.5);
   }
 
-  #tarjeta h3 {
+  .tarjeta h3 {
     color: #ff3b3b;
     font-size: 1.2rem;
     margin-bottom: 5px;
   }
   
-  #tarjeta h4 {
+  .tarjeta h4 {
     color: #ccc;
     font-size: 0.9rem;
     margin: 3px 0;
@@ -150,6 +157,9 @@ display: grid;
 
   .botones-tarjeta{
     padding-top: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
   }
 
   /* Formulario agregar */
@@ -209,8 +219,12 @@ display: grid;
     font-weight: 500;
   }
   
+  .botonesForm{
+    display: flex;
+    flex-direction: column;
+  }
   /* 🟥 Botón */
-  button[type="submit"] {
+  .btn-form {
     background-color: #ff1e1e;
     color: #fff;
     border: none;
@@ -222,6 +236,10 @@ display: grid;
     transition: background-color 0.3s, transform 0.2s;
     margin-top: 12px;
   }
+
+  #btn-cancelar{
+    background-color: #7e7b7b;
+  }
   
   button[type="submit"]:hover {
     background-color: #ff4444;
@@ -231,4 +249,95 @@ display: grid;
   button[type="submit"]:active {
     transform: scale(0.97);
   }
+
+  .detalle-sala {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    border-radius: 16px;
+    background-color: #141414;
+    border: 1px solid #2b2b2b;
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  }
+  
+  .detalle-sala h2 {
+    color: #ffffff;
+    margin: 0 0 4px 0;
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+  
+  .detalle-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2b2b2b;
+  }
+  
+  .detalle-lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-left: 4px solid transparent;
+  }
+  
+  .detalle-lista li:nth-child(odd)  { background: rgba(255, 255, 255, 0.03); }
+  .detalle-lista li:nth-child(even) { background: rgba(255, 255, 255, 0.06); }
+  
+  .detalle-lista li:hover { border-left-color: #ff3b3b; }
+  
+  .label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ff5757;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  
+  .value {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+    overflow-wrap: anywhere;
+  }
+  
+  .chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid #2b2b2b;
+    color: #d9d9d9;
+  }
+  
+  .chip.ok {
+    background: rgba(39, 201, 63, 0.12);
+    border-color: rgba(39, 201, 63, 0.35);
+    color: #d7ffd9;
+  }
+  
+  .chip.bad {
+    background: rgba(255, 85, 85, 0.12);
+    border-color: rgba(255, 85, 85, 0.35);
+    color: #ffd7d7;
+  }
+  
+  .acciones-detalle {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  
+  .acciones-detalle .btn-form { flex: 1; }
   

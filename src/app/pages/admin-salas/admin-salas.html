@@ -1,79 +1,111 @@
 <main>
-    <section id = "salasPage">
-        <section id ="verSalas">
-            <div class="headerVerSalas">
-                <h2>Salas</h2>
-                <label>
-                    <input 
-                      type="checkbox" 
-                      name="filtroHabilitadas"
-                      [(ngModel)]="filtroHabilitadas"
-                      (change)="actualizarFiltroHabilitadas()"
-                    >
-                    Habilitadas
-                  </label>
-            </div>
-            
-            <div id="salas">
-                @if (salasService.salas.length) {
-                  @for (sala of salasService.salas; track $index) {
-                    <section id="tarjeta" >
-                      <h3>{{ sala.name }}</h3>
-                      <h4>Capacidad: {{ sala.seatCapacity }}</h4>
-          
-                      <div class="botones-tarjeta">
-                        <button class="btn-eliminar">
-                          Eliminar
-                        </button>
-                      </div>
-                    </section>
-                  }
-                }
-              </div>
-        </section>
-        
-        <section id = "agregarSala">
-            <h2>Agregar nueva sala</h2>
-            <form [formGroup]="salaForm" (ngSubmit)="agregarSala()">
-                <fieldset>
-                    <label for="name">Nombre</label>
-                    <input type="text" id="name" placeholder="Nombre" formControlName="name" required>
-                </fieldset>
-                
-                <fieldset>
-                    <label for="screenType">Tipo de Pantalla</label>
-                    <select id="screenType" formControlName="screenType" required>
-                      <option value="" disabled selected>Seleccionar tipo</option>
-                      <option value="STANDARD">2D</option>
-                      <option value="THREE_D">3D</option>
-                      <option value="FOUR_D">4D</option>
-                      <option value="IMAX">IMAX</option>
-                    </select>
-                </fieldset>
-               
-              
-                <fieldset>
-                    <label for="rowSeat">Filas</label>
-                    <input type="number" id="rowSeat" placeholder="Filas" formControlName="rowSeat" min="1">
-                </fieldset>
-                
-                <fieldset>
-                    <label for="columnSeat">Columnas</label>
-                    <input type="number" id="columnSeat" placeholder="Columnas" formControlName="columnSeat" min="1">
-                </fieldset>
-                
-              
-                <div class="checkbox-group">
-                  <label><input type="checkbox" formControlName="atmos"> Atmos</label>
-                  <label><input type="checkbox" formControlName="enabled"> Habilitada</label>
-                </div>
-              
-                <button type="submit">Agregar</button>
-              </form>
-              
-        </section>
-            
-        
+  <section id="salasPage">
+    <!-- Seccion listado de salas -->
+    <!-- Parte superior -->
+    <section id="verSalas">
+      <div class="headerVerSalas">
+        <h2>Salas</h2>
+        <label>
+          <input
+            type="checkbox"
+            name="filtroHabilitadas"
+            [(ngModel)]="filtroHabilitadas"
+            (change)="actualizarFiltroHabilitadas()"
+          >
+          Habilitadas
+        </label>
+      </div>
+      
     
+
+        <!--listado salas -->
+      <div id="salas">
+        @for (sala of salasService.salas; track sala.id) {
+          <section class="tarjeta" (click)="verDetalleSala(sala)">
+            <h3>{{ sala.name }}</h3>
+            <h4>Capacidad: {{ sala.seatCapacity }}</h4>
+
+            <div class="botones-tarjeta">
+              <button class="btn-eliminar" (click)="eliminarSala(sala); $event.stopPropagation()">Eliminar</button>
+              <button class="btn-modificar" (click)="editarSala(sala); $event.stopPropagation()">Modificar</button>
+            </div>
+          </section>
+        } @empty {
+          <h3 style="color: white">No hay salas para mostrar.</h3>
+        }
+      </div>
+
     </section>
+   
+
+    <!-- Seccion formularios y detalle-->
+    <section id="agregarSala">
+      @if (detalleSala) {
+        <!-- VISTA DE DETALLE -->
+        <article class="detalle-sala">
+          <h2>Detalles de {{ detalleSala.name }}</h2>
+          <ul class="detalle-lista">
+            <li><span class="label">Nombre</span><span class="value">{{ detalleSala.name }}</span></li>
+            <li><span class="label">Tipo de Pantalla</span><span class="value">{{ getScreenTypeLabel(detalleSala.screenType) }}</span></li>
+            <li><span class="label">Filas</span><span class="value">{{ detalleSala.rowSeat }}</span></li>
+            <li><span class="label">Columnas</span><span class="value">{{ detalleSala.columnSeat }}</span></li>
+            <li><span class="label">Capacidad</span><span class="value">{{ detalleSala.seatCapacity }}</span></li>
+            <li><span class="label">Atmos</span><span class="value"><span class="chip" [class.ok]="detalleSala.atmos" [class.bad]="!detalleSala.atmos">{{ detalleSala.atmos ? 'Sí' : 'No' }}</span></span></li>
+            <li><span class="label">Estado</span><span class="value"><span class="chip" [class.ok]="detalleSala.enabled" [class.bad]="!detalleSala.enabled">{{ detalleSala.enabled ? 'Habilitada' : 'Inhabilitada' }}</span></span></li>
+          </ul>
+          <div class="acciones-detalle">
+            <button class="btn-form" type="button" (click)="cerrarDetalle()">Cerrar</button>
+          </div>
+        </article>
+      } 
+      <!-- VISTA FORMULARIOS -->
+      @else {
+        <h2>
+          {{ isEditing ? ('Modificando ' + (selectedSala?.name || 'sala')) : 'Agregar sala' }}
+        </h2>
+        <form [formGroup]="salaForm" (ngSubmit)="isEditing ? actualizarSala() : agregarSala()">
+          <fieldset>
+            <label for="name">Nombre</label>
+            <input type="text" id="name" placeholder="Nombre" formControlName="name" required>
+          </fieldset>
+
+          <fieldset>
+            <label for="screenType">Tipo de Pantalla</label>
+            <select id="screenType" formControlName="screenType" required>
+              <option value="" disabled>Seleccionar tipo</option>
+              <option value="STANDARD">2D</option>
+              <option value="THREE_D">3D</option>
+              <option value="FOUR_D">4D</option>
+              <option value="IMAX">IMAX</option>
+            </select>
+          </fieldset>
+
+          <fieldset>
+            <label for="rowSeat">Filas</label>
+            <input type="number" id="rowSeat" placeholder="Filas" formControlName="rowSeat" min="1">
+          </fieldset>
+
+          <fieldset>
+            <label for="columnSeat">Columnas</label>
+            <input type="number" id="columnSeat" placeholder="Columnas" formControlName="columnSeat" min="1">
+          </fieldset>
+
+          <div class="checkbox-group">
+            <label><input type="checkbox" formControlName="atmos"> Atmos</label>
+            <label><input type="checkbox" formControlName="enabled"> Habilitada</label>
+          </div>
+
+          <div class="botonesForm">
+            <button class="btn-form" type="submit">
+              {{ isEditing ? 'Guardar cambios' : 'Agregar sala' }}
+            </button>
+
+            @if (isEditing) {
+              <button id="btn-cancelar" class="btn-form" type="button" (click)="cancelarEdicion()">Cancelar</button>
+            }
+          </div>
+        </form>
+      }
+    </section>
+  </section>
 </main>
