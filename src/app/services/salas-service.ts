@@ -37,6 +37,11 @@ export class SalaService {
     return this.http.get<Sala[]>(`${this.API_URL}/search?name=${encodeURIComponent(name)}`);
   }
 
+
+  
+  putSala(id: number, sala: any): Observable<any> {
+      return this.http.put(`${this.API_URL}/update/${id}`, sala);
+  }
  
   postSala(sala : Sala): Observable<Sala> {
     return this.http.post<Sala>(`${this.API_URL}/create`, sala);

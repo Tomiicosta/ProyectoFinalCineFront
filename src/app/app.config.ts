@@ -9,10 +9,10 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),provideHttpClient(),
+    provideRouter(routes),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideAnimations(),
     provideHttpClient(
       withInterceptors([
         AuthInterceptor // Lista de funciones interceptoras
