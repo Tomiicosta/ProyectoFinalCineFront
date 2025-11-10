@@ -23,15 +23,14 @@ export class TicketStep1 implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-  this.movieService.getMovies().subscribe({
-    next: (data) => {
-      this.movieService.moviesCartelera = data;
-      this.movieService.selectedPelicula = data[this.cardActive];
-      this.displayedDescription = this.processDescription(this.movieService.selectedPelicula.overview);
-    }
-  });
-}
-
+    this.movieService.getMovies().subscribe({
+      next: (data) => {
+        this.movieService.moviesCartelera = data;
+        this.movieService.selectedPelicula = data[this.cardActive];
+        this.displayedDescription = this.processDescription(this.movieService.selectedPelicula.overview);
+      }
+    });
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => this.cargarGaleria(), 0);

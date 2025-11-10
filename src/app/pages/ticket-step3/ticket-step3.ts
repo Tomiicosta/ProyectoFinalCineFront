@@ -1,6 +1,6 @@
 import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TicketService } from '../../services/ticket-service';
+import { TicketService } from '../../services/ticket/ticket-service';
 import { NgClass } from '@angular/common';
 import { Pelicula } from '../../models/pelicula';
 import { Butaca } from '../../models/butaca';

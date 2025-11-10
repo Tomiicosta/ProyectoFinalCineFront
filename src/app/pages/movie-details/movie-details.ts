@@ -1,7 +1,7 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { Pelicula } from '../../models/pelicula';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TicketService } from '../../services/ticket-service';
+import { TicketService } from '../../services/ticket/ticket-service';
 import { Location } from '@angular/common';
 import { MovieService } from '../../services/movie/movie-service';
 import Movie from '../../models/movie';

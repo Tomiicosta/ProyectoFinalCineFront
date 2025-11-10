@@ -1,9 +1,9 @@
 import { Injectable, signal } from '@angular/core';
-import { Pelicula } from '../models/pelicula';
+import { Pelicula } from '../../models/pelicula';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Compra } from '../models/compra';
+import { Compra } from '../../models/compra';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Funcion } from '../models/funcion';
+import { Funcion } from '../../models/funcion';
 
 @Injectable({
   providedIn: 'root'

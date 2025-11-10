@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pelicula } from '../../models/pelicula';
-import { TicketService } from '../../services/ticket-service';
+import { TicketService } from '../../services/ticket/ticket-service';
 import { Location } from '@angular/common';
 import { Funcion } from '../../models/funcion';
 
