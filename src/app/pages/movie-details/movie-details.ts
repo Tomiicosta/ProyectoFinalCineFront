@@ -33,7 +33,7 @@ export class MovieDetails {
       this.movieId = +params['id'];
       if (this.movieId) {
         // 3. Pide al servicio que busque y almacene la peli
-        this.getSelectedMovieBd(this.movieId)
+        this.getSelectedMovieBd(this.movieId.toString())
 
       } else {
         console.error('No hay película seleccionada para navegar.');
@@ -41,7 +41,7 @@ export class MovieDetails {
     });
   }
 
-  getSelectedMovieBd(id:number){
+  getSelectedMovieBd(id:string){
     this.movieService.getMovieBd(id).subscribe({
       next:(data)=>{ this.peliculaSeleccionada = data },
       error: (e)=> { console.log(e) }

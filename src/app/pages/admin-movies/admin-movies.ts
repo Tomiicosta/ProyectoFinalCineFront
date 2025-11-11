@@ -26,6 +26,14 @@ export class AdminMovies implements OnInit{
     this.mostrarAgregar = true;
   }
 
+  seleccionarBD(id:string){
+    this.movieService.getMovieBd(id).subscribe({
+      next: (data) => { this.selectedMovie = data;
+        this.mostrarAgregar = true;
+      },
+      error: (e) => { console.log(e) }
+    })
+  }
 
   getMovieById(id:string){
     this.movieService.getMovie(id).subscribe({
