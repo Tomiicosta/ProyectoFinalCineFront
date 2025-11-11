@@ -5,47 +5,50 @@
 
     <section id="buscarId">
       <form>
-        <input id="inputNombre" name="nombreInput" placeholder="Buscar pelicula" type="string" [(ngModel)]="nombreInput"/>
-        <button type="button" (click)="getMoviesByName(nombreInput)" [disabled] = "!authService.isAdmin()">
+        <input id="inputNombre" name="nombreInput" placeholder="Buscar pelicula" type="string"
+          [(ngModel)]="nombreInput" />
+        <button type="button" (click)="getMoviesByName(nombreInput)" [disabled]="!authService.isAdmin()">
           Buscar
         </button>
-        <button class="btn-volver" (click)="getAllMovies()" [disabled] = "!authService.isAdmin()">Volver</button>
+        <button class="btn-volver" (click)="getAllMovies()" [disabled]="!authService.isAdmin()">Volver</button>
       </form>
     </section>
-    
+
     <div id="peliculasCartelera">
       @if (movieService.moviesCartelera.length) {
-        @for (movie of movieService.moviesCartelera; track $index) {
-          <section id="tarjeta" (click)="seleccionar(movie)">
-            <h3>{{ movie.title }}</h3>
-            <h4>Estreno: {{ movie.releaseDate }}</h4>
+      @for (movie of movieService.moviesCartelera; track $index) {
+      <section id="tarjeta" (click)="seleccionar(movie)">
+        <h3>{{ movie.title }}</h3>
+        <h4>Estreno: {{ movie.releaseDate }}</h4>
 
-            <div class="botones-tarjeta">
-              <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id.toString())" [disabled] = "!authService.isAdmin()">
-                Eliminar
-              </button>
-            </div>
-          </section>
-        }
+        <div class="botones-tarjeta">
+          <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id.toString())"
+            [disabled]="!authService.isAdmin()">
+            Eliminar
+          </button>
+        </div>
+      </section>
+      }
       }
     </div>
 
-    
+
     <div id="buscarMovie">
       @if (movieService.movies.length) {
-        @for (movie of movieService.movies; track $index) {
-          <section id="tarjeta" (click)="seleccionar(movie)" >
-            <h3>{{ movie.title }}</h3>
-            <h4>Estreno: {{ movie.releaseDate }}</h4>
+      @for (movie of movieService.movies; track $index) {
+      <section id="tarjeta" (click)="seleccionar(movie)">
+        <h3>{{ movie.title }}</h3>
+        <h4>Estreno: {{ movie.releaseDate }}</h4>
 
-            <div class="botones-tarjeta">
-              <button class="btn-agregar" (click)="$event.stopPropagation(); seleccionar(movie)" [disabled] = "!authService.isAdmin()">
-                Ver info
-              </button>
-            </div>
-          </section>
-          
-        }
+        <div class="botones-tarjeta">
+          <button class="btn-agregar" (click)="$event.stopPropagation(); seleccionar(movie)"
+            [disabled]="!authService.isAdmin()">
+            Ver info
+          </button>
+        </div>
+      </section>
+
+      }
       }
     </div>
   </section>
@@ -53,37 +56,46 @@
 
   <section id="Agregar">
     @if (mostrarAgregar){
-      @if (selectedMovie) {
-        <h2 class = "tituloPelicula">{{ selectedMovie.title }}</h2>
-        <p><strong>🎬 Estreno:</strong> {{ selectedMovie.releaseDate }}</p>
-        <p><strong>⏱️ Duración:</strong> {{ selectedMovie.runtime }} min</p>
-        <p><strong>🧩 Géneros:</strong> 
-          {{ selectedMovie.genres && selectedMovie.genres.length ? selectedMovie.genres.join(', ') : 'No especificado' }}
-        </p>
-        <p><strong>⭐ Promedio de votos:</strong> {{ selectedMovie.voteAverage }} ({{ selectedMovie.voteCount }} votos)</p>
-        <p><strong>🔗 IMDb: </strong> 
-          @if(selectedMovie.imdbId){
-            <a  href="https://www.imdb.com/title/{{ selectedMovie.imdbId }}" target="_blank">
-            Ver en IMDb
-            </a>
-          }
-          @if(!selectedMovie.imdbId){
-            <span>No disponible</span>
-          }
-          
-        </p>
-        <h3>Sinopsis</h3>
-          <p>{{ selectedMovie.overview || 'Sin descripción disponible.' }}</p>
-        
-    
+    @if (selectedMovie) {
+    <h2 class="tituloPelicula">{{ selectedMovie.title }}</h2>
+    <p><strong>🎬 Estreno:</strong> {{ selectedMovie.releaseDate }}</p>
+    <p><strong>⏱️ Duración:</strong> {{ selectedMovie.runtime }} min</p>
+    <p><strong>🧩 Géneros:</strong>
+      @if (selectedMovie.genres && selectedMovie.genres.length > 0) {
+      
+        @for (genre of selectedMovie.genres; track $index){
+        {{ genre }}
+        }
 
-        <button class="btn-agregar" (click)="manejarEnvio(selectedMovie.id.toString())" [disabled] = "!authService.isAdmin()">Agregar a cartelera</button>
-      } 
+      } @else {
+      <span>No especificado</span>
+      }
+    </p>
+    <p><strong>⭐ Promedio de votos:</strong> {{ selectedMovie.voteAverage }} ({{ selectedMovie.voteCount }} votos)</p>
+    <p><strong>🔗 IMDb: </strong>
+      @if(selectedMovie.imdbId){
+      <a href="https://www.imdb.com/title/{{ selectedMovie.imdbId }}" target="_blank">
+        Ver en IMDb
+      </a>
+      }
+      @if(!selectedMovie.imdbId){
+      <span>No disponible</span>
+      }
+
+    </p>
+    <h3>Sinopsis</h3>
+    <p>{{ selectedMovie.overview || 'Sin descripción disponible.' }}</p>
+
+
+
+    <button class="btn-agregar" (click)="manejarEnvio(selectedMovie.id.toString())"
+      [disabled]="!authService.isAdmin()">Agregar a cartelera</button>
+    }
     }
     @else {
-      <h2>Seleccioná una película para ver los detalles</h2>
+    <h2>Seleccioná una película para ver los detalles</h2>
     }
- 
+
   </section>
 
 
