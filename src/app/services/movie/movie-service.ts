@@ -58,7 +58,7 @@ export class MovieService {
     return this.http.get<Movie[]>(`/api/movies/bd`)
   }
 
-  getMovieBd(id:number){
+  getMovieBd(id:string){
     return this.http.get<Movie>(`/api/movies/bd/${id}`);
   }
 
