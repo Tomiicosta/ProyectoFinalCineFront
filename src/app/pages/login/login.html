@@ -16,7 +16,13 @@
   
         <fieldset class="PasswordField">
           <label for="Password">Contraseña</label>
-          <input type="password" id="Password" formControlName="Password" placeholder="ingrese su contraseña">
+          <div class="password-input-wrapper"> 
+            <input [type]="tipoDeCampo ? 'text' : 'password'" id="Password" formControlName="Password" placeholder="ingrese su contraseña"> 
+        
+            <div class="cambiarCampo" >
+              <img  [src]="obtenerIcono()" alt="alternar visibilidad de contraseña" class="im" (click)="verContrasenia()">
+            </div>
+          </div>
           @if(Password.invalid && Password.touched){
             <p class = "error-message"> Este campo no puede estar vacío.</p>
           }
