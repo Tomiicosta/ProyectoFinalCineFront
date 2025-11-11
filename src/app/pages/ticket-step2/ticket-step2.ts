@@ -44,15 +44,23 @@ export class TicketStep2 implements OnInit {
 
   }
 
+  
   confirmarPaso2() {
     
     if (!this.peliculaSeleccionada) return;
 
     // Setear la funcion elegida
     this.ticketService.setFuncion({ 
-      id: 1, 
-      fecha: '02-06-2026', 
-      hora: '20:00' 
+      id: 1,
+      date: '2026-06-02',
+      time:"20:00", // formato ISO, más realista
+      cinemaId: 3,
+      cinemaName: 'Sala 3D Central',
+      movieId: this.peliculaSeleccionada.id,
+      movieName: this.peliculaSeleccionada.title,
+      availableCapacity: 120,
+      runTime: 125,
+    
     });
     // if (!this.funcionSeleccionada) return;
 

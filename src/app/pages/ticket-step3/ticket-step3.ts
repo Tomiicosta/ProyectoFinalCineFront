@@ -196,8 +196,8 @@ export class TicketStep3 implements OnInit {
     // Guardar todos los datos en el servicio
     this.ticketService.setCompra({
       movieId: this.peliculaSeleccionada.id,
-      fecha: this.funcionSeleccionada.fecha,
-      hora: this.funcionSeleccionada.hora,
+      fecha: this.funcionSeleccionada.date,
+      hora: "guarda dani te hardcodee esto para no tener kilombo",
       butacas: this.butacasSeleccionadas(), 
       cantButacas: this.totalButacasSeleccionadas(),
       precioUnidad: 2500 // hardcodeo (CAMBIAR)
