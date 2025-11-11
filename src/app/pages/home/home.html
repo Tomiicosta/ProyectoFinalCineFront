@@ -15,7 +15,8 @@
 
                 <div class="info-pelicula">
                     <p class="titulo">{{ movieService.moviesCartelera[indiceActual]?.title }}</p>
-                    <button class="btn-info" (click)="verDetalles(movieService.moviesCartelera[indiceActual]?.id)">Más info</button>
+                    <button class="btn-info" (click)="verDetalles(movieService.moviesCartelera[indiceActual]?.id)">Más
+                        info</button>
                 </div>
 
                 <button class="anterior" (click)="anterior()">&#10094;</button>
@@ -34,16 +35,24 @@
             <button class="flecha izquierda" (click)="moverIzquierda()">&#10094;</button>
 
             <div class="carrusel" #carrusel>
-                @for (movie of movieService.moviesCartelera ; track $index) {
-                    @if(isUpcoming(movie.releaseDate)){
-                      <div class="pelicula">
-                    <img [src]="movie.posterUrl" [class.mostrar]="indiceActual === $index" alt="movie.title">
+
+                @if (upcomingMovies.length === 0) {
+
+                <p>No hay películas próximas a estrenar</p>
+
+                } @else {
+                @for (movie of upcomingMovies; track $index) {
+                <div class="pelicula" (click)="verDetalles(movie.id)">
+                    <img [src]="movie.posterUrl" [alt]="movie.title" class="poster">
+                    <div class="overlay">
+                        <button>Ver detalle</button>
+                    </div>
                     <p>{{ movie.title }}</p>
-                </div>  
-                    }
-                
+                </div>
+                }
                 }
             </div>
+
 
             <button class="flecha derecha" (click)="moverDerecha()">&#10095;</button>
         </div>

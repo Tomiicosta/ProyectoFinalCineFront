@@ -39,6 +39,9 @@ anterior() {
 }
 
 
+get upcomingMovies() {
+  return this.movieService.moviesCartelera.filter(movie => this.isUpcoming(movie.releaseDate));
+}
 
 
   
