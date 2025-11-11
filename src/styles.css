@@ -87,3 +87,37 @@ main{
   color: #ffffff;
   border: 1px solid #c82333; 
 }
+
+select {
+  /* base */
+  background-color: #0e0e0e;
+  color: #fff;
+  border: 1px solid #ff1e1e;
+  border-radius: 6px;
+
+  /* espacio para la flecha */
+  padding-right: 36px !important;
+
+  /* quitamos la flecha nativa */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* flecha custom (doble triángulo) a la izquierda del borde derecho */
+  background-image:
+    linear-gradient(45deg, transparent 50%, #ff4444 50%),
+    linear-gradient(135deg, #ff4444 50%, transparent 50%);
+  background-position: right 14px center, right 8px center; /* <- corrimiento */
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* IE/Edge Legacy: oculta la flecha nativa */
+select::-ms-expand { display: none; }
+
+/* (opcional) hover más clarito */
+select:hover {
+  background-image:
+    linear-gradient(45deg, transparent 50%, #ff6666 50%),
+    linear-gradient(135deg, #ff6666 50%, transparent 50%);
+}

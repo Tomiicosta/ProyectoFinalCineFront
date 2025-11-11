@@ -1,1 +1,153 @@
-<p>admin-funciones works!</p>
+<main>
+    <section id="funcionesPage">
+      <!-- Sección listado de funciones -->
+      <section id="verFunciones">
+        <div class="headerVerFunciones">
+          <h2>Funciones</h2>
+  
+          <div class="filtros">
+            <!-- Filtro por película -->
+            <select [(ngModel)]="filtroPelicula" (change)="aplicarFiltros()">
+              <option value="">Película (todas)</option>
+              @for (p of peliculas; track p.id) {
+                <option [value]="p.id">{{ p.title }}</option>
+              }
+            </select>
+  
+            <!-- Filtro por sala -->
+            <select [(ngModel)]="filtroSala" (change)="aplicarFiltros()">
+              <option value="">Sala (todas)</option>
+              @for (s of salas; track s.id) {
+                <option [value]="s.id">{{ s.name }}</option>
+              }
+            </select>
+  
+            <!-- Filtro por fecha -->
+            <input
+              type="date"
+              [(ngModel)]="filtroFecha"
+              (change)="aplicarFiltros()"
+            />
+  
+            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+          </div>
+        </div>
+  
+        <!-- Listado de funciones -->
+        <div id="funciones">
+          @for (funcion of funcionesFiltradas; track funcion.id) {
+            <section
+              class="tarjeta"
+              tabindex="0"
+              (click)="verDetalleFuncion(funcion)"
+              (keydown.enter)="verDetalleFuncion(funcion)"
+            >
+              <h3>{{ funcion.movieName }} — {{ funcion.cinemaName }}</h3>
+              <h4>
+                {{ funcion.date | date: 'dd/MM/yyyy' }} · {{ funcion.time | slice:0:5 }}
+              </h4>
+  
+              <div class="botones-tarjeta">
+                <button
+                  class="btn-eliminar"
+                  type="button"
+                  (click)="eliminarFuncion(funcion); $event.stopPropagation()"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </section>
+          } @empty {
+            <h3 style="color: white">No hay funciones para mostrar.</h3>
+          }
+        </div>
+      </section>
+  
+      <!-- Sección formulario -->
+      <section id="agregarFuncion">
+        @if (detalleFuncion) {
+          <!-- Vista de detalle -->
+          <article class="detalle-funcion">
+            <h2>Detalles</h2>
+            <ul class="detalle-lista">
+              <li>
+                <span class="label">Película</span>
+                <span class="value">{{ detalleFuncion.movieName }}</span>
+              </li>
+              <li>
+                <span class="label">Sala</span>
+                <span class="value">{{ detalleFuncion.cinemaName }}</span>
+              </li>
+              <li>
+                <span class="label">Fecha</span>
+                <span class="value">{{ detalleFuncion.date | date: 'dd/MM/yyyy' }}</span>
+              </li>
+              <li>
+                <span class="label">Hora</span>
+                <span class="value">{{ detalleFuncion.time | slice:0:5 }}</span>
+              </li>
+              <li>
+                <span class="label">Capacidad disponible</span>
+                <span class="value">{{ detalleFuncion.availableCapacity }}</span>
+              </li>
+            </ul>
+            <div class="acciones-detalle">
+              <button class="btn-form" type="button" (click)="cerrarDetalle()">
+                Cerrar
+              </button>
+            </div>
+          </article>
+        } @else {
+          <h2>Agregar función</h2>
+  
+          <form [formGroup]="funcionForm" (ngSubmit)="agregarFuncion()">
+            <fieldset>
+              <label for="fecha">Fecha</label>
+              <input id="fecha" type="date" formControlName="date" required />
+            </fieldset>
+  
+            <fieldset>
+              <label for="hora">Horario</label>
+              <input id="hora" type="time" formControlName="time" required />
+            </fieldset>
+  
+            <fieldset>
+              <label for="pelicula">Película</label>
+              <select id="pelicula" formControlName="movieId" required>
+                <option [ngValue]="null" disabled>Seleccionar película</option>
+                @for (p of peliculas; track p.id) {
+                  <option [ngValue]="p.id">{{ p.title }}</option>
+                }
+              </select>
+            </fieldset>
+  
+            <fieldset>
+              <label for="sala">Sala</label>
+              <select id="sala" formControlName="salaId" required>
+                <option [ngValue]="null" disabled>Seleccionar sala</option>
+                @for (s of salas; track s.id) {
+                  <option [ngValue]="s.id">
+                    {{ s.name }} ({{ s.screenType }}) — {{ s.atmos ? 'Atmos' : 'Estándar' }}
+                  </option>
+                }
+              </select>
+            </fieldset>
+  
+            <div class="botonesForm">
+              <button class="btn-form" type="submit">Agregar función</button>
+              <!-- Nuevo botón para vaciar -->
+              <button
+                id="btn-vaciar"
+                class="btn-form"
+                type="button"
+                (click)="funcionForm.reset()"
+              >
+                Vaciar campos
+              </button>
+            </div>
+          </form>
+        }
+      </section>
+    </section>
+  </main>
+  
