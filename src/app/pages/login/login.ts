@@ -43,7 +43,7 @@ export class Login {
 
     this.authService.login(this.formLogin.value.User, this.formLogin.value.Password).subscribe({
       next: () => {
-        this.toastr.success("¡Login exitoso!")
+        this.toastr.success("¡Login exitoso!");
         this.router.navigate(['/']);
       },
       error: () => {
