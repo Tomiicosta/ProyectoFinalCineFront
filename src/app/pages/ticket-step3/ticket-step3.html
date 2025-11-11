@@ -6,51 +6,58 @@
 
     <section class="ticket-section font-inter">
         <!-- Panel de Información (INFO PELICULA) -->
-        @if (peliculaSeleccionada; as peli) {
-          <div class="div-info">
+        @if (peliculaSeleccionada && funcionSeleccionada) {
+        <div class="div-info">
             <h4 class="">Detalles del Ticket</h4>
 
             <!-- Información Fija (Película, Día, Hora) -->
             <div class="info-peli">
-              <h3 class="title-peli" title="{{ peli.title }}">
-                {{ peli.title }}
-              </h3>
-              <p class="funcion-peli">Función: <b>{{ funcionSeleccionada?.date }}</b> a las <b> DANI TE SACO ESTO PORQUE ME DA PROBLEMA</b></p>
+                <h3 class="title-peli" title="{{ peliculaSeleccionada.title }}">
+                    {{ peliculaSeleccionada.title }}
+                </h3>
+                <p class="funcion-peli">Función: <b>{{ funcionSeleccionada.date }}</b> a las <b>{{ funcionSeleccionada.time }}</b></p>
             </div>
 
             <!-- Asientos Seleccionados (Reactivo) -->
             <div class="div-butacas">
-              <p class="">
-                <b>
-                Asientos Seleccionados:
-                </b>
-              </p>
-              <p class="num-butacas"><b>{{ totalButacasSeleccionadas() }}</b></p>
-              
-              <p class="">
-                Butacas: 
-              </p>
-              <p class="butacas-info">
-                <b>
-                {{ listaButacasSeleccionadas() || 'Ninguna' }}
-                </b>
-              </p>
+                <p class="">
+                    <b>
+                        Asientos Seleccionados:
+                    </b>
+                </p>
+                <p class="num-butacas"><b>{{ totalButacasSeleccionadas() }}</b></p>
+
+                <p class="">
+                    Butacas:
+                </p>
+                <p class="butacas-info">
+                    <b>
+                        {{ listaButacasSeleccionadas() || 'Ninguna' }}
+                    </b>
+                </p>
             </div>
 
             <ul class="info-colores">
                 <li class="info-color">
-                    <div class="color c-1"></div><p>Butaca Disponible</p>
+                    <div class="color c-1"></div>
+                    <p>Butaca Disponible</p>
                 </li>
                 <li class="info-color">
-                    <div class="color c-2"></div><p>Butaca Confirmada</p>
+                    <div class="color c-2"></div>
+                    <p>Butaca Confirmada</p>
                 </li>
                 <li class="info-color">
-                    <div class="color c-3"></div><p>Butaca Ocupada</p>
+                    <div class="color c-3"></div>
+                    <p>Butaca Ocupada</p>
                 </li>
             </ul>
-            
-            <button class="btn-reiniciar" (click)="limpiarButacasSeleccionadas()">Reiniciar butacas</button>
-          </div>
+
+            <button class="btn-reiniciar" 
+                (click)="limpiarButacasSeleccionadas()" 
+                [disabled]="totalButacasSeleccionadas() === 0">
+                    Reiniciar Butacas
+            </button>
+        </div>
         }
 
         <!-- Mapa de la Sala -->
@@ -60,40 +67,43 @@
                 <div class="pantalla"></div>
             </div>
             <div class="div-butacas">
-                @for (fila of mapaButacas(); track $index) {
+                @for (butaca of mapaButacas(); track butaca.id) {
+                    <p>ID: {{ butaca.id }} - Fila: {{ butaca.rowNumber }} - Columna: {{ butaca.columnNumber }} - Estado: {{ butaca.occupied }}</p>
+                    <!--
+                    FALTA TRABAJAR EL DIBUJADO DEL MAPA, PERO RETORNA BIEN LA INFO DE BUTACAS
                     <div class="fila-butacas">
-                        <span class="etiqueta-fila font-inter">{{ fila[0].fila }}</span>
+
+                        <span class="etiqueta-fila font-inter">
+                            {{ String.fromCharCode(64 + fila[0].seatRowNumber) }} 
+                        </span>
 
                         @for (butaca of fila; track butaca.id) {
-                        <div class="butaca" [ngClass]="{
-                                        'ocupada': butaca.estado === 'ocupada',
-                                        'seleccionada': butaca.estado === 'seleccionada',
-                                        'disponible-hover': butaca.hover && butaca.estado === 'disponible'
-                                    }" (click)="seleccionarButaca(butaca)" (mouseenter)="onMouseEnter(butaca)"
-                            (mouseleave)="onMouseLeave(butaca)">
-                        </div>
+                            <div class="butaca" (click)="seleccionarButaca(butaca)" [ngClass]="{
+                                    'butaca-ocupada': butaca.occupied,
+                                    'butaca-seleccionada': isButacaSeleccionada(butaca),
+                                    'butaca-disponible': !butaca.occupied && !isButacaSeleccionada(butaca)
+                                }">
+                            </div>
                         }
                     </div>
+                    -->
                 }
             </div>
         </div>
-    <!--}-->
     </section>
 
     <aside class="banner">
         <div class="btns-ticket font-inter">
             <button id="btn-step" class="" (click)="confirmarPaso3()">SIGUIENTE</button>
             <button id="btn-back" class="" (click)="volverAtras()">ATRÁS</button>
-            
+
             <!-- DIV DE ERRORES -->
             @if (errorMessage()) {
-                <div class="div-error ">
-                    {{ errorMessage() }}
-                </div>
+            <div class="div-error ">
+                {{ errorMessage() }}
+            </div>
             }
-
         </div>
-        
-    </aside>
 
+    </aside>
 </main>

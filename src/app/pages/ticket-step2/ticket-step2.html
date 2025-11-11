@@ -5,7 +5,7 @@
     <h1 class="step">PASO <span class="step-num">2</span></h1>
   </section>
 
-  <section class="funciones">
+  <section class="funciones-section">
     @if (peliculaSeleccionada; as peli) {
       <div class="div-img">
         <img [src]="peli.posterUrl" [alt]="peli.title">
@@ -15,12 +15,17 @@
           <h2>{{ peli.title }}</h2>
         </div>
         <div class="div-funciones">
-          <div class="div-dias">
             <h3>Elige tu FUNCIÓN preferida</h3>
-            <div class="dias">
-              [Días disponibles de función]
-            </div>
-          </div>
+
+            <ul class="funciones">
+              @for (f of funciones; track f.id) {
+                <li class="funcion" (click)="seleccionarFuncion(f)" 
+                  [style.background]="f.id === funcionSeleccionada?.id ? '#007bff' : ''" 
+                    [style.color]="f.id === funcionSeleccionada?.id ? 'white' : ''">
+                      {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} ({{ f.cinemaName }})
+                </li>
+              }
+            </ul>
         </div>
       </div>
     } @else {
@@ -46,7 +51,7 @@
   <aside class="banner font-inter">
     <div class="btns-ticket">
       <button id="btn-step" class=" " (click)="confirmarPaso2()">SIGUIENTE</button>
-      <button id="btn-back" class=" "  (click)="volverAtras()">ATRÁS</button>
+      <button id="btn-back" class=" " (click)="volverAtras()">ATRÁS</button>
     </div>
   </aside>
 </main>

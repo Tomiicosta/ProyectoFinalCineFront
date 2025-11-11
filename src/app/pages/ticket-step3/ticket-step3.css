@@ -161,13 +161,14 @@ main {
     margin: 5px;
     cursor: pointer;
     display: inline-block;
-    border-radius: 4px; /* Para simular una butaca */
-    transition: background-color 0.2s;
+    border-radius: 4px;
+    transition: all 0.2s ease;
 }
 
 /* 1. Butacas Ocupadas (Rojo) */
 .ocupada {
     background-color: #ff4d4d; /* Rojo */
+    border-color: #ffa3a3;
     cursor: not-allowed;
     pointer-events: none; /* Deshabilita clics e interacción */
 }
@@ -175,15 +176,17 @@ main {
 /* 2. Butacas Seleccionadas (Verde) */
 .seleccionada {
     background-color: #4CAF50; /* Verde */
+    border-color: #c5ffc0;
 }
 
 /* 3. Butacas Disponibles (Base: Blanco/Gris) */
 .disponible {
     background-color: #f0f0f0; 
+    border-color: #c0e0ff;
 }
 
 /* 4. Efecto Hover (Azul) - Se aplica SÓLO si está disponible */
-.disponible-hover {
+.disponible:hover {
     background-color: #3f51b5 !important; /* Azul */
     border: 2px solid #3f51b5;
     transform: scale(1.1);
@@ -260,4 +263,9 @@ main {
 
 .div-error {
     color: #ff4d4d;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
 }
