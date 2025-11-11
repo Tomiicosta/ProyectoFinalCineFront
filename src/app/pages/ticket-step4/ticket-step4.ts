@@ -9,7 +9,9 @@ import { PagoService } from '../../services/pago/pago-service';
   templateUrl: './ticket-step4.html',
   styleUrl: './ticket-step4.css',
 })
+// SIN TERMINAR NI PROBAR, SE PUEDE BORRAR Y VOLVER A EMPEZAR
 export class TicketStep4 {
+  
   usuarioLogueado: boolean = false;
   compraInfo: any = null; // Información de la compra y el preferenceId
 

@@ -5,12 +5,10 @@
     </section>
 
     <section class="ticket-section font-inter">
+        <!--
         <div *ngIf="compraInfo">
             <h3>Resumen de la Compra</h3>
             <p>Producto: {{ compraInfo.nombre }}</p>
-            <!--
-            <p>Total: {{ compraInfo.precio | currency }}</p>
-            -->
             <hr>
             
             <ng-container *ngIf="usuarioLogueado; else mensajeNoLogueado">
@@ -25,13 +23,14 @@
         
             <ng-template #mensajeNoLogueado>
                 <div class="alert alert-warning" role="alert">
-                    🚨 **Debes iniciar sesión** para continuar con la compra.
+                    <b>Debes iniciar sesión</b> para continuar con la compra.
                 </div>
                 <button (click)="redirigirALogin()" class="btn btn-success">
                     Iniciar Sesión
                 </button>
             </ng-template>
         </div>
+        -->
     </section>
 
 </main>

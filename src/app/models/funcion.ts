@@ -10,5 +10,4 @@ export interface Funcion {
     movieId: number;
     cinemaName: string;
     cinemaId: number;
-
 }

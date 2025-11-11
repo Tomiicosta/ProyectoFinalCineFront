@@ -2,22 +2,18 @@ import { Injectable } from '@angular/core';
 import { Funcion } from '../../models/funcion';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Butaca2 } from '../../models/butaca2';
+import { Butaca } from '../../models/butaca';
 
 const BASE_URL = 'http://localhost:8080/api/functions';
 
 @Injectable({
   providedIn: 'root'
 })
-
-
-
 export class FunctionService {
 
   funciones: Funcion[] = [];
 
   constructor(private http: HttpClient) {}
-
 
   // LISTAR
   getFunciones(): Observable<Funcion[]> {
@@ -35,7 +31,7 @@ export class FunctionService {
 
   // Trae las butacas segun la funcion
   getSeatsByFunction(functionId: number) {
-    return this.http.get<Butaca2[]>(`/api/functions/${functionId}/seats`);
+    return this.http.get<Butaca[]>(`/api/functions/${functionId}/seats`);
   }
 
   getPorSala(cinemaId: number): Observable<Funcion[]> {

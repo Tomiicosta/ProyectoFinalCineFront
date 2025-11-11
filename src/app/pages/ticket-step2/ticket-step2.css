@@ -41,7 +41,7 @@ main {
 
 /* FUNCIONES -------------------------------------------------------------------- */
 
-.funciones {
+.funciones-section {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,27 +64,35 @@ main {
 
 .div-funciones {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: 1em;
-
+  padding: 0 1em;
   margin-top: 1em;
 }
 
-.div-dias {
-  padding: 0 1em;
-}
-
-.dias {
+.funciones {
   padding: 1em 2em;
+  list-style: none;
 }
 
-.div-horarios {
-  padding: 0 1em;
-  border-left: 1px solid #000000;
+.funcion {
+  width: 100%;
+  border-radius: 3px;
+  padding: 2px 5px;
+  margin: 2px;
+
+  cursor: pointer;
 }
 
-.horarios {
-  padding: 1em 2em;
+.funcion:hover {
+  background-color: #daecff;
+}
+
+.seleccionado {
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
 }
 
 /* BANNER -------------------------------------------------------------------- */
