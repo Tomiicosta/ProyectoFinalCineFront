@@ -21,12 +21,22 @@ export class AdminMovies implements OnInit{
   constructor(public movieService: MovieService, public authService: AuthService) {}
 
 
-  seleccionar(movie: Movie) {
-    this.selectedMovie = movie;
+  seleccionar(id: string) {
+    this.getMovieById(id);
     this.mostrarAgregar = true;
   }
 
+
+  getMovieById(id:string){
+    this.movieService.getMovie(id).subscribe({
+      next: (data) => { this.selectedMovie = data;},
+      error: (e) => { console.log(e) }
+    })
+  }
+
+
   getMoviesByName(name:string){
+
     this.movieService.moviesCartelera = [];
     this.movieService.getMovieByName(name).subscribe({
       next: (data) => { this.movieService.movies = data },

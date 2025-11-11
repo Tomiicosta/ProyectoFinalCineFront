@@ -10,5 +10,6 @@ export default interface Movie {
     posterUrl: string;
     bannerUrl: string;
     overview: string; 
-    imdbId?: string;  
+    imdbId?: string; 
+    adult: Boolean; 
 }
