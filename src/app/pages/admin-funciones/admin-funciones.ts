@@ -38,8 +38,7 @@ export class AdminFunciones {
   selectedFuncion: Funcion | null = null;
   detalleFuncion: Funcion | null = null;
 
-  // Bandera de edición (no se usa; queda falsa para que el HTML compile)
-  isEditing = false;
+  
 
   constructor(
     private fb: FormBuilder,
@@ -95,7 +94,7 @@ export class AdminFunciones {
     this.selectedFuncion = null;
     this.detalleFuncion = f;
     console.log(f)
-    console.log(this.funcionService.funciones)
+    
   }
 
   cerrarDetalle() {
@@ -134,7 +133,7 @@ export class AdminFunciones {
     const payload = this.armarPayload(this.funcionForm.value);
 
     this.funcionService.postFuncion(payload).subscribe({
-      next: (data) => {  console.log(data); this.resetForm(); this.cargarFunciones(); },
+      next: (data) => {   this.resetForm(); this.cargarFunciones(); },
       error: (e) => console.error(e)
     });
   }
@@ -143,7 +142,7 @@ export class AdminFunciones {
  eliminarFuncion(f: Funcion) {
   if (!confirm(`¿Eliminar la función de "${f.movieName}" en sala "${f.cinemaName}"?`)) return;
   this.funcionService.deleteFuncion(f.id).subscribe({
-    next: () => this.cargarFunciones(),
+    next: () => {this.cargarFunciones()},
     error: (e) => console.error(e)
   });
 }
@@ -168,7 +167,6 @@ export class AdminFunciones {
   private resetForm() {
     this.selectedFuncion = null;
     this.detalleFuncion = null;
-    this.isEditing = false;
     this.funcionForm.reset();
   }
 }
