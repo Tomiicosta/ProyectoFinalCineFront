@@ -15,6 +15,11 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class Register {
 
+  tipoDeCampo : boolean = false;
+
+  readonly ruta_ojo_cerrado = "img/password/eye-closed.svg";
+  readonly ruta_ojo_abierto = "img/password/eye-open-svgrepo-com.svg";
+
   readonly passwordRegex: RegExp = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.{6,})/;
 
   formRegister: FormGroup;
@@ -80,4 +85,14 @@ export class Register {
     }
   }
 
+  verContrasenia(): void{
+    this.tipoDeCampo = !this.tipoDeCampo;
+  }
+
+  public obtenerIcono(): string {
+    return this.tipoDeCampo 
+      ? this.ruta_ojo_abierto
+      : this.ruta_ojo_cerrado;
+  }
 }
+
