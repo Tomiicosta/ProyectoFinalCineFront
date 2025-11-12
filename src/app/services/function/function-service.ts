@@ -52,4 +52,5 @@ export class FunctionService {
   deleteFuncion(id: number) {
     return this.http.delete<Funcion>(`/api/functions/delete/${id}`);
   }
+
 }
