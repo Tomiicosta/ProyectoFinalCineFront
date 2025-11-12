@@ -7,7 +7,7 @@ import Movie from '../../models/movie';
 import { Sala } from '../../models/sala';
 
 import { MovieService } from '../../services/movie/movie-service';
-import { SalaService } from '../../services/salas-service';
+import { CinemaService } from '../../services/cinema/cinema-service';
 import { FunctionService } from '../../services/function/function-service';
 
 import { HttpErrorResponse } from '@angular/common/http';
@@ -46,7 +46,7 @@ export class AdminFunciones {
   constructor(
     private fb: FormBuilder,
     public funcionService: FunctionService,
-    public salaService: SalaService,
+    public cinemaService: CinemaService,
     public movieService: MovieService,
     private toastr: ToastrService
   ) {}
@@ -94,7 +94,7 @@ export class AdminFunciones {
     });
 
     // Salas (solo habilitadas)
-    this.salaService.getSalasByEnabled(true).subscribe({
+    this.cinemaService.getSalasByEnabled(true).subscribe({
       next: (data: Sala[]) => { this.salas = data; },
        error: (error: HttpErrorResponse) => {
       
@@ -122,6 +122,7 @@ export class AdminFunciones {
     this.funcionService.getFunciones().subscribe({
       next: (data: Funcion[]) => {
         this.funcionService.funciones = data || [];
+        this.funcionesFiltradas = []; // agregado
         this.funcionesFiltradas = [...this.funcionService.funciones];
         
       },

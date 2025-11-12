@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SalaService } from '../../services/salas-service';
+import { CinemaService } from '../../services/cinema/cinema-service';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Sala } from '../../models/sala';
@@ -23,7 +23,7 @@ export class AdminSalas {
   selectedSala: any | null = null;
   detalleSala: Sala | null = null;
 
-  constructor(private fb: FormBuilder,public salasService: SalaService, public authService: AuthService, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder,public cinemaService: CinemaService, public authService: AuthService, private toastr: ToastrService) {}
 
   /* Formulario agregar */
   crearFormulario() {
@@ -63,7 +63,7 @@ export class AdminSalas {
 
       console.log('Nueva sala:', nuevaSala);
 
-      this.salasService.postSala(nuevaSala).subscribe({
+      this.cinemaService.postSala(nuevaSala).subscribe({
         next: () => {
           this.toastr.success("Sala agregada correctamente.");
           this.salaForm.reset({
@@ -139,7 +139,7 @@ export class AdminSalas {
         return;
       }
 
-      this.salasService.putSala(id, payload).subscribe({
+      this.cinemaService.putSala(id, payload).subscribe({
         next: () => {
           this.toastr.success('Sala actualizada correctamente');
           this.resetFormYRefrescar();
@@ -191,7 +191,7 @@ export class AdminSalas {
         const confirmar = confirm(`¿Eliminar la sala "${sala.name}"?`);
         if (!confirmar) return;
     
-        this.salasService.deleteSala(id).subscribe({
+        this.cinemaService.deleteSala(id).subscribe({
           next: () => {
             this.toastr.success('Sala eliminada correctamente');
             // Si estabas editando esa misma sala, cancelá edición
@@ -234,8 +234,8 @@ export class AdminSalas {
   /*trae salas habilitadas */
   getSalasHabilitadas(){
     this.vistaActual = 'habilitadas';
-    this.salasService.getSalasByEnabled(true).subscribe({
-      next: (data) => { this.salasService.salas = data; },
+    this.cinemaService.getSalasByEnabled(true).subscribe({
+      next: (data) => { this.cinemaService.salas = data; },
       error: (error: HttpErrorResponse) => {
       
           //Verifica si es un error 400 del tipo esperado
@@ -260,8 +260,8 @@ export class AdminSalas {
     /*trae salas inhabilitadas */
   getSalasInhabilitadas(){
     this.vistaActual = 'inhabilitadas';
-    this.salasService.getSalasByEnabled(false).subscribe({
-      next: (data) => { this.salasService.salas = data; },
+    this.cinemaService.getSalasByEnabled(false).subscribe({
+      next: (data) => { this.cinemaService.salas = data; },
       error: (error: HttpErrorResponse) => {
       
           //Verifica si es un error 400 del tipo esperado

@@ -15,7 +15,8 @@
                 <h3 class="title-peli" title="{{ peliculaSeleccionada.title }}">
                     {{ peliculaSeleccionada.title }}
                 </h3>
-                <p class="funcion-peli">Función: <b>{{ funcionSeleccionada.date }}</b> a las <b>{{ funcionSeleccionada.time }}</b></p>
+                <p class="funcion-peli">Función: <b>{{ funcionSeleccionada.date }}</b> a las <b>{{
+                        funcionSeleccionada.time }}</b></p>
             </div>
 
             <!-- Asientos Seleccionados (Reactivo) -->
@@ -52,10 +53,9 @@
                 </li>
             </ul>
 
-            <button class="btn-reiniciar" 
-                (click)="limpiarButacasSeleccionadas()" 
+            <button class="btn-reiniciar" (click)="limpiarButacasSeleccionadas()"
                 [disabled]="totalButacasSeleccionadas() === 0">
-                    Reiniciar Butacas
+                Reiniciar Butacas
             </button>
         </div>
         }
@@ -67,28 +67,29 @@
                 <div class="pantalla"></div>
             </div>
             <div class="div-butacas">
-                @for (butaca of mapaButacas(); track butaca.id) {
-                    <p>ID: {{ butaca.id }} - Fila: {{ butaca.rowNumber }} - Columna: {{ butaca.columnNumber }} - Estado: {{ butaca.occupied }}</p>
-                    <!--
-                    FALTA TRABAJAR EL DIBUJADO DEL MAPA, PERO RETORNA BIEN LA INFO DE BUTACAS
-                    <div class="fila-butacas">
 
-                        <span class="etiqueta-fila font-inter">
-                            {{ String.fromCharCode(64 + fila[0].seatRowNumber) }} 
-                        </span>
+                @for (fila of mapaButacas(); track $index) {
+                <div class="fila-butacas">
 
-                        @for (butaca of fila; track butaca.id) {
-                            <div class="butaca" (click)="seleccionarButaca(butaca)" [ngClass]="{
-                                    'butaca-ocupada': butaca.occupied,
-                                    'butaca-seleccionada': isButacaSeleccionada(butaca),
-                                    'butaca-disponible': !butaca.occupied && !isButacaSeleccionada(butaca)
-                                }">
-                            </div>
-                        }
+                    <!-- Etiqueta de fila, ej: A, B, C, D... 
+                    <span class="etiqueta-fila font-inter">
+                        {{ String.fromCharCode(65 + $index) }}
+                    </span>-->
+
+                    <!-- Iterar cada butaca dentro de la fila -->
+                    @for (butaca of fila; track butaca?.id) {
+                    <div class="butaca" (click)="seleccionarButaca(butaca)" [ngClass]="{
+                            'ocupada': butaca?.occupied,
+                            'seleccionada': isButacaSeleccionada(butaca),
+                            'disponible': !butaca?.occupied && !isButacaSeleccionada(butaca)
+                        }">
                     </div>
-                    -->
+                    }
+                </div>
                 }
+
             </div>
+
         </div>
     </section>
 
