@@ -40,13 +40,13 @@ export class TicketStep3 implements OnInit {
   // Variables no-signals
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
-  
+
   constructor(
     private location: Location,
     private router: Router,
     private ticketService: TicketService,
     private functionService: FunctionService,
-    private cinemaService: CinemaService
+    public cinemaService: CinemaService
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class TicketStep3 implements OnInit {
     // Recibe la Sala por Funcion
     this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
       next: (data) => { this.cinemaService.selectedSala = data },
-      error: (e) => console.error("Error CinemaService getSala = ",e)
+      error: (e) => console.error("Error CinemaService getSala = ", e)
     });
 
     if (!this.cinemaService.selectedSala) return;
@@ -67,25 +67,25 @@ export class TicketStep3 implements OnInit {
     this.cargarMapaButacas(this.funcionSeleccionada.id, this.cinemaService.selectedSala.id);
   }
 
-  cargarMapaButacas(functionId : number, cinemaId: number) {
+  cargarMapaButacas(functionId: number, cinemaId: number) {
 
     // Recibe las Butacas por Funcion
     this.functionService.getSeatsByFunction(functionId)
       .subscribe({
         next: (butacas) => {
-        // Agrupar las butacas por fila
-        const matrizButacas: Butaca[][] = Array.from({ length: this.cinemaService.selectedSala?.rowSeat || 0 }, () =>
-          Array(this.cinemaService.selectedSala?.columnSeat || 0).fill(null)
-        );
+          // Agrupar las butacas por fila
+          const matrizButacas: Butaca[][] = Array.from({ length: this.cinemaService.selectedSala?.rowSeat || 0 }, () =>
+            Array(this.cinemaService.selectedSala?.columnSeat || 0).fill(null)
+          );
 
-        for (const b of butacas) {
-          const rowIndex = b.rowNumber - 1; // restamos 1 si las filas empiezan desde 1
-          const colIndex = b.columnNumber - 1;
-          matrizButacas[rowIndex][colIndex] = b;
-        }
+          for (const b of butacas) {
+            const rowIndex = b.rowNumber - 1; // restamos 1 si las filas empiezan desde 1
+            const colIndex = b.columnNumber - 1;
+            matrizButacas[rowIndex][colIndex] = b;
+          }
 
-        this.mapaButacas.set(matrizButacas);
-      },
+          this.mapaButacas.set(matrizButacas);
+        },
         error: (err) => console.error('Error al cargar butacas:', err)
       });
   }
@@ -140,15 +140,15 @@ export class TicketStep3 implements OnInit {
 
     this.ticketService.setCompra({
       title: "Entrada de cine", // Entrada de cine
-      description: "Proyeccion de la pelicula "+this.peliculaSeleccionada?.title+" en "+this.funcionSeleccionada?.cinemaName, // Proyeccion de la pelicula Sombras en el paraiso en sala 3D
+      description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + " en " + this.funcionSeleccionada?.cinemaName, // Proyeccion de la pelicula Sombras en el paraiso en sala 3D
 
       userEmail: "", // email@gmail.com
 
       quantity: this.butacasSeleccionadas.length, // 1
       unitPrice: 3500, // 3500.00
-      
+
       functionId: this.funcionSeleccionada?.id, // 2
-      seats: ["A1","C3"] // ["A1","C3"]
+      seats: ["A1", "C3"] // ["A1","C3"]
     });
 
     this.router.navigate(['/ticket/step4']);
@@ -156,6 +156,19 @@ export class TicketStep3 implements OnInit {
 
   volverAtras(): void {
     this.location.back();
+  }
+
+  // Formatear fecha: "YYYY-MM-DD" → "11 de septiembre"
+  formatearFecha(fecha: string): string {
+    const [year, month, day] = fecha.split('-').map(Number);
+    const dateObj = new Date(year, month - 1, day); // esto usa la zona local
+    const opciones: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' };
+    return dateObj.toLocaleDateString('es-ES', opciones);
+  }
+
+  // Formatear hora: "HH:mm:ss" → "HH:mm"
+  formatearHora(hora: string): string {
+    return hora.slice(0, 5); // corta los segundos
   }
 
 }

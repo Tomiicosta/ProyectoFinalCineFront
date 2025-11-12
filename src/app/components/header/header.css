@@ -30,7 +30,7 @@ header {
 
 .container {
   position: fixed;
-  top: 20px;
+  top: 10px;
   z-index: 10;
   /* solucion: para mantener header por encima de todo */
 
@@ -38,7 +38,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 0 6px 0 17px;
   gap: 100px;
   background: rgba(36, 40, 51, 0.8);
   /* <- 0.8 es el nivel de opacidad (0 a 1) */
@@ -64,46 +64,71 @@ header {
     padding: 16px;
 }
 
-.list a{
-    display: inline-block; 
-    position: relative;
-    text-decoration: none;
-    color: rgb(220, 217, 217);
-    font-weight: 600;
-    font-size: 16px ;
-    letter-spacing: .2px;
-    padding: 10px 8px;
-    border-radius: 10px;
-    outline: none;
-    transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
-  }
-  .list a:hover::after{ transform: scaleX(1); }
-
-/* Hover/active feedback visual */
-.list a:hover{
-  background: rgba(255,255,255,0.10);
-  transform: scale(1.07); 
+.list .nav-a {
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: rgb(220, 217, 217);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: .2px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  outline: none;
+  transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
 }
 
-.list a:active{
+.list .nav-a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Hover/active feedback visual */
+.list .nav-a:hover {
+  background: rgba(255, 255, 255, 0.10);
+  transform: scale(1.07);
+}
+
+.list .nav-a:active {
   transform: translateY(1px);
 }
 
 /* Focus accesible */
-.list a:focus-visible{
-  outline: 3px solid rgba(255,255,255,.55);
+.list .nav-a:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, .55);
   outline-offset: 2px;
 }
 
-.btnLogin{
+.btnLogin {
+  cursor:pointer;
+
   border-radius: 20px;
   border: 1px solid white;
   background-color: white;
-  
+
+  display: inline-block;
+  position: relative;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: .2px;
+  padding: 10px 14px;
+  outline: none;
+  transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
 
 }
-.btnLogin a{
+
+.btnLogin a {
   color: #000000;
+  text-decoration: none;
+
+}
+
+.btnLogin:hover::after {
+  transform: scaleX(1);
+}
+
+/* Hover/active feedback visual */
+.btnLogin:hover {
+  transform: scale(1.1);
 }
 
 /* ---------------- MEDIA QUERIES ---------------- */

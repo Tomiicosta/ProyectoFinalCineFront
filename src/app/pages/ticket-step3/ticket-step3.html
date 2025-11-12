@@ -8,15 +8,15 @@
         <!-- Panel de Información (INFO PELICULA) -->
         @if (peliculaSeleccionada && funcionSeleccionada) {
         <div class="div-info">
-            <h4 class="">Detalles del Ticket</h4>
+            <h4 class="info-title">Detalles del Ticket</h4>
 
             <!-- Información Fija (Película, Día, Hora) -->
             <div class="info-peli">
                 <h3 class="title-peli" title="{{ peliculaSeleccionada.title }}">
                     {{ peliculaSeleccionada.title }}
                 </h3>
-                <p class="funcion-peli">Función: <b>{{ funcionSeleccionada.date }}</b> a las <b>{{
-                        funcionSeleccionada.time }}</b></p>
+                <p class="funcion-peli"><b>{{ formatearFecha(funcionSeleccionada.date) }}</b></p>
+                <p class="funcion-peli">a las <b>{{ formatearHora(funcionSeleccionada.time) }} hs</b></p>
             </div>
 
             <!-- Asientos Seleccionados (Reactivo) -->
@@ -45,7 +45,7 @@
                 </li>
                 <li class="info-color">
                     <div class="color c-2"></div>
-                    <p>Butaca Confirmada</p>
+                    <p>Butaca Seleccionada</p>
                 </li>
                 <li class="info-color">
                     <div class="color c-3"></div>

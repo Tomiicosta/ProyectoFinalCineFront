@@ -10,11 +10,11 @@
     <nav [class.active]="menuAbierto">
       <div class="menu">
         <ul class="list">
-          <li><a routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
-          <li><a routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li>
-          <li><a routerLink="/adminMovies" (click)="cerrarMenu()">Cartelera</a></li>
-          <li><a routerLink="/adminSalas" (click)="cerrarMenu()">Salas</a></li>
-          <li><a routerLink="/adminFunciones" (click)="cerrarMenu()">Funciones</a></li>
+          <li><a class="nav-a" routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
+          <li><a class="nav-a" routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li>
+          <li><a class="nav-a" routerLink="/adminMovies" (click)="cerrarMenu()">Cartelera</a></li>
+          <li><a class="nav-a" routerLink="/adminSalas" (click)="cerrarMenu()">Salas</a></li>
+          <li><a class="nav-a" routerLink="/adminFunciones" (click)="cerrarMenu()">Funciones</a></li>
           <li class="btnLogin"><a (click)="onLogout()" routerLink="/">Perfil</a></li>
         </ul>
       </div>

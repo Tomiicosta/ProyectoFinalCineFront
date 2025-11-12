@@ -5,6 +5,8 @@ import { TicketService } from '../../services/ticket/ticket-service';
 import { Location } from '@angular/common';
 import { MovieService } from '../../services/movie/movie-service';
 import Movie from '../../models/movie';
+import { Funcion } from '../../models/funcion';
+import { FunctionService } from '../../services/function/function-service';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 
 @Component({
@@ -17,6 +19,8 @@ export class MovieDetails {
 
   movieId: number | undefined;
   peliculaSeleccionada: Movie | undefined;
+  funciones: Funcion[] | undefined;
+
   // Signal para mostrar mensajes de error en la UI (reemplaza alert)
   errorMessage: WritableSignal<string | null> = signal(null);
 
@@ -26,16 +30,18 @@ export class MovieDetails {
     private router: Router,
     public movieService: MovieService,
     public ticketService: TicketService,
+    private functionService: FunctionService,
     private errorHandlerService: ErrorHandler
   ) { }
 
   ngOnInit(): void {
-    // 1. Obtener el parámetro de la ruta (movieId)
+    // Obtener el parámetro de la ruta (movieId)
     this.route.params.subscribe(params => {
       this.movieId = +params['id'];
       if (this.movieId) {
-        // 3. Pide al servicio que busque y almacene la peli
-        this.getSelectedMovieBd(this.movieId.toString())
+        // Pide al servicio que busque y almacene la pelicula
+        this.traerPeliculaPorId(this.movieId.toString())
+        this.traerFuncionesPorPeliculaId(this.movieId);
 
       } else {
         console.error('No hay película seleccionada para navegar.');
@@ -43,10 +49,17 @@ export class MovieDetails {
     });
   }
 
-  getSelectedMovieBd(id:string){
+  traerPeliculaPorId(id:string){
     this.movieService.getMovieBd(id).subscribe({
       next:(data)=>{ this.peliculaSeleccionada = data },
       error: (e) => { this.errorHandlerService.handleHttpError(e)}
+    })
+  }
+
+  traerFuncionesPorPeliculaId(id: number) {
+    this.functionService.getDisponiblesPorPelicula(id).subscribe({
+      next: (data) => { this.funciones = data } ,
+      error: (e) => { console.log("Error: "+ e) }
     })
   }
 
@@ -69,6 +82,19 @@ export class MovieDetails {
   volverAtras(): void {
     // El método back() simula hacer clic en el botón "Atrás" del navegador
     this.location.back();
+  }
+
+  // Formatear fecha: "YYYY-MM-DD" → "11 de septiembre"
+  formatearFecha(fecha: string): string {
+    const [year, month, day] = fecha.split('-').map(Number);
+    const dateObj = new Date(year, month - 1, day); // esto usa la zona local
+    const opciones: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' };
+    return dateObj.toLocaleDateString('es-ES', opciones);
+  }
+
+  // Formatear hora: "HH:mm:ss" → "HH:mm"
+  formatearHora(hora: string): string {
+    return hora.slice(0, 5); // corta los segundos
   }
 
 }
