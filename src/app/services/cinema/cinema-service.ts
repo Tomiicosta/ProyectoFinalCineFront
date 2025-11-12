@@ -2,12 +2,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Sala } from '../models/sala';
+import { Sala } from '../../models/sala';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SalaService {
+export class CinemaService {
 
   readonly API_URL = 'http://localhost:8080/api/cinemas';
 
@@ -25,7 +25,7 @@ export class SalaService {
     return this.http.get<Sala[]>(this.API_URL);
   }
 
-  getSala(id: string | number): Observable<Sala> {
+  getSala(id: number): Observable<Sala> {
     return this.http.get<Sala>(`${this.API_URL}/${id}`);
   }
 
@@ -37,8 +37,6 @@ export class SalaService {
     return this.http.get<Sala[]>(`${this.API_URL}/search?name=${encodeURIComponent(name)}`);
   }
 
-
-  
   putSala(id: number, sala: any): Observable<any> {
       return this.http.put(`${this.API_URL}/update/${id}`, sala);
   }
@@ -47,13 +45,10 @@ export class SalaService {
     return this.http.post<Sala>(`${this.API_URL}/create`, sala);
   }
 
-
-
   deleteSala(id: string | number): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/delete/${id}`);
   }
 
- 
   vaciarSalas(): void {
     this.salas = [];
   }
@@ -62,7 +57,4 @@ export class SalaService {
     this.selectedSala = sala;
   }
 
-
-
-  
 }

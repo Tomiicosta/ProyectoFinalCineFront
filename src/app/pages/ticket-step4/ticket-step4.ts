@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { TicketService } from '../../services/ticket/ticket-service';
-import { PagoService } from '../../services/pago/pago-service';
+import { PagoService } from '../../services/payment/payment-service';
 
 @Component({
   selector: 'app-ticket-step4',
