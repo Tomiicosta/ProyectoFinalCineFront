@@ -4,6 +4,8 @@ import { AuthService } from '../../services/AuthService/auth-service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Sala } from '../../models/sala';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-salas',
@@ -21,7 +23,7 @@ export class AdminSalas {
   selectedSala: any | null = null;
   detalleSala: Sala | null = null;
 
-  constructor(private fb: FormBuilder,public salasService: SalaService, public authService: AuthService) {}
+  constructor(private fb: FormBuilder,public salasService: SalaService, public authService: AuthService, private toastr: ToastrService) {}
 
   /* Formulario agregar */
   crearFormulario() {
@@ -63,7 +65,7 @@ export class AdminSalas {
 
       this.salasService.postSala(nuevaSala).subscribe({
         next: () => {
-          console.log('Sala agregada correctamente');
+          this.toastr.success("Sala agregada correctamente.");
           this.salaForm.reset({
             name: '',
             screenType: '',
@@ -79,7 +81,25 @@ export class AdminSalas {
             this.getSalasInhabilitadas();
           }
         },
-        error: (e) => console.error(e)
+        error: (error: HttpErrorResponse) => {
+      
+          //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como un alert
+            this.toastr.error(errorMessage, 'Error:');
+        
+          }
+        }
       });
     } else {
       console.warn('Formulario inválido');
@@ -121,10 +141,27 @@ export class AdminSalas {
 
       this.salasService.putSala(id, payload).subscribe({
         next: () => {
-          console.log('Sala actualizada correctamente');
+          this.toastr.success('Sala actualizada correctamente');
           this.resetFormYRefrescar();
         },
-        error: (e) => console.error(e)
+        error: (error: HttpErrorResponse) => {
+      
+          //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como una notificación
+            this.toastr.error(errorMessage, 'Error:');
+          }
+        }
       });
     } else {
       this.salaForm.markAllAsTouched();
@@ -156,14 +193,32 @@ export class AdminSalas {
     
         this.salasService.deleteSala(id).subscribe({
           next: () => {
-            console.log('Sala eliminada correctamente');
+            this.toastr.success('Sala eliminada correctamente');
             // Si estabas editando esa misma sala, cancelá edición
             if (this.selectedSala?.id === id) {
               this.cancelarEdicion();
             }
             this.refrescarListadoActual();
           },
-          error: (e) => console.error(e)
+          error: (error: HttpErrorResponse) => {
+      
+            //Verifica si es un error 400 del tipo esperado
+            if (error.status === 400 && error.error) {
+              let errorMessage: string;
+
+              if (typeof error.error === 'string') {
+                errorMessage = error.error; 
+              } else if (error.error.message) {
+                errorMessage = error.error.message;
+              } else {
+                errorMessage = 'Ocurrió un error de validación en el servidor.';
+              }
+
+              // Muestra el error como una notificación
+              this.toastr.error(errorMessage, 'Error:');
+        
+          }
+        }
         });
       }
 
@@ -181,7 +236,24 @@ export class AdminSalas {
     this.vistaActual = 'habilitadas';
     this.salasService.getSalasByEnabled(true).subscribe({
       next: (data) => { this.salasService.salas = data; },
-      error: (e) => console.log(e)
+      error: (error: HttpErrorResponse) => {
+      
+          //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como una notificación
+            this.toastr.error(errorMessage, 'Error:');
+        }
+        }
     });
   }
 
@@ -190,7 +262,24 @@ export class AdminSalas {
     this.vistaActual = 'inhabilitadas';
     this.salasService.getSalasByEnabled(false).subscribe({
       next: (data) => { this.salasService.salas = data; },
-      error: (e) => console.log(e)
+      error: (error: HttpErrorResponse) => {
+      
+          //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como una notificación
+            this.toastr.error(errorMessage, 'Error:');
+          }
+        }
     });
   }
 

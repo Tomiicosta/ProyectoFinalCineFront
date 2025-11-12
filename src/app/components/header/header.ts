@@ -9,9 +9,19 @@ import { AuthService } from '../../services/AuthService/auth-service';
   styleUrl: './header.css',
 })
 export class Header {
-  constructor (public authService: AuthService){
 
+  menuAbierto = false;
+
+constructor (public authService: AuthService){
   }
+
+toggleMenu() {
+  this.menuAbierto = !this.menuAbierto;
+}
+  
+cerrarMenu() {
+  this.menuAbierto = false;
+}
   
 onLogout() {
   this.authService.logout();

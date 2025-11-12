@@ -31,7 +31,13 @@
                     <p class="error-message">El texto debe tener formato de Email.</p>
                 }
 
-            <input type="password" id="password" formControlName="password" placeholder="🔗 Ingrese su contraseña" >
+            <div class="password-input-wrapper"> 
+                <input [type]="tipoDeCampo ? 'text' : 'password'" id="password" formControlName="password" placeholder="🔗 Ingrese su contraseña"> 
+        
+                <div class="cambiarCampo" >
+                    <img  [src]="obtenerIcono()" alt="alternar visibilidad de contraseña" class="im" (click)="verContrasenia()">
+                </div>
+            </div>
                 @if(password.hasError('required') && password.touched){
                     <p class="error-message"> La contraseña es obligatoria.</p>
                 }@else if(password.hasError('minlength')){

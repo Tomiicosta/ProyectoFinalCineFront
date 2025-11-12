@@ -207,3 +207,117 @@ button:active {
   background-color: #ff1e1e;
   border-radius: 4px;
 }
+
+
+/* 📱 Responsive hasta 1000px */
+@media (max-width: 1000px) {
+
+  main {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    gap: 20px;
+    padding-top: 120px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  /* 🔹 Secciones principales */
+  #sectionPeliculasCartelera,
+  #Agregar {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  #sectionPeliculasCartelera {
+    order: 1;
+  }
+
+  #Agregar {
+    order: 2;
+    align-items: center;
+  }
+
+  /* 🔹 Buscador más compacto */
+  #buscarId {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  #buscarId form {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  #buscarId input {
+    width: 80%;
+    font-size: 0.9rem;
+  }
+
+  #buscarId button,
+  .btn-volver {
+    width: 60%;
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  /* 🎞️ Tarjetas adaptables */
+  #peliculasCartelera,
+  #buscarMovie {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px; /* 🔹 Menor separación entre tarjetas */
+    justify-items: center;
+    padding: 0;
+  }
+
+  #tarjeta {
+    width: 90%;
+    max-width: 180px;
+    padding: 10px;
+    font-size: 0.9rem;
+    transition: none;
+    
+    /* 🔹 Flex interno para ubicar el botón abajo */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Desactivar hover completamente */
+  #tarjeta:hover,
+  #tarjeta button:hover {
+    transform: none !important;
+    background-color: inherit !important;
+    box-shadow: none !important;
+    cursor: default !important;
+  }
+
+  /* 🔹 Tipografía dentro de las tarjetas */
+  #tarjeta h3 {
+    font-size: 1rem;
+  }
+
+  #tarjeta h4 {
+    font-size: 0.85rem;
+  }
+
+  /* 🔹 Botones dentro de la tarjeta */
+  .botones-tarjeta {
+    margin-top: auto; /* 👈 empuja los botones hacia abajo */
+  }
+
+  .botones-tarjeta button {
+    padding: 8px;
+    width: 100%;
+    font-size: 0.85rem;
+  }
+}

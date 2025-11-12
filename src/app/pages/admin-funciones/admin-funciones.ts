@@ -10,6 +10,9 @@ import { MovieService } from '../../services/movie/movie-service';
 import { SalaService } from '../../services/salas-service';
 import { FunctionService } from '../../services/function/function-service';
 
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-admin-funciones',
   standalone: true,
@@ -44,7 +47,8 @@ export class AdminFunciones {
     private fb: FormBuilder,
     public funcionService: FunctionService,
     public salaService: SalaService,
-    public movieService: MovieService
+    public movieService: MovieService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -68,13 +72,49 @@ export class AdminFunciones {
     // Películas
     this.movieService.getMovies().subscribe({
       next: (data: Movie[]) => { this.peliculas = data; },
-      error: (e) => console.error(e)
+       error: (error: HttpErrorResponse) => {
+      
+        //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como una notificación
+            this.toastr.error(errorMessage, 'Error:');
+        
+          }
+        }
     });
 
     // Salas (solo habilitadas)
     this.salaService.getSalasByEnabled(true).subscribe({
       next: (data: Sala[]) => { this.salas = data; },
-      error: (e) => console.error(e)
+       error: (error: HttpErrorResponse) => {
+      
+        //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como una notificación
+            this.toastr.error(errorMessage, 'Error:');
+        
+          }
+        }
     });
   }
 
@@ -85,7 +125,25 @@ export class AdminFunciones {
         this.funcionesFiltradas = [...this.funcionService.funciones];
         
       },
-      error: (e) => console.error(e)
+       error: (error: HttpErrorResponse) => {
+      
+        //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como una notificación
+            this.toastr.error(errorMessage, 'Error:');
+        
+          }
+        }
     });
   }
 
@@ -133,8 +191,30 @@ export class AdminFunciones {
     const payload = this.armarPayload(this.funcionForm.value);
 
     this.funcionService.postFuncion(payload).subscribe({
-      next: (data) => {   this.resetForm(); this.cargarFunciones(); },
-      error: (e) => console.error(e)
+      next: (data) => {   
+        this.resetForm();
+        this.cargarFunciones();
+        this.toastr.success("Función agregada correctamente.");
+       },
+      error: (error: HttpErrorResponse) => {
+      
+        //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+            // Muestra el error como una notificación
+            this.toastr.error(errorMessage, 'Error:');
+        
+          }
+        }
     });
   }
 
@@ -142,8 +222,29 @@ export class AdminFunciones {
  eliminarFuncion(f: Funcion) {
   if (!confirm(`¿Eliminar la función de "${f.movieName}" en sala "${f.cinemaName}"?`)) return;
   this.funcionService.deleteFuncion(f.id).subscribe({
-    next: () => {this.cargarFunciones()},
-    error: (e) => console.error(e)
+    next: () => {
+      this.cargarFunciones();
+      this.toastr.success("Función eliminada correctamente.");
+    },
+     error: (error: HttpErrorResponse) => {
+      
+        //Verifica si es un error 400 del tipo esperado
+          if (error.status === 400 && error.error) {
+            let errorMessage: string;
+
+            if (typeof error.error === 'string') {
+              errorMessage = error.error; 
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else {
+              errorMessage = 'Ocurrió un error de validación en el servidor.';
+            }
+
+        // Muestra el error como una notificación
+          this.toastr.error(errorMessage, 'Error:');
+        
+          }
+        }
   });
 }
 
