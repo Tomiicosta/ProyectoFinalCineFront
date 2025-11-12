@@ -6,6 +6,7 @@ import { Registro } from '../../models/registro';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +31,7 @@ export class Register {
   password: FormControl;
 
 
-  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService){
+  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService, private errorHandlerService:ErrorHandler){
     this.name = new FormControl ('', [Validators.required, Validators.minLength(3)]),
     this.surname = new FormControl ('', [Validators.required, Validators.minLength(3)]),
     this.username = new FormControl ('', [Validators.required, Validators.minLength(3)]),
@@ -61,23 +62,7 @@ export class Register {
           
         },
         error: (error: HttpErrorResponse) => {
-      
-        //Verifica si es un error 400 del tipo esperado
-          if (error.status === 400 && error.error) {
-            let errorMessage: string;
-
-          if (typeof error.error === 'string') {
-            errorMessage = error.error; 
-          } else if (error.error.message) {
-            errorMessage = error.error.message;
-          } else {
-            errorMessage = 'Ocurrió un error de validación en el servidor.';
-          }
-
-        // Muestra el error como un alert
-          this.toastr.error(errorMessage, 'Error de registro');
-        
-          }
+          this.errorHandlerService.handleHttpError(error);
         }
       });
     } else {

@@ -7,6 +7,7 @@ import { MovieService } from '../../services/movie/movie-service';
 import Movie from '../../models/movie';
 import { Funcion } from '../../models/funcion';
 import { FunctionService } from '../../services/function/function-service';
+import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 
 @Component({
   selector: 'app-movie-details',
@@ -29,7 +30,8 @@ export class MovieDetails {
     private router: Router,
     public movieService: MovieService,
     public ticketService: TicketService,
-    private functionService: FunctionService
+    private functionService: FunctionService,
+    private errorHandlerService: ErrorHandler
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +52,7 @@ export class MovieDetails {
   traerPeliculaPorId(id:string){
     this.movieService.getMovieBd(id).subscribe({
       next:(data)=>{ this.peliculaSeleccionada = data },
-      error: (e)=> { console.log(e) }
+      error: (e) => { this.errorHandlerService.handleHttpError(e)}
     })
   }
 

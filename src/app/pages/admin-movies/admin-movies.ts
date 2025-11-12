@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 
 @Component({
   selector: 'app-admin-movies',
@@ -20,7 +21,7 @@ export class AdminMovies implements OnInit{
   selectedMovie?: Movie; 
   mostrarAgregar : boolean = false;
 
-  constructor(public movieService: MovieService, public authService: AuthService, private toastr: ToastrService) {}
+  constructor(public movieService: MovieService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler) {}
 
 
   seleccionar(id: string) {
@@ -34,24 +35,8 @@ export class AdminMovies implements OnInit{
         this.mostrarAgregar = true;
       },
       error: (error: HttpErrorResponse) => {
-      
-        //Verifica si es un error 400 del tipo esperado
-          if (error.status === 400 && error.error) {
-            let errorMessage: string;
-
-            if (typeof error.error === 'string') {
-              errorMessage = error.error; 
-            } else if (error.error.message) {
-              errorMessage = error.error.message;
-            } else {
-              errorMessage = 'Ocurrió un error de validación en el servidor.';
-            }
-
-            // Muestra el error como una notificación
-            this.toastr.error(errorMessage, 'Error:');
-        
-          }
-        }
+        this.errorHandlerService.handleHttpError(error);  
+      }
     })
   }
 
@@ -59,24 +44,8 @@ export class AdminMovies implements OnInit{
     this.movieService.getMovie(id).subscribe({
       next: (data) => { this.selectedMovie = data;},
       error: (error: HttpErrorResponse) => {
-      
-        //Verifica si es un error 400 del tipo esperado
-          if (error.status === 400 && error.error) {
-            let errorMessage: string;
-
-            if (typeof error.error === 'string') {
-              errorMessage = error.error; 
-            } else if (error.error.message) {
-              errorMessage = error.error.message;
-            } else {
-              errorMessage = 'Ocurrió un error de validación en el servidor.';
-            }
-
-            // Muestra el error como una notificación
-            this.toastr.error(errorMessage, 'Error:');
-        
-          }
-        }
+        this.errorHandlerService.handleHttpError(error);
+      }
     })
   }
 
@@ -87,24 +56,8 @@ export class AdminMovies implements OnInit{
     this.movieService.getMovieByName(name).subscribe({
       next: (data) => { this.movieService.movies = data },
       error: (error: HttpErrorResponse) => {
-      
-        //Verifica si es un error 400 del tipo esperado
-          if (error.status === 400 && error.error) {
-            let errorMessage: string;
-
-            if (typeof error.error === 'string') {
-              errorMessage = error.error; 
-            } else if (error.error.message) {
-              errorMessage = error.error.message;
-            } else {
-              errorMessage = 'Ocurrió un error de validación en el servidor.';
-            }
-
-            // Muestra el error como una notificación
-            this.toastr.error(errorMessage, 'Error:');
-        
-          }
-        }
+        this.errorHandlerService.handleHttpError(error);
+      }
     })
     this.nombreInput = ''
     this.idInput = ""
@@ -119,24 +72,8 @@ export class AdminMovies implements OnInit{
         this.toastr.success("Película agregada correctamente a la cartelera.");
       this.getAllMovies();},
       error: (error: HttpErrorResponse) => {
-      
-        //Verifica si es un error 400 del tipo esperado
-          if (error.status === 400 && error.error) {
-            let errorMessage: string;
-
-            if (typeof error.error === 'string') {
-              errorMessage = error.error; 
-            } else if (error.error.message) {
-              errorMessage = error.error.message;
-            } else {
-              errorMessage = 'Ocurrió un error de validación en el servidor.';
-            }
-
-            // Muestra el error como una notificación
-            this.toastr.error(errorMessage, 'Error:');
-        
-          }
-        }
+        this.errorHandlerService.handleHttpError(error);
+      }
     })
     this.nombreInput = ''
     this.idInput = ""
@@ -149,24 +86,8 @@ export class AdminMovies implements OnInit{
     this.movieService.getMovies().subscribe({
       next: (data) => {this.movieService.moviesCartelera = data},
       error: (error: HttpErrorResponse) => {
-      
-        //Verifica si es un error 400 del tipo esperado
-          if (error.status === 400 && error.error) {
-            let errorMessage: string;
-
-            if (typeof error.error === 'string') {
-              errorMessage = error.error; 
-            } else if (error.error.message) {
-              errorMessage = error.error.message;
-            } else {
-              errorMessage = 'Ocurrió un error de validación en el servidor.';
-            }
-
-            // Muestra el error como una notificación
-            this.toastr.error(errorMessage, 'Error:');
-        
-          }
-        }
+        this.errorHandlerService.handleHttpError(error);
+      }
     })
 
     this.nombreInput = ''
@@ -188,24 +109,8 @@ export class AdminMovies implements OnInit{
 
       },
       error: (error: HttpErrorResponse) => {
-      
-        //Verifica si es un error 400 del tipo esperado
-          if (error.status === 400 && error.error) {
-            let errorMessage: string;
-
-            if (typeof error.error === 'string') {
-              errorMessage = error.error; 
-            } else if (error.error.message) {
-              errorMessage = error.error.message;
-            } else {
-              errorMessage = 'Ocurrió un error de validación en el servidor.';
-            }
-
-            // Muestra el error como una notificación
-            this.toastr.error(errorMessage, 'Error:');
-        
-          }
-        }
+        this.errorHandlerService.handleHttpError(error);  
+      }
   })
 }
   

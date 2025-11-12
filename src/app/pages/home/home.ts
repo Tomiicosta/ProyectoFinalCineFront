@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/co
 import { MovieService } from '../../services/movie/movie-service';
 import { Router } from '@angular/router';
 import { SlicePipe } from '@angular/common';
+import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 
 @Component({
   selector: 'app-home',
@@ -21,14 +22,15 @@ export class Home implements OnInit, OnDestroy {
 
   constructor(
     private router: Router, 
-    public movieService: MovieService
+    public movieService: MovieService,
+    private errorHandlerService: ErrorHandler
   ) {}
 
   // 🟢 Obtener todas las películas
   getAllMovies() {
     this.movieService.getMovies().subscribe({
       next: (data) => { this.movieService.moviesCartelera = data },
-      error: (e) => { console.log(e) }
+      error: (e) => { this.errorHandlerService.handleHttpError(e)}
     });
   }
 

@@ -7,6 +7,7 @@ import { Funcion } from '../../models/funcion';
 import Movie from '../../models/movie';
 import { FunctionService } from '../../services/function/function-service';
 import { Observable } from 'rxjs';
+import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 
 @Component({
   selector: 'app-ticket-step2',
@@ -24,7 +25,8 @@ export class TicketStep2 implements OnInit {
     private location: Location,
     private ticketService: TicketService, 
     private functionService: FunctionService,
-    private router: Router
+    private router: Router,
+    private errorHandlerService: ErrorHandler
   ) { }
 
   
@@ -48,7 +50,7 @@ export class TicketStep2 implements OnInit {
   mostrarFunciones(id: number) {
     this.functionService.getDisponiblesPorPelicula(id).subscribe({
       next: (data) => { this.funciones = data } ,
-      error: (e) => { console.log("Error: "+ e) }
+      error: (e) => { this.errorHandlerService.handleHttpError(e) }
     })
   }
 
