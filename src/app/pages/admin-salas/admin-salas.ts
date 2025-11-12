@@ -25,7 +25,7 @@ export class AdminSalas {
   selectedSala: any | null = null;
   detalleSala: Sala | null = null;
 
-  constructor(private fb: FormBuilder,public cinemaService: CinemaService, public authService: AuthService, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder,public cinemaService: CinemaService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler) {}
 
   /* Formulario agregar */
   crearFormulario() {
@@ -155,13 +155,28 @@ export class AdminSalas {
     }
 
       /* metodo DELETE */
-      eliminarSala(sala: any) {
-        const id = sala?.id;
-        if (!id) return;
-    
-        const confirmar = confirm(`¿Eliminar la sala "${sala.name}"?`);
-        if (!confirmar) return;
-    
+    async eliminarSala(sala: any) {
+      const id = sala?.id;
+      if (!id) return;
+
+      const result = await Swal.fire({
+              title: 'Confirmar Eliminación',
+              html: `¿Eliminar la sala "${sala.name}"?`,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33', 
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Eliminar',
+              cancelButtonText: 'Cancelar'
+            });
+        
+            //Verificar el resultado de la confirmación
+            if (!result.isConfirmed) {
+              this.toastr.error('Eliminación cancelada por el usuario.');
+              return; 
+            }
+
+
         this.cinemaService.deleteSala(id).subscribe({
           next: () => {
             this.toastr.success('Sala eliminada correctamente');
