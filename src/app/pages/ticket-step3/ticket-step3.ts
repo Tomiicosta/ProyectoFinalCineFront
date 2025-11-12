@@ -8,6 +8,8 @@ import { Location } from '@angular/common';
 import { Funcion } from '../../models/funcion';
 import Movie from '../../models/movie';
 import { FunctionService } from '../../services/function/function-service';
+import { CinemaService } from '../../services/cinema/cinema-service';
+import { Sala } from '../../models/sala';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -20,7 +22,7 @@ export class TicketStep3 implements OnInit {
 
   // Mapa de Butacas (Inicializado con la nueva estructura)
   // Las butacas que eran 'ocupada' ahora tienen occupied: true
-  mapaButacas: WritableSignal<Butaca[]> = signal([]);
+  mapaButacas: WritableSignal<Butaca[][]> = signal([]);
 
   // Asientos Seleccionados (Ahora solo guarda el objeto Butaca de las seleccionadas)
   butacasSeleccionadas: WritableSignal<Butaca[]> = signal([]);
@@ -35,18 +37,16 @@ export class TicketStep3 implements OnInit {
     this.butacasSeleccionadas().map(b => `${String.fromCharCode(64 + b.rowNumber)}${b.columnNumber}`).join(', ')
   );
 
-  // Variables no-Signals (se usan solo para datos de navegación/servicio)
+  // Variables no-signals
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
   
-  // Variable necesaria para el HTML
-  String: any;
-
   constructor(
     private location: Location,
     private router: Router,
     private ticketService: TicketService,
-    private functionService: FunctionService
+    private functionService: FunctionService,
+    private cinemaService: CinemaService
   ) { }
 
   ngOnInit(): void {
@@ -54,61 +54,82 @@ export class TicketStep3 implements OnInit {
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     this.funcionSeleccionada = this.ticketService.getFuncion();
 
-    if (!this.peliculaSeleccionada) return;
-    if (!this.funcionSeleccionada) return;
+    if (!this.peliculaSeleccionada || !this.funcionSeleccionada) return;
 
-    this.functionService.getSeatsByFunction(this.funcionSeleccionada.id)
+    // Recibe la Sala por Funcion
+    this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
+      next: (data) => { this.cinemaService.selectedSala = data },
+      error: (e) => console.error("Error CinemaService getSala = ",e)
+    });
+
+    if (!this.cinemaService.selectedSala) return;
+
+    this.cargarMapaButacas(this.funcionSeleccionada.id, this.cinemaService.selectedSala.id);
+  }
+
+  cargarMapaButacas(functionId : number, cinemaId: number) {
+
+    // Recibe las Butacas por Funcion
+    this.functionService.getSeatsByFunction(functionId)
       .subscribe({
-        next: (butacas) =>{ this.mapaButacas.set(butacas); console.log("data Seats:", butacas) },
+        next: (butacas) => {
+        // Agrupar las butacas por fila
+        const matrizButacas: Butaca[][] = Array.from({ length: this.cinemaService.selectedSala?.rowSeat || 0 }, () =>
+          Array(this.cinemaService.selectedSala?.columnSeat || 0).fill(null)
+        );
+
+        for (const b of butacas) {
+          const rowIndex = b.rowNumber - 1; // restamos 1 si las filas empiezan desde 1
+          const colIndex = b.columnNumber - 1;
+          matrizButacas[rowIndex][colIndex] = b;
+        }
+
+        this.mapaButacas.set(matrizButacas);
+      },
         error: (err) => console.error('Error al cargar butacas:', err)
       });
   }
 
-  /**
-   * Método para manejar el click en una butaca disponible.
-   * Ahora SÓLO modifica el signal `butacasSeleccionadas`.
-   * @param butaca La butaca clickeada.
-   */
+  // Método para manejar el click en una butaca disponible
   seleccionarButaca(butaca: Butaca): void {
     if (butaca.occupied) {
-      // Las butacas ocupadas no se pueden seleccionar.
+      // Si la butaca esta ocupada
       this.errorMessage.set("ERROR: La butaca ya está ocupada.");
       return;
     }
 
-    this.errorMessage.set(null); // Limpiar error si la selección es válida
+    this.errorMessage.set(null); // Limpiar error si la seleccion es valida
 
-    // Usamos el ID para saber si ya está seleccionada.
+    // Se usa el id para saber si ya esta seleccionada
     const isSelected = this.butacasSeleccionadas().some(b => b.id === butaca.id);
 
     this.butacasSeleccionadas.update(currentSelections => {
       if (isSelected) {
-        // Si está seleccionada, la quitamos (deseleccionar)
+        // Si esta seleccionada, la quitamos (deseleccionar)
         return currentSelections.filter(b => b.id !== butaca.id);
       } else {
-        // Si no está seleccionada, la agregamos (seleccionar)
+        // Si no esta seleccionada, la agregamos (seleccionar)
         return [...currentSelections, butaca];
       }
     });
   }
 
-  /**
-   * Método para verificar si una butaca está seleccionada (para NgClass)
-   */
+  // Metodo para verificar si una butaca esta seleccionada (para NgClass)
   isButacaSeleccionada(butaca: Butaca): boolean {
     return this.butacasSeleccionadas().some(b => b.id === butaca.id);
   }
 
-  /**
-   * Limpia todas las butacas seleccionadas.
-   */
+  // Limpia todas las butacas seleccionadas
   limpiarButacasSeleccionadas(): void {
-    // Simplemente vaciamos el Signal de butacas seleccionadas. ¡Mucho más sencillo!
+    // Simplemente vaciamos el Signal de butacas seleccionadas
     this.butacasSeleccionadas.set([]);
     this.errorMessage.set(null);
   }
 
   confirmarPaso3(): void {
+
+    if (!this.peliculaSeleccionada || !this.funcionSeleccionada) return;
+
     // Lógica de confirmación:
     if (this.totalButacasSeleccionadas() === 0) {
       this.errorMessage.set("ERROR: Seleccione al menos una butaca para continuar.");
@@ -116,16 +137,20 @@ export class TicketStep3 implements OnInit {
     }
 
     // El resto de la lógica de guardado y navegación se mantiene igual
-    /*
+
     this.ticketService.setCompra({
-      movieId: this.peliculaSeleccionada!.id,
-      fecha: this.funcionSeleccionada!.date,
-      hora: "guarda dani te hardcodee esto para no tener kilombo",
-      butacas: this.butacasSeleccionadas(),
-      cantButacas: this.totalButacasSeleccionadas(),
-      precioUnidad: 2500 // hardcodeo (CAMBIAR)
+      title: "Entrada de cine", // Entrada de cine
+      description: "Proyeccion de la pelicula "+this.peliculaSeleccionada?.title+" en "+this.funcionSeleccionada?.cinemaName, // Proyeccion de la pelicula Sombras en el paraiso en sala 3D
+
+      userEmail: "", // email@gmail.com
+
+      quantity: this.butacasSeleccionadas.length, // 1
+      unitPrice: 3500, // 3500.00
+      
+      functionId: this.funcionSeleccionada?.id, // 2
+      seats: ["A1","C3"] // ["A1","C3"]
     });
-    */
+
     this.router.navigate(['/ticket/step4']);
   }
 
@@ -133,6 +158,4 @@ export class TicketStep3 implements OnInit {
     this.location.back();
   }
 
-  // ** NOTA: Los métodos onMouseEnter y onMouseLeave se han ELIMINADO **
-  // La funcionalidad de hover se gestionará completamente en el CSS.
 }

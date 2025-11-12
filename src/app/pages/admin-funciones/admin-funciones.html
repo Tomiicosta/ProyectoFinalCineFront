@@ -101,16 +101,7 @@
           <h2>Agregar función</h2>
   
           <form [formGroup]="funcionForm" (ngSubmit)="agregarFuncion()">
-            <fieldset>
-              <label for="fecha">Fecha</label>
-              <input id="fecha" type="date" formControlName="date" required />
-            </fieldset>
-  
-            <fieldset>
-              <label for="hora">Horario</label>
-              <input id="hora" type="time" formControlName="time" required />
-            </fieldset>
-  
+            
             <fieldset>
               <label for="pelicula">Película</label>
               <select id="pelicula" formControlName="movieId" required>
@@ -131,6 +122,16 @@
                   </option>
                 }
               </select>
+            </fieldset>
+
+            <fieldset>
+              <label for="fecha">Fecha</label>
+              <input id="fecha" type="date" formControlName="date" required />
+            </fieldset>
+  
+            <fieldset>
+              <label for="hora">Horario</label>
+              <input id="hora" type="time" formControlName="time" required />
             </fieldset>
   
             <div class="botonesForm">

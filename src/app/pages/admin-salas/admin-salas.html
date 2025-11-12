@@ -20,7 +20,7 @@
 
         <!--listado salas -->
       <div id="salas">
-        @for (sala of salasService.salas; track sala.id) {
+        @for (sala of cinemaService.salas; track sala.id) {
           <section class="tarjeta" (click)="verDetalleSala(sala)">
             <h3>{{ sala.name }}</h3>
             <h4>Capacidad: {{ sala.seatCapacity }}</h4>
