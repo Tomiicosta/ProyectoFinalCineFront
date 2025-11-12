@@ -10,7 +10,17 @@ import { AuthService } from '../../services/AuthService/auth-service';
 })
 export class HeaderAdmin {
 
+  menuAbierto = false;
+
   constructor(private authService :AuthService){}
+
+  toggleMenu() {
+    this.menuAbierto = !this.menuAbierto;
+  }
+
+   cerrarMenu() {
+    this.menuAbierto = false;
+  }
 
   onLogout() {
   this.authService.logout();

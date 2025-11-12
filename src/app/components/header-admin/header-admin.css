@@ -108,3 +108,74 @@ header {
 .btnLogin a {
   color: #000000;
 }
+
+/* ---------------- MENU HAMBURGUESA ---------------- */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+/* 📱 Responsive para móviles */
+@media (max-width: 974px) {
+  
+  .container {
+  width: 70%;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    width: 100%;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: rgba(36, 40, 51, 0.8);
+    text-align: center;
+    padding: 15px 0;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  }
+
+  nav.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .list {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+  }
+
+  .list a {
+    color: white;
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+    padding: 8px 0;
+  }
+
+  .btnLogin {
+    width: 80%;
+    margin: 10px auto;
+  }
+
+  .btnLogin a{
+    color: #000000;
+  text-decoration: none;
+  font-weight: 600;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
