@@ -340,4 +340,138 @@ display: grid;
   }
   
   .acciones-detalle .btn-form { flex: 1; }
+
+  /* 📱 Responsive para móviles (hasta 700px) */
+@media (max-width: 1000px) {
+
+  main {
+    padding: 20px;
+    padding-top: 120px;
+  }
+
+  #salasPage {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Cada bloque ocupa toda la pantalla */
+  #verSalas, 
+  #agregarSala {
+    width: 100%;
+    padding: 20px;
+  }
+
+  /* Encabezado de la lista de salas */
+  .headerVerSalas {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Listado de tarjetas */
+  #salas {
+    grid-template-columns: 1fr;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .tarjeta {
+    padding: 12px;
+  }
+
+  .tarjeta h3 {
+    font-size: 1.1rem;
+  }
+
+  .tarjeta h4 {
+    font-size: 0.85rem;
+  }
+
+  .botones-tarjeta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  /* Formularios */
+  form {
+    gap: 12px;
+  }
+
+  fieldset {
+    gap: 6px;
+  }
+
+  input,
+  select {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .checkbox-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .botonesForm {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-form {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  /* Detalle de sala */
+  .detalle-sala {
+    padding: 16px;
+  }
+
+  .detalle-sala h2 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .detalle-lista li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .label {
+    font-size: 0.75rem;
+  }
+
+  .value {
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .acciones-detalle {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .acciones-detalle .btn-form {
+    width: 100%;
+  }
+}
+
   
