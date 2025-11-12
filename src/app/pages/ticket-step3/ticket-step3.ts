@@ -64,46 +64,38 @@ export class TicketStep3 implements OnInit {
       });
   }
 
-  /**
-   * Método para manejar el click en una butaca disponible.
-   * Ahora SÓLO modifica el signal `butacasSeleccionadas`.
-   * @param butaca La butaca clickeada.
-   */
+  // Método para manejar el click en una butaca disponible
   seleccionarButaca(butaca: Butaca): void {
     if (butaca.occupied) {
-      // Las butacas ocupadas no se pueden seleccionar.
+      // Si la butaca esta ocupada
       this.errorMessage.set("ERROR: La butaca ya está ocupada.");
       return;
     }
 
-    this.errorMessage.set(null); // Limpiar error si la selección es válida
+    this.errorMessage.set(null); // Limpiar error si la seleccion es valida
 
-    // Usamos el ID para saber si ya está seleccionada.
+    // Se usa el id para saber si ya esta seleccionada
     const isSelected = this.butacasSeleccionadas().some(b => b.id === butaca.id);
 
     this.butacasSeleccionadas.update(currentSelections => {
       if (isSelected) {
-        // Si está seleccionada, la quitamos (deseleccionar)
+        // Si esta seleccionada, la quitamos (deseleccionar)
         return currentSelections.filter(b => b.id !== butaca.id);
       } else {
-        // Si no está seleccionada, la agregamos (seleccionar)
+        // Si no esta seleccionada, la agregamos (seleccionar)
         return [...currentSelections, butaca];
       }
     });
   }
 
-  /**
-   * Método para verificar si una butaca está seleccionada (para NgClass)
-   */
+  // Metodo para verificar si una butaca esta seleccionada (para NgClass)
   isButacaSeleccionada(butaca: Butaca): boolean {
     return this.butacasSeleccionadas().some(b => b.id === butaca.id);
   }
 
-  /**
-   * Limpia todas las butacas seleccionadas.
-   */
+  // Limpia todas las butacas seleccionadas
   limpiarButacasSeleccionadas(): void {
-    // Simplemente vaciamos el Signal de butacas seleccionadas. ¡Mucho más sencillo!
+    // Simplemente vaciamos el Signal de butacas seleccionadas
     this.butacasSeleccionadas.set([]);
     this.errorMessage.set(null);
   }
@@ -133,6 +125,4 @@ export class TicketStep3 implements OnInit {
     this.location.back();
   }
 
-  // ** NOTA: Los métodos onMouseEnter y onMouseLeave se han ELIMINADO **
-  // La funcionalidad de hover se gestionará completamente en el CSS.
 }
