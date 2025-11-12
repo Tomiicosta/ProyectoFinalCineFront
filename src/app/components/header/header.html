@@ -1,23 +1,22 @@
 <header>
-    <div class="container font-inter">
-        <div class="logo">
-            <img src="/img/logo/logo.png" alt="Logo cine">
-        </div>
-        <nav>
-            <div class="menu">
-                <ul class = "list">
-                    <li> <a routerLink = "/">Inicio</a> </li>
-                    <li> <a routerLink = "/ticket/step1">Comprar</a> </li>
-                    <li> <a routerLink = "/cinemas">Cines</a> </li>
-                    @if(authService.isLoggedIn()){
-                      <li class="btnLogin"> <a  (click)="onLogout()" routerLink="/">Cerrar Sesión</a></li>  
-                    }@else{
-                    <li class="btnLogin"> <a routerLink = "/login">Iniciar sesión</a> </li>
-                    }
-                    
-                    
-                </ul>
-            </div>
-        </nav>
+  <div class="container font-inter" [class.menu-abierto]="menuAbierto">
+    <div class="logo">
+      <img src="/img/logo/logo.png" alt="Logo cine">
     </div>
+
+    <button class="menu-toggle" (click)="toggleMenu()">☰</button>
+
+    <nav [class.active]="menuAbierto">
+      <ul class="list">
+        <li><a routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
+        <li><a routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li>
+
+        @if (authService.isLoggedIn()) {
+          <li class="btnLogin"><a (click)="onLogout(); cerrarMenu()" routerLink="/">Cerrar Sesión</a></li>
+        } @else {
+          <li class="btnLogin"><a routerLink="/login" (click)="cerrarMenu()">Iniciar sesión</a></li>
+        }
+      </ul>
+    </nav>
+  </div>
 </header>
