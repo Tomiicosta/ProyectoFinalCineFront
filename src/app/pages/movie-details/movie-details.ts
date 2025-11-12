@@ -5,6 +5,7 @@ import { TicketService } from '../../services/ticket/ticket-service';
 import { Location } from '@angular/common';
 import { MovieService } from '../../services/movie/movie-service';
 import Movie from '../../models/movie';
+import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 
 @Component({
   selector: 'app-movie-details',
@@ -24,7 +25,8 @@ export class MovieDetails {
     private route: ActivatedRoute,
     private router: Router,
     public movieService: MovieService,
-    public ticketService: TicketService
+    public ticketService: TicketService,
+    private errorHandlerService: ErrorHandler
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +46,7 @@ export class MovieDetails {
   getSelectedMovieBd(id:string){
     this.movieService.getMovieBd(id).subscribe({
       next:(data)=>{ this.peliculaSeleccionada = data },
-      error: (e)=> { console.log(e) }
+      error: (e) => { this.errorHandlerService.handleHttpError(e)}
     })
   }
 
