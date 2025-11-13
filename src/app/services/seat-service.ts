@@ -7,12 +7,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SeatService {
 
-  private api = 'http://localhost:8080/api/seats';
-
   constructor(private http: HttpClient) {}
 
   getSeat(id: number) {
-    return this.http.get<Butaca>(`${this.api}/${id}`);
+    return this.http.get<Butaca>(`/api/seats/${id}`);
   }
   
 }

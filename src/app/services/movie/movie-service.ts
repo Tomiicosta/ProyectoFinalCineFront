@@ -21,6 +21,7 @@ export class MovieService {
     this.moviesBd = []
   }
 
+  //METODOS GET
   getMovie(id:string){
     return this.http.get<Movie>(`/api/movies/${id}`);
   }
@@ -28,11 +29,25 @@ export class MovieService {
   getMovieByName(name:string){
     return this.http.get<Movie[]>(`/api/movies/search?title=${name}`);
   }
+  
+  getMovies(){
+    return this.http.get<Movie[]>('/api/movies')
+  }
+  
+  getAllMoviesBd(){
+    return this.http.get<Movie[]>(`/api/movies/bd`)
+  }
 
+  getMovieBd(id:string){
+    return this.http.get<Movie>(`/api/movies/bd/${id}`);
+  }
+
+  //LIMPIAR ARRAY
   vaciarMovies(){
     this.movies = [];
   }
 
+  //METODO POST
   postMovie(id : string){
     if(!this.authService.isAdmin()){
       // Si no es admin, lanza un error inmediatamente y no hace la petición.
@@ -42,24 +57,14 @@ export class MovieService {
     return this.http.post<Movie>(`/api/movies/save/${id}`,null);
   }
 
-  getMovies(){
-    return this.http.get<Movie[]>('/api/movies')
-  }
-
+  //METODO DELETE
   deleteMovie(id:string){
     return this.http.delete<Movie>(`/api/movies/delete/${id}`)
   }
 
+
   selectedMovie(movie : Movie){
     this.selectedPelicula = movie;
-  }
-
-  getAllMoviesBd(){
-    return this.http.get<Movie[]>(`/api/movies/bd`)
-  }
-
-  getMovieBd(id:string){
-    return this.http.get<Movie>(`/api/movies/bd/${id}`);
   }
 
   updateMovie(id: string, movie: Movie) {
@@ -69,6 +74,7 @@ export class MovieService {
     } 
     return this.http.put<Movie>(`/api/movies/update/${id}`, movie);
   }
+
 
 
 }

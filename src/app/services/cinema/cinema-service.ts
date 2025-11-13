@@ -9,8 +9,6 @@ import { Sala } from '../../models/sala';
 })
 export class CinemaService {
 
-  readonly API_URL = 'http://localhost:8080/api/cinemas';
-
   salas: Sala[];
   salasBd: Sala[];
   selectedSala?: Sala;
@@ -21,38 +19,45 @@ export class CinemaService {
   }
 
   // ===== CRUD principal =====
+
+  //METODOS GET
   getSalas(): Observable<Sala[]> {
-    return this.http.get<Sala[]>(this.API_URL);
+    return this.http.get<Sala[]>('/api/cinemas');
   }
 
   getSala(id: number): Observable<Sala> {
-    return this.http.get<Sala>(`${this.API_URL}/${id}`);
+    return this.http.get<Sala>(`/api/cinemas/${id}`);
   }
 
   getSalasByEnabled(enabled: boolean) {
-    return this.http.get<Sala[]>(`${this.API_URL}/enabled/${enabled}`);
+    return this.http.get<Sala[]>(`/api/cinemas/enabled/${enabled}`);
   }
   
   getSalaByName(name: string): Observable<Sala[]> {
-    return this.http.get<Sala[]>(`${this.API_URL}/search?name=${encodeURIComponent(name)}`);
+    return this.http.get<Sala[]>(`/api/cinemas/search?name=${encodeURIComponent(name)}`);
   }
 
+  //METODO PUT
   putSala(id: number, sala: any): Observable<any> {
-      return this.http.put(`${this.API_URL}/update/${id}`, sala);
+      return this.http.put(`/api/cinemas/update/${id}`, sala);
   }
  
+  //METODO POST
   postSala(sala : Sala): Observable<Sala> {
-    return this.http.post<Sala>(`${this.API_URL}/create`, sala);
+    return this.http.post<Sala>(`/api/cinemas/create`, sala);
   }
 
+  //METODO DELETE
   deleteSala(id: string | number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/delete/${id}`);
+    return this.http.delete<void>(`/api/cinemas/delete/${id}`);
   }
 
+  //vaciar array salas
   vaciarSalas(): void {
     this.salas = [];
   }
 
+  //traer sala seleccionada
   seleccionarSala(sala: Sala): void {
     this.selectedSala = sala;
   }

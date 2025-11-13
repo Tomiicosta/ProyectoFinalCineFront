@@ -13,9 +13,6 @@ import { Sala } from '../../models/sala';
 })
 export class TicketService {
 
-  // URL base de tu API de Spring Boot
-  private apiUrl = 'http://localhost:3306/cinepass';
-
   // Lista de peliculas (TRAER DESDE LA API PELICULAS)
   public peliculas: Movie[] = [];
 

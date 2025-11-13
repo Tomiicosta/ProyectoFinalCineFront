@@ -4,8 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Butaca } from '../../models/butaca';
 
-const BASE_URL = 'http://localhost:8080/api/functions';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -17,16 +15,16 @@ export class FunctionService {
 
   // LISTAR
   getFunciones(): Observable<Funcion[]> {
-    return this.http.get<Funcion[]>(`${BASE_URL}`);
+    return this.http.get<Funcion[]>(`/api/functions`);
   }
 
   getFuncionById(id: number): Observable<Funcion> {
-    return this.http.get<Funcion>(`${BASE_URL}/${id}`);
+    return this.http.get<Funcion>(`/api/functions/${id}`);
   }
 
   // VARIANTES DE LECTURA (si las usás en el front)
   getDisponiblesPorPelicula(movieId: number): Observable<Funcion[]> {
-    return this.http.get<Funcion[]>(`${BASE_URL}/available/${movieId}`);
+    return this.http.get<Funcion[]>(`/api/functions/available/${movieId}`);
   }
 
   // Trae las butacas segun la funcion
@@ -35,17 +33,17 @@ export class FunctionService {
   }
 
   getPorSala(cinemaId: number): Observable<Funcion[]> {
-    return this.http.get<Funcion[]>(`${BASE_URL}/cinema/${cinemaId}`);
+    return this.http.get<Funcion[]>(`/api/functions/cinema/${cinemaId}`);
   }
 
   // CREAR
   postFuncion(payload: any): Observable<Funcion> {
-    return this.http.post<Funcion>(`${BASE_URL}/create`, payload);
+    return this.http.post<Funcion>(`/api/functions/create`, payload);
   }
 
   // ACTUALIZAR
   putFuncion(id: number, payload: any): Observable<Funcion> {
-    return this.http.put<Funcion>(`${BASE_URL}/update/${id}`, payload);
+    return this.http.put<Funcion>(`/api/functions/update/${id}`, payload);
   }
 
   // ELIMINAR

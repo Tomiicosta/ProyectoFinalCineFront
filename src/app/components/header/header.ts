@@ -13,8 +13,8 @@ export class Header {
   menuAbierto = false;
   perfilMenuAbierto = false;
 
-constructor (public authService: AuthService, private router: Router){
-  }
+constructor (public authService: AuthService, private router: Router){}
+
 
 toggleMenu() {
   this.menuAbierto = !this.menuAbierto;
