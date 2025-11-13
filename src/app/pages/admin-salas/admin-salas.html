@@ -52,6 +52,7 @@
             <li><span class="label">Capacidad</span><span class="value">{{ detalleSala.seatCapacity }}</span></li>
             <li><span class="label">Atmos</span><span class="value"><span class="chip" [class.ok]="detalleSala.atmos" [class.bad]="!detalleSala.atmos">{{ detalleSala.atmos ? 'Sí' : 'No' }}</span></span></li>
             <li><span class="label">Estado</span><span class="value"><span class="chip" [class.ok]="detalleSala.enabled" [class.bad]="!detalleSala.enabled">{{ detalleSala.enabled ? 'Habilitada' : 'Inhabilitada' }}</span></span></li>
+            <li><span class="label">Precio</span><span class="value">{{ detalleSala.price }}</span></li>
           </ul>
           <div class="acciones-detalle">
             <button class="btn-form" type="button" (click)="cerrarDetalle()">Cerrar</button>
@@ -86,8 +87,13 @@
           </fieldset>
 
           <fieldset>
-            <label for="columnSeat">Columnas</label>
-            <input type="number" id="columnSeat" placeholder="Columnas" formControlName="columnSeat" min="1">
+            <label for="column">Columnas</label>
+            <input type="number" id="column" placeholder="Columnas" formControlName="columnSeat" min="1">
+          </fieldset>
+
+          <fieldset>
+            <label for="precio">Precio</label>
+            <input type="number" id="precio" placeholder="Precio" formControlName="price" min="1">
           </fieldset>
 
           <div class="checkbox-group">

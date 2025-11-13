@@ -1,11 +1,11 @@
-<main>
+<!-- <main>
     <section class="ticket-info font-open-sans">
         <h1 class="info"><span class="color">REALIZA</span> TU <span class="color">OPERACIÓN</span></h1>
         <h1 class="step">PASO <span class="step-num">4</span></h1>
     </section>
 
     <section class="ticket-section font-inter">
-        <!--
+        
         <div *ngIf="compraInfo">
             <h3>Resumen de la Compra</h3>
             <p>Producto: {{ compraInfo.nombre }}</p>
@@ -30,7 +30,104 @@
                 </button>
             </ng-template>
         </div>
-        -->
+        
     </section>
 
+</main> -->
+
+
+<main>
+    <!-- Panel Principal -->
+    <section class="ticket-info font-open-sans">
+        <h1 class="info">
+            <span class="color">REALIZA</span> TU <span class="color">OPERACIÓN</span>
+        </h1>
+        <h1 class="step">PASO <span class="step-num">4</span></h1>
+    </section>
+
+    <section class="ticket-section font-inter">
+        <!-- Panel de Información (igual al del paso 3) -->
+        @if (peliculaSeleccionada && funcionSeleccionada) {
+        <div class="div-info">
+            <h4 class="info-title">Detalles del Ticket</h4>
+
+            <div class="info-peli">
+                <h3 class="title-peli" title="{{ peliculaSeleccionada.title }}">
+                    {{ peliculaSeleccionada.title }}
+                </h3>
+                <p class="funcion-peli"><b>{{ formatearFecha(funcionSeleccionada.date) }}</b></p>
+                <p class="funcion-peli">a las <b>{{ formatearHora(funcionSeleccionada.time) }} hs</b></p>
+            </div>
+
+            <div class="div-butacas">
+                <p><b>Asientos Seleccionados:</b></p>
+                <p class="num-butacas"><b>{{ compra?.quantity }}</b></p>
+
+                <p>Butacas:</p>
+            </div>
+
+            <button class="btn-reiniciar" (click)="volverASeleccionButacas()">
+                Volver a Seleccionar
+            </button>
+        </div>
+        }
+
+        <!-- Panel de Pago -->
+        <div class="div-operacion">
+            <h3 class="operacion-title font-open-sans">FINALIZA TU OPERACIÓN</h3>
+            <p class="operacion-desc">
+                Revisa los datos de tu compra y selecciona el tipo de operación.
+            </p>
+
+            <div class="resumen-compra">
+                <p><b>Película:</b> {{ peliculaSeleccionada?.title }}</p>
+                <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada!.date) }}</p>
+                <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada!.time) }} hs</p>
+                <p><b>Entradas:</b> {{ compra?.quantity }}</p>
+                <p><b>Total:</b> ${{ calcularTotal() }}</p>
+            </div>
+
+            <div class="tipo-operacion">
+                <h4 class="font-open-sans">Tipo de Operación</h4>
+
+                <label class="radio-option">
+                    <input type="radio" name="tipo" value="compra" [(ngModel)]="tipoOperacion" /> COMPRA
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="tipo" value="reserva" [(ngModel)]="tipoOperacion" /> RESERVA
+                </label>
+            </div>
+
+            @if (usuarioLogueado) {
+            <button class="btn-pago" (click)="iniciarPago()" [disabled]="!tipoOperacion">
+                CONFIRMAR {{ tipoOperacion?.toUpperCase() }}
+            </button>
+
+            <!-- CONTENEDOR DEL SDK MERCADO PAGO-->
+            <div id="wallet_container"></div>
+
+            <small class="texto-secundario">
+                Serás redirigido al entorno seguro de Mercado Pago.
+            </small>
+            } @else {
+            <div class="alerta-login">
+                <p><b>Debes iniciar sesión</b> para continuar con la compra.</p>
+                <button class="btn-login" (click)="redirigirALogin()">Iniciar Sesión</button>
+            </div>
+            }
+        </div>
+    </section>
+
+    <aside class="banner">
+        <div class="btns-ticket font-inter">
+            <button id="btn-step" class="" (click)="confirmarPaso4()">SIGUIENTE</button>
+            <button id="btn-back" class="" (click)="volverAtras()">ATRÁS</button>
+
+            <!-- @if (errorMessage()) { -->
+            <!-- <div class="div-error"> -->
+            <!-- {{ errorMessage() }} -->
+            <!-- </div> -->
+            <!-- } -->
+        </div>
+    </aside>
 </main>

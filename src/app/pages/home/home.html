@@ -1,23 +1,45 @@
 <main>
   <!-- 🎬 CARRUSEL PRINCIPAL (solo escritorio) -->
   <section id="carrucelPrincipal" class="desktop-only">
+  @if (movieService.moviesCartelera && movieService.moviesCartelera.length > 0) {
     <div class="imagen-contenedor">
       <img id="pantalla" src="img/home/PantallaCine.png" alt="Pantalla de cine">
+
       <div id="bannerCarrusel">
         @for (movie of movieService.moviesCartelera; track $index) {
-          <img [src]="movie.bannerUrl" [class.mostrar]="indiceActual === $index" [alt]="movie.title">
+          <img
+            [src]="movie.bannerUrl"
+            [class.mostrar]="indiceActual === $index"
+            [alt]="movie.title">
         }
+
         <div class="info-pelicula">
-          <p class="titulo">{{ movieService.moviesCartelera[indiceActual]?.title }}</p>
-          <button class="btn-info" (click)="verDetalles(movieService.moviesCartelera[indiceActual]?.id)">
+          <p class="titulo">
+            {{ movieService.moviesCartelera[indiceActual]?.title }}
+          </p>
+          <button
+            class="btn-info"
+            (click)="verDetalles(movieService.moviesCartelera[indiceActual]?.id)">
             Más info
           </button>
         </div>
+
         <button class="anterior" (click)="anterior()">&#10094;</button>
         <button class="siguiente" (click)="siguiente()">&#10095;</button>
       </div>
     </div>
-  </section>
+  } @else {
+    <div class="imagen-contenedor sin-peliculas">
+      <img id="pantalla" src="img/home/PantallaCine.png" alt="Pantalla de cine">
+      <div id="bannerCarrusel">
+        <div class="info-pelicula">
+          <p class="titulo">No hay películas en cartelera por el momento.</p>
+        </div>
+      </div>
+    </div>
+  }
+</section>
+
 
   <!-- 🍿 CARTELERA MÓVIL -->
   <section id="carteleraMovil" class="mobile-only">
@@ -35,7 +57,10 @@
               <button (click)="verDetalles(movie.id)">Info</button>
             </div>
           </div>
+        }@empty{
+          <p>No hay películas próximas a estrenar</p>
         }
+      
       </div>
 
       <button class="flecha derecha" (click)="moverDerechaCartelera()">&#10095;</button>
@@ -49,10 +74,8 @@
       <button class="flecha izquierda" (click)="moverIzquierdaEstrenos()">&#10094;</button>
 
       <div class="carrusel" #carruselEstrenos>
-        @if (upcomingMovies.length === 0) {
-          <p>No hay películas próximas a estrenar</p>
-        } @else {
-          @for (movie of upcomingMovies; track $index) {
+       
+          @for(movie of upcomingMovies; track $index) {
             <div class="pelicula">
               <img [src]="movie.posterUrl" [alt]="movie.title">
 
@@ -61,8 +84,10 @@
                 <button (click)="verDetalles(movie.id)">Info</button>
               </div>
             </div>
+          }@empty{
+            <p>No hay películas próximas a estrenar</p>
           }
-        }
+        
       </div>
 
       <button class="flecha derecha" (click)="moverDerechaEstrenos()">&#10095;</button>
