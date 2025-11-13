@@ -21,17 +21,16 @@
 
             <!-- Asientos Seleccionados (Reactivo) -->
             <div class="div-butacas">
-                <p class="">
-                    <b>
-                        Asientos Seleccionados:
-                    </b>
+                <h3 class="cinema-funcion">{{ funcionSeleccionada.cinemaName }}</h3>
+                <p class="title-butacas">
+                    <b>Asientos Seleccionados:</b>
                 </p>
                 <p class="num-butacas"><b>{{ totalButacasSeleccionadas() }}</b></p>
 
-                <p class="">
+                <h3 class="subtitle-butacas">
                     Butacas:
-                </p>
-                <p class="butacas-info">
+                </h3>
+                <p class="list-butacas">
                     <b>
                         {{ listaButacasSeleccionadas() || 'Ninguna' }}
                     </b>

@@ -1,6 +1,21 @@
 <main>
     <div class="div-sections">
-        <!-- Panel de Información (INFO PELICULA) -->
+        <!-- Panel de Información (INFO PELICULA) 
+         export default interface Movie {
+            id: number; 
+            title: string;
+            releaseDate: string; 
+            runtime: number;
+            originalLanguage: string;
+            genres: string[];
+            voteAverage: number; 
+            voteCount: number;
+            posterUrl: string;
+            bannerUrl: string;
+            overview: string; 
+            imdbId?: string; 
+            adult: Boolean;
+        }-->
         @if (peliculaSeleccionada; as peli) {
         <section class="section-img">
             <div class="div-marco">
@@ -18,7 +33,10 @@
                     {{ g.toString() }} |
                     }
                 </h3>
+                <h4 class="runtime-peli">Duracion {{ peli.runtime }} mins.</h4>
                 <p class="description-peli">{{ peli.overview }}</p>
+                <h5 class="release-peli">Estrenada el {{ peli.releaseDate }}</h5>
+
             </div>
             <div class="div-funciones">
                 <h1 class="title-function">PROYECCIONES</h1>
@@ -26,7 +44,7 @@
                 <ul class="lista-funciones">
                     @for (f of funciones; track f.id) {
                         <li class="funcion">
-                            {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} ( {{ f.cinemaName }} )
+                            {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — {{ f.cinemaName }}
                         </li>
                     }
                 </ul>

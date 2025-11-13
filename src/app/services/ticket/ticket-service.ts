@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Funcion } from '../../models/funcion';
 import { MovieService } from '../movie/movie-service';
 import Movie from '../../models/movie';
+import { Sala } from '../../models/sala';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,8 @@ export class TicketService {
 
   funcionActual: Funcion | undefined;
 
+  salaActual: Sala | undefined;
+
   constructor(private http: HttpClient,
     private movieService: MovieService
   ) { }
@@ -44,6 +47,14 @@ export class TicketService {
 
   getFuncion(): Funcion | undefined {
     return this.funcionActual;
+  }
+
+  setSala(sala: Sala | undefined): void {
+    this.salaActual = sala;
+  }
+
+  getSala(): Sala | undefined {
+    return this.salaActual;
   }
 
   setPeliculaSeleccionada(pelicula: Movie | undefined): void {
