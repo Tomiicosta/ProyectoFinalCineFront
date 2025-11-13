@@ -14,13 +14,13 @@ export class HeaderAdmin {
 
   constructor(private authService :AuthService){}
 
-  toggleMenu() {
-    this.menuAbierto = !this.menuAbierto;
-  }
+toggleMenu() {
+  this.menuAbierto = !this.menuAbierto;
+}
 
-   cerrarMenu() {
-    this.menuAbierto = false;
-  }
+cerrarMenu() {
+  this.menuAbierto = false;
+}
 
   onLogout() {
   this.authService.logout();

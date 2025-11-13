@@ -10,6 +10,12 @@ import Movie from '../../models/movie';
 import { FunctionService } from '../../services/function/function-service';
 import { CinemaService } from '../../services/cinema/cinema-service';
 import { Sala } from '../../models/sala';
+<<<<<<< Updated upstream
+=======
+import { UserService } from '../../services/user/user';
+import { User } from '../../models/user';
+import { ToastrService } from 'ngx-toastr';
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-ticket-step3',
@@ -46,7 +52,13 @@ export class TicketStep3 implements OnInit {
     private router: Router,
     private ticketService: TicketService,
     private functionService: FunctionService,
+<<<<<<< Updated upstream
     private cinemaService: CinemaService
+=======
+    private cinemaService: CinemaService,
+    private userService: UserService,
+    private toastr: ToastrService
+>>>>>>> Stashed changes
   ) { }
 
   ngOnInit(): void {
@@ -136,6 +148,7 @@ export class TicketStep3 implements OnInit {
       return;
     }
 
+<<<<<<< Updated upstream
     // El resto de la lógica de guardado y navegación se mantiene igual
 
     this.ticketService.setCompra({
@@ -152,6 +165,48 @@ export class TicketStep3 implements OnInit {
     });
 
     this.router.navigate(['/ticket/step4']);
+=======
+    // Armar array de butacas tipo ["A1", "C3", ...]
+    const seatsSeleccionados: string[] = this.butacasSeleccionadas().map(b =>
+      `R${b.seatRowNumber}C${b.seatColumnNumber}`
+    );
+
+    // Opcional: ver en consola qué se está mandando
+    console.log('SEATS SELECCIONADOS:', seatsSeleccionados);
+    console.log('BUTACAS OBJETO:', this.butacasSeleccionadas());
+    
+    this.userService.getMyProfile().subscribe({
+      next: (data: User) => {
+      this.userSeleccionado = data;
+      console.log('PROFILE CARGADO:', data);
+
+      // Arma el ticket SOLO después de tener el usuario
+      this.ticketService.setCompra({
+        title: "Entrada de cine",
+        description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + 
+                    " en " + this.funcionSeleccionada?.cinemaName,
+        userEmail: data.email,   // ---> AHORA SÍ EXISTE
+        quantity: 1,
+        unitPrice: this.ticketService.salaActual?.price || 0,
+        functionId: this.funcionSeleccionada?.id || 0,
+        seats: seatsSeleccionados
+      });
+
+      console.log('ticket:', this.ticketService.getCompra());
+
+      this.router.navigate(['/ticket/step4']);
+    },
+    error: (err) => {
+      let httpError = err;
+        
+      if( httpError.status = 403){
+          this.toastr.error("Debes estar loggeado para ingresar")
+          this.router.navigate(['/login']);
+      }
+
+      }
+    });
+>>>>>>> Stashed changes
   }
 
   volverAtras(): void {

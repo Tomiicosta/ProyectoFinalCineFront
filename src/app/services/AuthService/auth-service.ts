@@ -17,10 +17,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  //Registra usuario
   register(userData: Registro): Observable <any>{
     return this.http.post(`/api/auth/register`, userData, {responseType: 'text'});
   }
 
+  //loggea usuario
   login(username: string, password: string) {
     return this.http.post<{ token: string }>(`/api/auth/login`, { username, password })
       .pipe(
@@ -32,24 +34,26 @@ export class AuthService {
       );
   }
 
+  //obtiene el token del usuario loggeado
   getToken() {
     return localStorage.getItem('token');
   }
 
+  //elimina el token del usuario loggeado
   logout() {
   localStorage.removeItem('token');
   this.loggedIn.next(false);   
   this.administrador.next(false); 
-}
+  }
 
-
+  //devuelve true o false dependiendo si el usuario esta loggeado o no
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     // Implementación más completa verificaría la expiración del token
     return !!token; 
   }
 
-  // Función para obtener el rol del token
+  // funcion para obtener el rol del token
   getRol(): string[] | null {
     const token = localStorage.getItem('token');
     if (token) {
@@ -60,7 +64,7 @@ export class AuthService {
     return null;
   }
 
-  // Función para verificar si el usuario es admin
+  //funcion para verificar si el usuario es admin
   isAdmin(): boolean {
     const userRoles = this.getRol();
     if(userRoles){

@@ -159,8 +159,8 @@ export class AdminFunciones {
   }
 
  // ---------- ELIMINAR ----------
-async eliminarFuncion(f: Funcion) {
-  const result = await Swal.fire({
+  async eliminarFuncion(f: Funcion) {
+    const result = await Swal.fire({
       title: 'Confirmar Eliminación',
       html: `¿Realmente deseas eliminar la función de <b>"${f.movieName}"</b> en sala <b>"${f.cinemaName}"</b>?`,
       icon: 'warning',
@@ -178,16 +178,16 @@ async eliminarFuncion(f: Funcion) {
     }
 
     // El usuario confirmó, procedemos con la llamada al servicio.
-  this.funcionService.deleteFuncion(f.id).subscribe({
-    next: () => {
-      this.cargarFunciones();
-      this.toastr.success("Función eliminada correctamente.");
-    },
-    error: (error: HttpErrorResponse) => {
-      this.errorHandlerService.handleHttpError(error);  
-    }
-  });
-}
+    this.funcionService.deleteFuncion(f.id).subscribe({
+      next: () => {
+        this.cargarFunciones();
+        this.toastr.success("Función eliminada correctamente.");
+      },
+      error: (error: HttpErrorResponse) => {
+       this.errorHandlerService.handleHttpError(error);  
+      }
+    });
+  }
 
   // ---------- HELPERS ----------
   private armarPayload(formValue: any) {

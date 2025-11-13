@@ -12,8 +12,12 @@ export class Header {
 
   menuAbierto = false;
 
+<<<<<<< Updated upstream
 constructor (public authService: AuthService){
   }
+=======
+constructor (public authService: AuthService, private router: Router){}
+>>>>>>> Stashed changes
 
 toggleMenu() {
   this.menuAbierto = !this.menuAbierto;

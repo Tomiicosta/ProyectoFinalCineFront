@@ -99,8 +99,35 @@ export class AdminSalas {
     this.detalleSala = null;
     this.selectedSala = sala;
 
+<<<<<<< Updated upstream
     console.log(sala)
 
+=======
+/* rellena el formulario con los datos de la sala seleccionada */
+  async editarSala(sala: any) {
+    if (!sala?.id) return;
+
+    try {
+      // 1) Consultar funciones de esa sala
+      const funciones = await firstValueFrom(this.funcionService.getPorSala(sala.id));
+
+      // 2) Si tiene funciones, NO permitimos editar
+      if (funciones && funciones.length > 0) {
+        this.toastr.error('No podés modificar esta sala porque está asignada a una función.');
+        return;
+      }
+    } catch (error) {
+      // Si hay un error real, lo manejás con tu handler
+      this.errorHandlerService.handleHttpError(error as HttpErrorResponse);
+      return;
+    }
+
+    // 3) Si no tiene funciones → habilitás la edición normalmente
+    this.isEditing = true;
+    this.detalleSala = null;
+    this.selectedSala = sala;
+
+>>>>>>> Stashed changes
     this.salaForm.patchValue({
       id: sala.id,
       name: sala.name,
@@ -108,10 +135,19 @@ export class AdminSalas {
       atmos: !!sala.atmos,
       rowSeat: sala.rowSeat,
       columnSeat: sala.columnSeat,
+<<<<<<< Updated upstream
       enabled: sala.enabled
     });
   }
 
+=======
+      enabled: sala.enabled,
+      price: sala.price
+    });
+  }
+
+
+>>>>>>> Stashed changes
   /*Metodo put */
   actualizarSala() {
     if (!this.isEditing || !this.selectedSala) return;
@@ -140,6 +176,7 @@ export class AdminSalas {
   }
 
     /* resetea el formulario y resetea campos */
+<<<<<<< Updated upstream
     cancelarEdicion() {
       this.isEditing = false;
       this.selectedSala = null;
@@ -180,17 +217,90 @@ export class AdminSalas {
         this.cinemaService.deleteSala(id).subscribe({
           next: () => {
             this.toastr.success('Sala eliminada correctamente');
+=======
+  cancelarEdicion() {
+    this.isEditing = false;
+    this.selectedSala = null;
+    this.salaForm.reset({
+      id: null,
+      name: '',
+      screenType: '',
+      atmos: false,
+      rowSeat: 0,
+      columnSeat: 0,
+      enabled: true,
+      price: 0
+    });
+  }
+
+  //Notificacion de eliminar
+  private async confirmarEliminacionSala(nombreSala: string): Promise<boolean> {
+    const result = await Swal.fire({
+      title: 'Confirmar Eliminación',
+      html: `¿Eliminar la sala "<b>${nombreSala}</b>"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+    
+    return result.isConfirmed;
+  }
+    
+
+    /* método DELETE */
+  async eliminarSala(sala: any) {
+    const id = sala?.id;
+    if (!id) return;
+
+    this.funcionService.getPorSala(id).subscribe({
+      next: async (funciones) => {
+        // 1) Verifico si la sala está asociada a alguna función
+        if (funciones && funciones.length > 0) {
+          this.toastr.error("No podés eliminar esta sala porque está asignada a una función.");
+          return;
+        }
+
+        // 2) Si no está usada, pido confirmación
+        const result = await this.confirmarEliminacionSala(sala.name);
+
+        if (!result) {
+          this.toastr.error('Eliminación cancelada por el usuario.');
+          return;
+        }
+
+        // 3) Si confirmó, elimino
+        this.cinemaService.deleteSala(id).subscribe({
+          next: () => {
+            this.toastr.success('Sala eliminada correctamente');
+
+>>>>>>> Stashed changes
             // Si estabas editando esa misma sala, cancelá edición
             if (this.selectedSala?.id === sala.id) {
               this.cancelarEdicion();
             }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             this.refrescarListadoActual();
           },
           error: (error: HttpErrorResponse) => {
             this.errorHandlerService.handleHttpError(error);
           }
         });
+<<<<<<< Updated upstream
       }
+=======
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errorHandlerService.handleHttpError(error);
+      }
+    });
+  }
+>>>>>>> Stashed changes
 
   /* cambia el listado de salas cada vez que tocan el checkbox*/
   actualizarFiltroHabilitadas() {
