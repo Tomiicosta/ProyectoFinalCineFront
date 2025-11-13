@@ -21,7 +21,6 @@ export class MovieService {
     this.moviesBd = []
   }
 
-  //METODOS GET
   getMovie(id:string){
     return this.http.get<Movie>(`/api/movies/${id}`);
   }
@@ -29,25 +28,11 @@ export class MovieService {
   getMovieByName(name:string){
     return this.http.get<Movie[]>(`/api/movies/search?title=${name}`);
   }
-  
-  getMovies(){
-    return this.http.get<Movie[]>('/api/movies')
-  }
-  
-  getAllMoviesBd(){
-    return this.http.get<Movie[]>(`/api/movies/bd`)
-  }
 
-  getMovieBd(id:string){
-    return this.http.get<Movie>(`/api/movies/bd/${id}`);
-  }
-
-  //LIMPIAR ARRAY
   vaciarMovies(){
     this.movies = [];
   }
 
-  //METODO POST
   postMovie(id : string){
     if(!this.authService.isAdmin()){
       // Si no es admin, lanza un error inmediatamente y no hace la petición.
@@ -57,12 +42,14 @@ export class MovieService {
     return this.http.post<Movie>(`/api/movies/save/${id}`,null);
   }
 
-  //METODO DELETE
+  getMovies(){
+    return this.http.get<Movie[]>('/api/movies')
+  }
+
   deleteMovie(id:string){
     return this.http.delete<Movie>(`/api/movies/delete/${id}`)
   }
 
-<<<<<<< Updated upstream
   selectedMovie(movie : Movie){
     this.selectedPelicula = movie;
   }
@@ -75,21 +62,6 @@ export class MovieService {
     return this.http.get<Movie>(`/api/movies/bd/${id}`);
   }
 
-=======
-  //METODO PUT
-  updateMovie(id: string, movie: Movie) {
-    if (!this.authService.isAdmin()) {
-      console.error('Se requiere rol ADMIN.');
-      return throwError(() => new Error('Acceso Denegado: Rol insuficiente.'));
-    } 
-    return this.http.put<Movie>(`/api/movies/update/${id}`, movie);
-  }
-  
-  //Obtiene pelicula seleccionada
-  selectedMovie(movie : Movie){
-    this.selectedPelicula = movie;
-  }
->>>>>>> Stashed changes
 
 
 }

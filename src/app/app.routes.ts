@@ -16,18 +16,14 @@ import { TicketStep4 } from './pages/ticket-step4/ticket-step4';
 export const routes: Routes = [
     {path: '', component: Home},
     {path: 'billboard', component: Home},
-    {path: 'cinemas', component: Home },
+    {path: 'cinemas', component: Home /*canActivate: [AuthGuard]*/},
     {path: 'login', component: Login},
     {path: 'register', component: Register},
     {path: 'ticket/step1', component: TicketStep1},
     {path: 'ticket/step2', component: TicketStep2},
     {path: 'ticket/step3', component: TicketStep3},
-    {path: 'ticket/step4', component: TicketStep4, canActivate: [AuthGuard]},
+    {path: 'ticket/step4', component: TicketStep4},
     {path: 'details/:id', component: MovieDetails},
-<<<<<<< Updated upstream
-=======
-    {path: 'profile', component: Perfil, canActivate: [AuthGuard]},
->>>>>>> Stashed changes
     {path: 'adminMovies',component: AdminMovies, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminFunciones',component: AdminFunciones, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminSalas',component:AdminSalas, canActivate: [RoleGuard], data: {role : 'ADMIN'}},

@@ -13,7 +13,6 @@ export class AuthGuard implements CanActivate {
   
   constructor(private authService: AuthService, private router: Router) {}
   
-  //Metodo para proteger rutas que se necesita estar loggeado
   canActivate(): Observable<boolean> {
     // Usamos el Observable del servicio para la comprobación
     return this.authService.isLoggedIn$.pipe(

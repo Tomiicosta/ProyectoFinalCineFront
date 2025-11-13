@@ -8,7 +8,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ErrorHandler {
   constructor(private toastr: ToastrService){}
 
-  //Metodo para manejar errores en la pagina
   handleHttpError(error: any, defaultMessage: string = 'Ocurrió un error inesperado.') {
     // errores HTTP
     if (error instanceof HttpErrorResponse) {

@@ -10,7 +10,6 @@ export class RoleGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  //Metodo para proteger rutas que se necesita ser administrador
   canActivate( route: ActivatedRouteSnapshot) : boolean | UrlTree {
     
     //Obtener el rol requerido de la configuración de la ruta

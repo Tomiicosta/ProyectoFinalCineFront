@@ -112,11 +112,6 @@ export class Home implements OnInit, OnDestroy {
     this.getAllMovies();
 
     // Banner principal
-<<<<<<< Updated upstream
-=======
-    
-
->>>>>>> Stashed changes
     setInterval(() => this.siguiente(), 8000);
 
     // 🔹 Movimiento automático del carrusel de CARTELERA
