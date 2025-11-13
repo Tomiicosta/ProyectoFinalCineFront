@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 import Swal from 'sweetalert2';
+import { FunctionService } from '../../services/function/function-service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-admin-salas',
@@ -25,7 +27,7 @@ export class AdminSalas {
   selectedSala: any | null = null;
   detalleSala: Sala | null = null;
 
-  constructor(private fb: FormBuilder,public cinemaService: CinemaService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler) {}
+  constructor(private fb: FormBuilder,public cinemaService: CinemaService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler, public funcionService : FunctionService) {}
 
   /* Formulario agregar */
   crearFormulario() {
@@ -90,30 +92,49 @@ export class AdminSalas {
         }
       });
     } else {
-      console.warn('Formulario inválido');
+      this.toastr.error("Formulario invalido: Completes los campos")
       this.salaForm.markAllAsTouched();
     }
   }
 
-  /* rellena el formulario con los datos de la pelicula seleccionada*/
-  editarSala(sala: any) {
-    this.isEditing = true;
-    this.detalleSala = null;
-    this.selectedSala = sala;
+ 
 
-    console.log(sala)
+/* rellena el formulario con los datos de la sala seleccionada */
+async editarSala(sala: any) {
+  if (!sala?.id) return;
 
-    this.salaForm.patchValue({
-      id: sala.id,
-      name: sala.name,
-      screenType: sala.screenType,
-      atmos: !!sala.atmos,
-      rowSeat: sala.rowSeat,
-      columnSeat: sala.columnSeat,
-      enabled: sala.enabled,
-      price: sala.price
-    });
+  try {
+    // 1) Consultar funciones de esa sala
+    const funciones = await firstValueFrom(this.funcionService.getPorSala(sala.id));
+
+    // 2) Si tiene funciones, NO permitimos editar
+    if (funciones && funciones.length > 0) {
+      this.toastr.error('No podés modificar esta sala porque está asignada a una función.');
+      return;
+    }
+  } catch (error) {
+    // Si hay un error real, lo manejás con tu handler
+    this.errorHandlerService.handleHttpError(error as HttpErrorResponse);
+    return;
   }
+
+  // 3) Si no tiene funciones → habilitás la edición normalmente
+  this.isEditing = true;
+  this.detalleSala = null;
+  this.selectedSala = sala;
+
+  this.salaForm.patchValue({
+    id: sala.id,
+    name: sala.name,
+    screenType: sala.screenType,
+    atmos: !!sala.atmos,
+    rowSeat: sala.rowSeat,
+    columnSeat: sala.columnSeat,
+    enabled: sala.enabled,
+    price: sala.price
+  });
+}
+
 
   /*Metodo put */
   actualizarSala() {
@@ -158,43 +179,69 @@ export class AdminSalas {
       });
     }
 
-      /* metodo DELETE */
-    async eliminarSala(sala: any) {
-      const id = sala?.id;
-      if (!id) return;
-
+    private async confirmarEliminacionSala(nombreSala: string): Promise<boolean> {
       const result = await Swal.fire({
-              title: 'Confirmar Eliminación',
-              html: `¿Eliminar la sala "${sala.name}"?`,
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#d33', 
-              cancelButtonColor: '#3085d6',
-              confirmButtonText: 'Eliminar',
-              cancelButtonText: 'Cancelar'
-            });
-        
-            //Verificar el resultado de la confirmación
-            if (!result.isConfirmed) {
-              this.toastr.error('Eliminación cancelada por el usuario.');
-              return; 
-            }
+        title: 'Confirmar Eliminación',
+        html: `¿Eliminar la sala "<b>${nombreSala}</b>"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar'
+      });
+    
+      return result.isConfirmed;
+    }
+    
 
+    /* método DELETE */
+async eliminarSala(sala: any) {
+  const id = sala?.id;
+  if (!id) return;
 
-        this.cinemaService.deleteSala(id).subscribe({
-          next: () => {
-            this.toastr.success('Sala eliminada correctamente');
-            // Si estabas editando esa misma sala, cancelá edición
-            if (this.selectedSala?.id === sala.id) {
-              this.cancelarEdicion();
-            }
-            this.refrescarListadoActual();
-          },
-          error: (error: HttpErrorResponse) => {
-            this.errorHandlerService.handleHttpError(error);
-          }
-        });
+  this.funcionService.getPorSala(id).subscribe({
+    next: async (funciones) => {
+      // 1) Verifico si la sala está asociada a alguna función
+      if (funciones && funciones.length > 0) {
+        this.toastr.error("No podés eliminar esta sala porque está asignada a una función.");
+        return;
       }
+
+      // 2) Si no está usada, pido confirmación
+      const result = await this.confirmarEliminacionSala(sala.name);
+
+      if (!result) {
+        this.toastr.error('Eliminación cancelada por el usuario.');
+        return;
+      }
+
+      // 3) Si confirmó, elimino
+      this.cinemaService.deleteSala(id).subscribe({
+        next: () => {
+          this.toastr.success('Sala eliminada correctamente');
+
+          // Si estabas editando esa misma sala, cancelá edición
+          if (this.selectedSala?.id === sala.id) {
+            this.cancelarEdicion();
+          }
+
+          this.refrescarListadoActual();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.errorHandlerService.handleHttpError(error);
+        }
+      });
+    },
+    error: (error: HttpErrorResponse) => {
+      this.errorHandlerService.handleHttpError(error);
+    }
+  });
+}
+
+    
+
+      
 
   /* cambia el listado de salas cada vez que tocan el checkbox*/
   actualizarFiltroHabilitadas() {
@@ -247,3 +294,4 @@ export class AdminSalas {
   }
 
 }
+

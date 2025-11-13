@@ -24,10 +24,11 @@ declare var MercadoPago: any;
 export class TicketStep4 implements OnInit {
 
   usuarioLogueado: boolean = false;
-  tipoOperacion: string | null = null;
+  confirmacion: string | null = null;
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
-  compra! : Compra | null;
+  compra! : Compra | undefined;
+  
 
   compraInfo: any = {
     nombre: '',
@@ -54,6 +55,7 @@ export class TicketStep4 implements OnInit {
     //  Cargar datos
     this.funcionSeleccionada = this.ticketService.getFuncion();
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada()
+    
     if (!this.peliculaSeleccionada || !this.funcionSeleccionada) {
       console.warn('No se encontraron datos de película o función seleccionadas.');
       return;
@@ -65,56 +67,78 @@ export class TicketStep4 implements OnInit {
       error: (err) => console.error('Error al obtener la sala:', err)
     });
 
+    this.getCompra();
+
     //  Inicializar datos de compra
     this.compraInfo = {
       nombre: this.peliculaSeleccionada.title,
       precio: this.calcularTotal(),
       preferenceId: null
     };
+
   }
 
 
   getCompra(){
-    this.compra = this.ticketService.getCompra() || null;
+    this.compra = this.ticketService.getCompra();
   }
 
 
   /**
-   *  Se ejecuta al hacer clic en "CONFIRMAR COMPRA"
+   *  Se ejecuta al hacer clic en "FINALIZAR"
    */
   iniciarPago(): void {
+    console.log('FINALIZAR PRESIONADO', this.compra)
+
     if (!this.usuarioLogueado) {
       this.redirigirALogin();
       return;
     }
 
+    if (this.confirmacion !== 'compra') {
+      alert('Debes aceptar los términos y condiciones antes de continuar.');
+      return;
+    }
+
+    if (!this.compra) {
+      console.error('No hay datos de compra disponibles.');
+      return;
+    }
+
     const payload = {
-      title: this.compra?.title,
-      description: this.compra?.description,
-      userEmail: this.compra?.userEmail,
-      quantity: this.compra?.quantity,
-      unitPrice: this.compra?.unitPrice,
-      seats: this.compra?.seats,
-      functionId: this.compra?.functionId
+      title: this.compra.title,
+      description: this.compra.description,
+      userEmail: this.compra.userEmail,
+      quantity: this.compra.quantity,
+      unitPrice: this.compra.unitPrice,
+      seats: this.compra.seats,
+      functionId: this.compra.functionId
     };
 
-    this.pagoService.crearPreferencia(payload).subscribe({
-      next: (res: any) => {
-        this.compraInfo.preferenceId = res.preferenceId;
+    console.log('Payload enviado:', payload);
 
-        //  Inicializar el SDK solo una vez
+    this.pagoService.crearPreferencia(payload).subscribe({
+      next: (response) => {
+        console.log('Respuesta del backend:', response);
+
+        // Inicializar Mercado Pago una sola vez
         const mp = this.pagoService.inicializarMercadoPago();
 
+        // Renderizar el botón/ventana de pago
         mp.bricks().create('wallet', 'wallet_container', {
-          initialization: { preferenceId: res.preferenceId },
+          initialization: { preferenceId: response.preferenceId },
           customization: { texts: { valueProp: 'smart_option' } },
         });
+
+        // Redirige a Mercado Pago
+        window.location.href = response.initPoint; 
       },
       error: (err) => {
         console.error('Error al generar la preferencia:', err);
-      },
+      }
     });
   }
+
 
 
   //  Cálculo total de la compra
@@ -158,7 +182,7 @@ export class TicketStep4 implements OnInit {
 
 
   volverASeleccionButacas(): void {
-    this.router.navigate(['/tickets/paso3']);
+    this.router.navigate(['/ticket/step3']);
   }
 
 
@@ -166,14 +190,14 @@ export class TicketStep4 implements OnInit {
     this.location.back();
   }
 
-  
+
   confirmarPaso4(): void {
-    if (!this.tipoOperacion) {
+    if (!this.confirmacion) {
       alert('Debe seleccionar un tipo de operación.');
       return;
     }
 
-    if (this.tipoOperacion === 'compra') {
+    if (this.confirmacion === 'compra') {
       this.iniciarPago();
     } else {
       this.router.navigate(['/confirmacion-reserva']);
