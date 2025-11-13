@@ -13,41 +13,26 @@ main {
   grid-template-areas:
     "peliculas agregar"
     "peliculas agregar";
-  grid-template-columns: 70% 30%;
-  grid-template-rows: 10% auto ;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.38fr);
+  grid-template-rows: auto;
   gap: 20px;
   padding: 150px;
-
 }
-h2{
+
+h2 {
   font-size: 32px;
   color: white;
 }
-h3{
+
+h3 {
   color: white;
 }
 
-#Agregar h2{
-  text-align: center;
-  font-size: 18px;
-  color: rgb(255, 255, 255, 0.5);
-  font-weight: 400;
-}
-
-#Agregar .tituloPelicula{
-  font-size: 32px;
-  color: white;
-} 
-
-#Agregar p{
-  color: white;
-}
-
-
-/* 🔹 Secciones */
+/* ===================== */
+/* SECCIONES PRINCIPALES */
+/* ===================== */
 #sectionPeliculasCartelera,
-#Agregar
- {
+#Agregar {
   background-color: #141414;
   border: 1px solid #ff1e1e;
   border-radius: 10px;
@@ -56,42 +41,45 @@ h3{
   gap: 32px;
   display: flex;
   flex-direction: column;
-  
 }
 
-#Agregar{
+#Agregar {
   grid-area: agregar;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: radial-gradient(circle at top left, #3a1717 0, #141414 45%, #050505 100%);
+  border-radius: 16px;
+  box-shadow: 0 0 18px rgba(255, 0, 0, 0.25);
 }
 
+#sectionPeliculasCartelera,
+#Agregar,
+.detail-card,
+.detail-body,
+.meta-wrapper {
+  min-width: 0; 
+}
 
 #sectionPeliculasCartelera {
   grid-area: peliculas;
 }
 
+/* ===================== */
+/* BUSCADOR */
 #buscarId {
   display: flex;
   gap: 38px;
- 
 }
 
-#buscarId form{
+#buscarId form {
   display: flex;
   flex-direction: row;
   width: 80%;
 }
 
-
-#agregarId {
-  grid-area: agregar;
-  display: flex;
-  flex-direction: column;
-  gap: 38px;
-}
-
-/* 🎞️ Tarjetas de películas */
+/* ===================== */
+/* TARJETAS */
 #peliculasCartelera,
 #buscarMovie {
   display: grid;
@@ -102,8 +90,6 @@ h3{
   max-height: 70vh;
 }
 
-
-
 #tarjeta {
   background-color: #1a1a1a;
   border: 1px solid #ff2b2b;
@@ -113,9 +99,7 @@ h3{
   display: flex;
   flex-direction: column;
   cursor: pointer;
-
 }
-
 
 #tarjeta:hover {
   transform: translateY(-5px);
@@ -134,18 +118,17 @@ h3{
   margin: 3px 0;
 }
 
-/* 🔸 Formularios */
+.botones-tarjeta {
+  padding-top: 12px;
+}
+
+/* ===================== */
+/* FORMULARIO BÁSICO (BUSCADOR) */
 form {
   display: flex;
   flex-direction: column;
-
   gap: 12px;
   align-items: center;
-}
-
-label {
-  color: #fff;
-  font-weight: bold;
 }
 
 input {
@@ -158,45 +141,79 @@ input {
   width: 80%;
 }
 
-
 input:focus {
   outline: none;
   border-color: #ff5555;
   box-shadow: 0 0 5px #ff5555;
 }
-.botones-tarjeta{
-  padding-top: 12px;
-}
-/* 🔺 Botones */
+
+/* ===================== */
+/* BOTONES GLOBALES */
+/* ===================== */
+
 button {
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 8px 14px;
+  transition: background-color 0.2s, transform 0.15s;
+  border: none;
+}
+
+/* 🔴 Botón rojo — agregar / editar / aceptar */
+.btn-agregar, .btn-eliminar {
   background-color: #ff1e1e;
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
 }
 
-button:hover {
-  background-color: #ff4444;
-  transform: scale(1.05);
+.btn-agregar:hover:enabled, .btn-eliminar:hover:enabled {
+  background-color: #ff3d3d;
+  transform: translateY(-1px);
 }
 
-button:active {
-  transform: scale(0.95);
+.btn-agregar:active:enabled, .btn-eliminar:active:enabled {
+  transform: scale(0.97);
+
 }
 
+/* Hover específico para el botón "Buscar" */
+#buscarId form button:not(.btn-volver):hover:enabled {
+  background-color: #9f9a9a;
+  transform: translateY(-1px);
+}
+
+/* Hover específico para el botón "Guardar cambios" */
+.edit-form-actions button:not(.btn-volver):hover:enabled {
+  background-color: #9f9a9a;
+  transform: translateY(-1px);
+}
+
+/* ⚫ Botón gris — volver / cancelar */
 .btn-volver {
   background-color: #4f4f4f;
+  color: #fff;
 }
 
-.btn-volver:hover{
+.btn-volver:hover:enabled {
   background-color: #303030;
+  transform: translateY(-1px);
 }
 
-/* 🔹 Scroll personalizado */
+.btn-volver:active:enabled {
+  transform: scale(0.97);
+}
+
+button:disabled,
+.btn-agregar:disabled,
+.btn-volver:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===================== */
+/* SCROLL CUSTOM */
+/* ===================== */
 #buscarMovie::-webkit-scrollbar,
 #peliculasCartelera::-webkit-scrollbar {
   width: 8px;
@@ -208,10 +225,315 @@ button:active {
   border-radius: 4px;
 }
 
+/* ====================================== */
+/* PANEL DERECHO — DETALLE PELÍCULA      */
+/* ====================================== */
 
-/* 📱 Responsive hasta 1000px */
-@media (max-width: 1000px) {
+#Agregar .placeholder-text {
+  text-align: center;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+}
 
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+/* HEADER */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+}
+
+.detail-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#Agregar .tituloPelicula {
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/*  fecha + ATP */
+.badge-year {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #cbc7c7;
+}
+
+.badge-adult {
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  color: #111;
+}
+
+.badge-adult-true {
+  background: rgba(255, 90, 90, 0.9);
+}
+
+.badge-adult-false {
+  background: rgba(46, 204, 113, 0.95);
+}
+
+/* pill de rating */
+.detail-rating {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: linear-gradient(135deg, #2b2300, #3c2f00);
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 215, 0, 0.9);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+.rating-score {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.rating-out-of {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.rating-count {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* CUERPO */
+.detail-body {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.poster-wrapper {
+  width: 140px;
+  min-width: 140px;
+  height: 210px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+}
+
+.poster-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.meta-wrapper {
+  flex: 1;
+}
+
+.meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-list li {
+  display: grid;
+  grid-template-columns: 22px 90px 1fr;
+  align-items: center;
+  column-gap: 8px;
+  font-size: 13px;
+}
+
+.meta-icon {
+  text-align: center;
+  opacity: 0.9;
+}
+
+.meta-label {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.meta-value {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* chips de géneros */
+.genre-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  color: #c6c6c6;
+  font-weight: 500;
+}
+
+/* IMDb LINK */
+.imdb-link {
+  color: #f5c518;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.imdb-link:hover {
+  text-decoration: underline;
+}
+
+/* SINOPSIS */
+.synopsis-block {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.synopsis-block h3 {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.synopsis-block p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* BOTÓN ACCIONES (debajo de la sinopsis si lo necesitás en contenedor propio) */
+.detail-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* =============== */
+/* FORM EDIT PELI  */
+/* =============== */
+
+.edit-form {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-form h3 {
+  font-size: 18px;
+  margin-bottom: 4px;
+  color: #ffffff;
+}
+
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-control-full {
+  grid-column: 1 / -1;
+}
+
+.form-control label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.form-control input,
+.form-control select,
+.form-control textarea {
+  background-color: #0e0e0e;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 8px;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.form-control input:focus,
+.form-control select:focus,
+.form-control textarea:focus {
+  outline: none;
+  border-color: #ff5555;
+  box-shadow: 0 0 5px rgba(255, 85, 85, 0.6);
+}
+
+.form-control small {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.edit-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+  gap: 10px;
+}
+
+
+
+/* Dentro del form: respetar clases de botón */
+.edit-form-actions .btn-agregar {
+  padding: 8px 16px;
+}
+
+.edit-form-actions .btn-volver {
+  padding: 8px 16px;
+}
+
+/* ===================== */
+/* RESPONSIVE */
+/* ===================== */
+
+@media (max-width: 1320px) {
   main {
     display: flex;
     flex-direction: column;
@@ -220,63 +542,35 @@ button:active {
     padding-top: 120px;
   }
 
-  h2 {
-    font-size: 1.6rem;
-    text-align: center;
-  }
-
-  /* 🔹 Secciones principales */
-  #sectionPeliculasCartelera,
   #Agregar {
-    width: 100%;
     padding: 20px;
-    box-sizing: border-box;
   }
 
-  #sectionPeliculasCartelera {
-    order: 1;
-  }
-
-  #Agregar {
-    order: 2;
-    align-items: center;
-  }
-
-  /* 🔹 Buscador más compacto */
-  #buscarId {
+  .detail-header {
     flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
+    align-items: flex-start;
   }
 
-  #buscarId form {
+  .detail-body {
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
+    align-items: stretch;
   }
 
-  #buscarId input {
-    width: 80%;
-    font-size: 0.9rem;
+  .poster-wrapper {
+    width: 200px;
+    height: auto;
+    max-height: 320px;
   }
 
-  #buscarId button,
-  .btn-volver {
-    width: 60%;
-    font-size: 0.9rem;
-    padding: 8px;
+  .poster-wrapper img {
+    height: 100%;
+    max-height: 320px;
   }
 
-  /* 🎞️ Tarjetas adaptables */
   #peliculasCartelera,
   #buscarMovie {
-    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 8px; /* 🔹 Menor separación entre tarjetas */
-    justify-items: center;
-    padding: 0;
+    gap: 8px;
   }
 
   #tarjeta {
@@ -284,40 +578,9 @@ button:active {
     max-width: 180px;
     padding: 10px;
     font-size: 0.9rem;
-    transition: none;
-    
-    /* 🔹 Flex interno para ubicar el botón abajo */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
 
-  /* Desactivar hover completamente */
-  #tarjeta:hover,
-  #tarjeta button:hover {
-    transform: none !important;
-    background-color: inherit !important;
-    box-shadow: none !important;
-    cursor: default !important;
-  }
-
-  /* 🔹 Tipografía dentro de las tarjetas */
-  #tarjeta h3 {
-    font-size: 1rem;
-  }
-
-  #tarjeta h4 {
-    font-size: 0.85rem;
-  }
-
-  /* 🔹 Botones dentro de la tarjeta */
-  .botones-tarjeta {
-    margin-top: auto; /* 👈 empuja los botones hacia abajo */
-  }
-
-  .botones-tarjeta button {
-    padding: 8px;
-    width: 100%;
-    font-size: 0.85rem;
+  .edit-form-grid {
+    grid-template-columns: 1fr;
   }
 }

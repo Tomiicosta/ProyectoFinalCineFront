@@ -6,5 +6,6 @@ export interface Sala {
     rowSeat: number,
     columnSeat: number,
     seatCapacity: number,
-    enabled: boolean
+    enabled: boolean,
+    price: number
 }

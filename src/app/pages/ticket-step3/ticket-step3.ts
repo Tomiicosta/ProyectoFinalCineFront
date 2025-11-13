@@ -10,6 +10,8 @@ import Movie from '../../models/movie';
 import { FunctionService } from '../../services/function/function-service';
 import { CinemaService } from '../../services/cinema/cinema-service';
 import { Sala } from '../../models/sala';
+import { UserService } from '../../services/user/user';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -40,13 +42,16 @@ export class TicketStep3 implements OnInit {
   // Variables no-signals
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
+  salaSeleccionada: Sala | undefined;
+  userSeleccionado!: User | null;
 
   constructor(
     private location: Location,
     private router: Router,
     private ticketService: TicketService,
     private functionService: FunctionService,
-    private cinemaService: CinemaService
+    private cinemaService: CinemaService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -143,22 +148,38 @@ export class TicketStep3 implements OnInit {
       return;
     }
 
-    // El resto de la lógica de guardado y navegación se mantiene igual
-    // CAMBIAR ESTO PARA REALIZAR LA ORDEN DE COMPRA, CON EL DTO QUE MANDO SEBAS AL WPP
+    // Armar array de butacas tipo ["A1", "C3", ...]
+  const seatsSeleccionados: string[] = this.butacasSeleccionadas().map(b =>
+    `R${b.rowNumber}C${b.columnNumber}`
+  );
+
+   // Opcional: ver en consola qué se está mandando
+    console.log('SEATS SELECCIONADOS:', seatsSeleccionados);
+    console.log('BUTACAS OBJETO:', this.butacasSeleccionadas());
+    
+    this.userService.getMyProfile().subscribe({
+  next: (data: User) => {
+    this.userSeleccionado = data;
+    console.log('PROFILE CARGADO:', data);
+
+    // Arma el ticket SOLO después de tener el usuario
     this.ticketService.setCompra({
-      title: "Entrada de cine", // Entrada de cine
-      description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + " en " + this.funcionSeleccionada?.cinemaName, // Proyeccion de la pelicula Sombras en el paraiso en sala 3D
-
-      userEmail: "", // email@gmail.com
-
-      quantity: this.butacasSeleccionadas.length, // 1
-      unitPrice: 3500, // 3500.00
-
-      functionId: this.funcionSeleccionada?.id, // 2
-      seats: ["A1", "C3"] // ["A1","C3"]
+      title: "Entrada de cine",
+      description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + 
+                   " en " + this.funcionSeleccionada?.cinemaName,
+      userEmail: data.email,   // ---> AHORA SÍ EXISTE
+      quantity: 1,
+      unitPrice: this.ticketService.salaActual?.price || 0,
+      functionId: this.funcionSeleccionada?.id || 0,
+      seats: seatsSeleccionados
     });
 
+    console.log('ticket:', this.ticketService.getCompra());
+
     this.router.navigate(['/ticket/step4']);
+  },
+  error: (err) => console.error(err)
+});
   }
 
   volverAtras(): void {
