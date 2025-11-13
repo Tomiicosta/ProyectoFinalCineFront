@@ -45,6 +45,7 @@
         <h1 class="step">PASO <span class="step-num">4</span></h1>
     </section>
 
+    
     <section class="ticket-section font-inter">
         <!-- Panel de Información (igual al del paso 3) -->
         @if (peliculaSeleccionada && funcionSeleccionada) {
@@ -73,6 +74,7 @@
         </div>
         }
 
+
         <!-- Panel de Pago -->
         <div class="div-operacion">
             <h3 class="operacion-title font-open-sans">FINALIZA TU OPERACIÓN</h3>
@@ -84,8 +86,9 @@
                 <p><b>Película:</b> {{ peliculaSeleccionada?.title }}</p>
                 <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada!.date) }}</p>
                 <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada!.time) }} hs</p>
-                <p><b>Entradas:</b> {{ compra?.seats }}</p>
-                <p><b>Total:</b> ${{ compra?.quantity }}</p>
+                <p><b>Entradas:</b> {{ compra?.seats }}</p>                
+                <p><b>Precio:</b> {{ compra?.unitPrice }}</p>
+                <p><b>Total a Pagar:</b> ${{ calcularTotal() }}</p>
             </div>
 
             <div class="tipo-operacion">
@@ -107,6 +110,7 @@
             }
         </div>
     </section>
+
 
     <aside class="banner">
         <div class="btns-ticket font-inter">
