@@ -10,7 +10,7 @@ main {
     justify-content: center;
     align-items: center;
     gap: 3em;
-    padding: 1em;
+    padding: 0;
 }
 
 .section-img {
@@ -114,6 +114,11 @@ main {
 
 .lista-funciones {
     list-style: none;
+    padding: 5px;
+}
+
+.funcion {
+    
 }
 
 /* BANNER -------------------------------------------------------------------- */

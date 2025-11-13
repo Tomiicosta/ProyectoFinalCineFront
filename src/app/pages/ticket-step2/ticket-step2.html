@@ -22,7 +22,7 @@
                 <li class="funcion" (click)="seleccionarFuncion(f)" 
                   [style.background]="f.id === funcionSeleccionada?.id ? '#007bff' : ''" 
                     [style.color]="f.id === funcionSeleccionada?.id ? 'white' : ''">
-                      {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} ({{ f.cinemaName }})
+                      {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — {{ f.cinemaName }}
                 </li>
               }
             </ul>

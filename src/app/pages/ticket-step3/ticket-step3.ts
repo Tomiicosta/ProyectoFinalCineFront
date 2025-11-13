@@ -46,36 +46,39 @@ export class TicketStep3 implements OnInit {
     private router: Router,
     private ticketService: TicketService,
     private functionService: FunctionService,
-    public cinemaService: CinemaService
+    private cinemaService: CinemaService
   ) { }
 
   ngOnInit(): void {
     // La lógica de inicialización y carga del servicio se mantiene
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     this.funcionSeleccionada = this.ticketService.getFuncion();
-
+    
     if (!this.peliculaSeleccionada || !this.funcionSeleccionada) return;
+
+    //console.log("DATA TicketService getPeliculaSeleccionada = ",this.peliculaSeleccionada);
+    //console.log("DATA TicketService getFuncion = ",this.funcionSeleccionada);
 
     // Recibe la Sala por Funcion
     this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
-      next: (data) => { this.cinemaService.selectedSala = data },
-      error: (e) => console.error("Error CinemaService getSala = ", e)
+      next: (data) => { 
+        this.ticketService.setSala(data);
+        //console.log("DATA CinemaService getSala = ",data);
+      },
+      error: (e) => { console.error("ERROR CinemaService getSala = ", e) }
     });
 
-    if (!this.cinemaService.selectedSala) return;
-
-    this.cargarMapaButacas(this.funcionSeleccionada.id, this.cinemaService.selectedSala.id);
-  }
-
-  cargarMapaButacas(functionId: number, cinemaId: number) {
+    // if (!this.ticketService.salaActual) return; // ESTA MIERDA BUGEA TODO EL MAPA DE BUTACAS Y NO LO MUESTRA Q_Q
 
     // Recibe las Butacas por Funcion
-    this.functionService.getSeatsByFunction(functionId)
+    this.functionService.getSeatsByFunction(this.funcionSeleccionada.id)
       .subscribe({
         next: (butacas) => {
+          //console.log("DATA FunctionService getSeatsByFunction = ", butacas);
+
           // Agrupar las butacas por fila
-          const matrizButacas: Butaca[][] = Array.from({ length: this.cinemaService.selectedSala?.rowSeat || 0 }, () =>
-            Array(this.cinemaService.selectedSala?.columnSeat || 0).fill(null)
+          const matrizButacas: Butaca[][] = Array.from({ length: this.ticketService.salaActual?.rowSeat || 0 }, () =>
+            Array(this.ticketService.salaActual?.columnSeat || 0).fill(null)
           );
 
           for (const b of butacas) {
@@ -84,10 +87,19 @@ export class TicketStep3 implements OnInit {
             matrizButacas[rowIndex][colIndex] = b;
           }
 
+          //console.log("DATA matrizButacas = ",matrizButacas);
+
           this.mapaButacas.set(matrizButacas);
+
+          //console.log("DATA mapaButacas = ",this.mapaButacas);
         },
         error: (err) => console.error('Error al cargar butacas:', err)
       });
+  }
+
+  cargarMapaButacas(functionId: number, cinemaId: number) {
+
+    
   }
 
   // Método para manejar el click en una butaca disponible
@@ -137,7 +149,7 @@ export class TicketStep3 implements OnInit {
     }
 
     // El resto de la lógica de guardado y navegación se mantiene igual
-
+    // CAMBIAR ESTO PARA REALIZAR LA ORDEN DE COMPRA, CON EL DTO QUE MANDO SEBAS AL WPP
     this.ticketService.setCompra({
       title: "Entrada de cine", // Entrada de cine
       description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + " en " + this.funcionSeleccionada?.cinemaName, // Proyeccion de la pelicula Sombras en el paraiso en sala 3D
@@ -158,12 +170,21 @@ export class TicketStep3 implements OnInit {
     this.location.back();
   }
 
-  // Formatear fecha: "YYYY-MM-DD" → "11 de septiembre"
+  // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
   formatearFecha(fecha: string): string {
     const [year, month, day] = fecha.split('-').map(Number);
-    const dateObj = new Date(year, month - 1, day); // esto usa la zona local
-    const opciones: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' };
-    return dateObj.toLocaleDateString('es-ES', opciones);
+    const dateObj = new Date(year, month - 1, day);
+
+    const opciones: Intl.DateTimeFormatOptions = {
+      weekday: 'long',  // agrega el día de la semana
+      day: 'numeric',
+      month: 'long'
+    };
+
+    // Esto devuelve algo como: "viernes, 14 de noviembre"
+    const fechaFormateada = dateObj.toLocaleDateString('es-ES', opciones);
+    // Eliminamos la coma y capitalizamos la primera letra
+    return fechaFormateada.replace(',', '');
   }
 
   // Formatear hora: "HH:mm:ss" → "HH:mm"

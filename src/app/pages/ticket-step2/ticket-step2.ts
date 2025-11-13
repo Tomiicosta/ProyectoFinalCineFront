@@ -54,12 +54,21 @@ export class TicketStep2 implements OnInit {
     })
   }
 
-  // Formatear fecha: "YYYY-MM-DD" → "11 de septiembre"
+  // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
   formatearFecha(fecha: string): string {
     const [year, month, day] = fecha.split('-').map(Number);
-    const dateObj = new Date(year, month - 1, day); // esto usa la zona local
-    const opciones: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' };
-    return dateObj.toLocaleDateString('es-ES', opciones);
+    const dateObj = new Date(year, month - 1, day);
+
+    const opciones: Intl.DateTimeFormatOptions = {
+      weekday: 'long',  // agrega el día de la semana
+      day: 'numeric',
+      month: 'long'
+    };
+
+    // Esto devuelve algo como: "viernes, 14 de noviembre"
+    const fechaFormateada = dateObj.toLocaleDateString('es-ES', opciones);
+    // Eliminamos la coma y capitalizamos la primera letra
+    return fechaFormateada.replace(',', '').replace(/^./, c => c.toUpperCase());
   }
 
   // Formatear hora: "HH:mm:ss" → "HH:mm"

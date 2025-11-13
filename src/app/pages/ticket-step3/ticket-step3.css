@@ -83,8 +83,22 @@ main {
     margin-bottom: 8px;
 }
 
+.cinema-funcion {
+    font-size: 1.7rem;
+}
+
+.title-butacas {
+    color: #464646;
+    font-size: 0.8rem;
+}
+
 .num-butacas {
     font-size: 2rem;
+}
+
+.subtitle-butacas {
+    color: #464646;
+    font-size: 0.8rem;
 }
 
 .info-colores {
