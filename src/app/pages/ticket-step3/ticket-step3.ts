@@ -36,7 +36,7 @@ export class TicketStep3 implements OnInit {
   totalButacasSeleccionadas = computed(() => this.butacasSeleccionadas().length);
   // Lista de IDs de butacas seleccionadas para mostrar en la UI
   listaButacasSeleccionadas = computed(() =>
-    this.butacasSeleccionadas().map(b => `${String.fromCharCode(64 + b.rowNumber)}${b.columnNumber}`).join(', ')
+    this.butacasSeleccionadas().map(b => `${String.fromCharCode(64 + b.seatRowNumber)}${b.seatColumnNumber}`).join(', ')
   );
 
   // Variables no-signals
@@ -87,8 +87,9 @@ export class TicketStep3 implements OnInit {
           );
 
           for (const b of butacas) {
-            const rowIndex = b.rowNumber - 1; // restamos 1 si las filas empiezan desde 1
-            const colIndex = b.columnNumber - 1;
+            console.log(`${b.seatRowNumber} + COLUMNAS${b.seatColumnNumber}`)
+            const rowIndex = b.seatRowNumber - 1; // restamos 1 si las filas empiezan desde 1
+            const colIndex = b.seatColumnNumber - 1;
             matrizButacas[rowIndex][colIndex] = b;
           }
 
@@ -150,7 +151,7 @@ export class TicketStep3 implements OnInit {
 
     // Armar array de butacas tipo ["A1", "C3", ...]
   const seatsSeleccionados: string[] = this.butacasSeleccionadas().map(b =>
-    `R${b.rowNumber}C${b.columnNumber}`
+    `R${b.seatRowNumber}C${b.seatColumnNumber}`
   );
 
    // Opcional: ver en consola qué se está mandando
@@ -187,9 +188,9 @@ export class TicketStep3 implements OnInit {
   }
 
   // Formatear butaca.rowNumber a un indice de fila "A","B","C",etc..
-  getFilaLetra(rowNumber?: number): string {
-    if (rowNumber == null) return '';           // retorna vacío si no hay dato
-    return String.fromCharCode(64 + rowNumber); // rowNumber es 1-based -> 1 => 'A'
+  getFilaLetra(seatRowNumber?: number): string {
+    if (seatRowNumber == null) return '';           // retorna vacío si no hay dato
+    return String.fromCharCode(64 + seatRowNumber); // rowNumber es 1-based -> 1 => 'A'
   }
 
   // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
