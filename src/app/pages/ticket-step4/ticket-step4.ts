@@ -143,7 +143,7 @@ export class TicketStep4 implements OnInit {
 
   //  Cálculo total de la compra
   calcularTotal(): number {
-    const cantidad = this.compra?.quantity ?? 0;
+    const cantidad = this.compra?.seats.length ?? 0;
     const precio = this.compra?.unitPrice ?? 0;
   
     const total = cantidad * precio;
