@@ -34,7 +34,10 @@
     </section>
 
 </main> -->
+
+
 <main>
+    <!-- Panel Principal -->
     <section class="ticket-info font-open-sans">
         <h1 class="info">
             <span class="color">REALIZA</span> TU <span class="color">OPERACIÓN</span>
@@ -58,7 +61,7 @@
 
             <div class="div-butacas">
                 <p><b>Asientos Seleccionados:</b></p>
-                <p class="num-butacas"><b>{{ compra?.seats?.length }}</b></p>
+                <p class="num-butacas"><b>{{ compra?.quantity }}</b></p>
 
                 <p>Butacas:</p>
             </div>
@@ -80,7 +83,7 @@
                 <p><b>Película:</b> {{ peliculaSeleccionada?.title }}</p>
                 <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada!.date) }}</p>
                 <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada!.time) }} hs</p>
-                <p><b>Entradas:</b> {{compra?.seats?.length }}</p>
+                <p><b>Entradas:</b> {{ compra?.quantity }}</p>
                 <p><b>Total:</b> ${{ calcularTotal() }}</p>
             </div>
 

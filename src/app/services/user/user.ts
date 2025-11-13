@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Compra } from '../../models/compra';
+import { Ticket } from '../../models/ticket';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -14,5 +16,9 @@ export class UserService {
 
   updateMyProfile(body: any) {
     return this.http.put<any>(`${this.api}/me/update`, body);
+  }
+
+  getMyTickets() {
+    return this.http.get<Ticket[]>('http://localhost:8080/api/tickets');
   }
 }

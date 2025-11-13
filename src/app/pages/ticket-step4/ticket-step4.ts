@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { TicketService } from '../../services/ticket/ticket-service';
-import { PagoService } from '../../services/payment/payment-service';
+import { PaymentService } from '../../services/payment/payment-service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Funcion } from '../../models/funcion';
@@ -35,15 +35,18 @@ export class TicketStep4 implements OnInit {
     preferenceId: null
   };
 
+
   constructor(
     private authService: AuthService,
-    private pagoService: PagoService,
+    private pagoService: PaymentService,
     private location: Location,
     private router: Router,
     private ticketService: TicketService,
     private functionService: FunctionService,
     public cinemaService: CinemaService
   ) { }
+
+
 
   ngOnInit(): void {
     //  Verificar sesión
@@ -70,9 +73,11 @@ export class TicketStep4 implements OnInit {
     };
   }
 
+
   getCompra(){
     this.compra = this.ticketService.getCompra() || null;
   }
+
 
   /**
    *  Se ejecuta al hacer clic en "CONFIRMAR COMPRA"
@@ -111,6 +116,7 @@ export class TicketStep4 implements OnInit {
     });
   }
 
+
   //  Cálculo total de la compra
   calcularTotal(): number {
     const cantidad = this.compra?.quantity ?? 0;
@@ -120,6 +126,7 @@ export class TicketStep4 implements OnInit {
   
     return total;
   }
+
 
   // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
   formatearFecha(fecha: string): string {
@@ -138,23 +145,28 @@ export class TicketStep4 implements OnInit {
     return fechaFormateada.replace(',', '');
   }
 
+
   // Formatear hora: "HH:mm:ss" → "HH:mm"
   formatearHora(hora: string): string {
     return hora.slice(0, 5); // corta los segundos
   }
 
+
   redirigirALogin(): void {
     this.router.navigate(['/login']);
   }
+
 
   volverASeleccionButacas(): void {
     this.router.navigate(['/tickets/paso3']);
   }
 
+
   volverAtras(): void {
     this.location.back();
   }
 
+  
   confirmarPaso4(): void {
     if (!this.tipoOperacion) {
       alert('Debe seleccionar un tipo de operación.');
@@ -168,5 +180,6 @@ export class TicketStep4 implements OnInit {
     }
   }
 }
+
 
 

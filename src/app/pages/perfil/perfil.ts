@@ -8,6 +8,15 @@ import { AuthService } from '../../services/AuthService/auth-service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
+import { Compra } from '../../models/compra';
+import { TicketService } from '../../services/ticket/ticket-service';
+import { Ticket } from '../../models/ticket';
+import { CinemaService } from '../../services/cinema/cinema-service';
+import { Sala } from '../../models/sala';
+import { SeatService } from '../../services/seat-service';
+import { Butaca } from '../../models/butaca';
+import { FunctionService } from '../../services/function/function-service';
+import { Funcion } from '../../models/funcion';
 
 interface EditUser {
   name: string;
@@ -27,6 +36,14 @@ interface EditUser {
   imports: [FormsModule, RouterLink]
 })
 export class  Perfil implements OnInit {
+
+  showTickets = false;
+  tickets: Ticket[] = [];
+  selectedIndex: number | null = null;
+  selectedTicket: Ticket | null = null;
+  selectedSala: Sala | null = null;
+  seatCodes: string[] = []; 
+  selectedFuncion: Funcion | null = null;;
 
   user!: User | null;
   editUser: EditUser = {
@@ -50,7 +67,10 @@ export class  Perfil implements OnInit {
       private userService: UserService,
       public authService: AuthService,
       private toastr: ToastrService,
-      private errorHandlerService: ErrorHandler
+      private errorHandlerService: ErrorHandler,
+      private cinemaService: CinemaService,
+      private seatService: SeatService,
+      private functionService: FunctionService
     ) {}
   
     ngOnInit(): void {
@@ -78,17 +98,38 @@ export class  Perfil implements OnInit {
     }
   
     toggleEdit(): void {
-      this.editMode = !this.editMode;
-  
-      if (this.editMode) {
-        this.syncEditUser();
-        this.showPasswordForm = false;
-        this.resetPasswordFields();
-      } else {
-        this.showPasswordForm = false;
-        this.resetPasswordFields();
-      }
-    }
+  this.editMode = !this.editMode;
+
+  if (this.editMode) {
+    // cierro tickets
+    this.showTickets = false;
+    this.selectedIndex = null;
+    this.selectedTicket = null;
+    this.selectedSala = null;
+    this.selectedFuncion = null;
+    this.seatCodes = [];
+
+    this.syncEditUser();
+    this.showPasswordForm = false;
+    this.resetPasswordFields();
+  } else {
+    this.showPasswordForm = false;
+    this.resetPasswordFields();
+  }
+}
+
+
+cerrarTickets(): void {
+  this.showTickets = false;
+  this.selectedIndex = null;
+  this.selectedTicket = null;
+  this.selectedSala = null;
+  this.selectedFuncion = null;
+  this.seatCodes = [];
+}
+
+
+
   
     togglePasswordForm(): void {
       this.showPasswordForm = !this.showPasswordForm;
@@ -184,4 +225,96 @@ private buildUpdatePayload(): any {
 
   return payload;
 }
+
+toggleTickets(): void {
+  this.showTickets = !this.showTickets;
+
+  if (this.showTickets) {
+    // Al abrir tickets, cierro edición
+    this.editMode = false;
+    this.showPasswordForm = false;
+    this.resetPasswordFields();
+  }
+
+  if (this.showTickets && this.tickets.length === 0) {
+    this.userService.getMyTickets().subscribe({
+      next: (data) => {
+        this.tickets = data;
+      },
+      error: (err) => console.error('Error cargando tickets:', err)
+    });
+  }
+}
+
+
+
+ onSelectChange(): void {
+  if (this.selectedIndex === null) {
+    this.selectedTicket = null;
+    this.selectedSala = null;
+    this.seatCodes = [];
+    return;
+  }
+
+  this.selectedTicket = this.tickets[this.selectedIndex];
+
+  if (!this.selectedTicket) {
+    this.selectedSala = null;
+    this.seatCodes = [];
+    return;
+  }
+
+  // Pedir sala
+  this.cinemaService.getSala(this.selectedTicket.cinemaId).subscribe({
+    next: (data: Sala) => {
+      this.selectedSala = data;
+    },
+    error: (err) => console.error(err)
+  });
+
+  this.functionService.getFuncionById(this.selectedTicket.funcionId).subscribe({
+    next: (data: Funcion) => {
+      this.selectedFuncion = data;
+      console.log('FUNCION CARGADA:', data);
+    },
+    error: (err) => console.error('Error cargando función:', err)
+  });
+
+  // 🔥 Pedir cada butaca por id y armar "R{row}C{column}"
+  this.seatCodes = []; // reseteamos
+
+  // Asumo que selectedTicket.seats es number[] con los IDs de las butacas
+  this.selectedTicket.seats.forEach((seatId: number) => {
+    this.seatService.getSeat(seatId).subscribe({
+      next: (seat: Butaca) => {
+        const code = `R${seat.seatRowNumber}C${seat.seatColumnNumber}`;
+        this.seatCodes.push(code);
+      },
+      error: (err) => console.error('Error cargando butaca', seatId, err)
+    });
+  });
+
+  console.log('SELECTED TICKET:', this.selectedTicket);
+}
+
+
+formatearFecha(fecha: string): string {
+  const [year, month, day] = fecha.split('-').map(Number);
+  const dateObj = new Date(year, month - 1, day);
+
+  const opciones: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long'
+  };
+
+  const fechaFormateada = dateObj.toLocaleDateString('es-ES', opciones);
+  return fechaFormateada.replace(',', '');
+}
+
+formatearHora(hora: string): string {
+  // asumiendo "HH:mm:ss"
+  return hora.slice(0, 5);
+}
+
 }

@@ -6,7 +6,7 @@ declare var MercadoPago: any;
 @Injectable({
   providedIn: 'root'
 })
-export class PagoService {
+export class PaymentService {
 
   // Base API
   private apiUrl = 'http://localhost:8080/api/payments';
