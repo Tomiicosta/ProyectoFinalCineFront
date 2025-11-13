@@ -53,7 +53,7 @@ export class TicketStep3 implements OnInit {
     // La lógica de inicialización es NECESARIA para que no se cargue el HTML antes que el mapa de butacas
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     this.funcionSeleccionada = this.ticketService.getFuncion();
-    
+
     if (!this.peliculaSeleccionada || !this.funcionSeleccionada) return;
 
     //console.log("DATA TicketService getPeliculaSeleccionada = ",this.peliculaSeleccionada);
@@ -61,7 +61,7 @@ export class TicketStep3 implements OnInit {
 
     // Recibe la Sala por Funcion
     this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
-      next: (data) => { 
+      next: (data) => {
         this.ticketService.setSala(data);
         //console.log("DATA CinemaService getSala = ",data);
       },
@@ -163,6 +163,12 @@ export class TicketStep3 implements OnInit {
 
   volverAtras(): void {
     this.location.back();
+  }
+
+  // Formatear butaca.rowNumber a un indice de fila "A","B","C",etc..
+  getFilaLetra(rowNumber?: number): string {
+    if (rowNumber == null) return '';           // retorna vacío si no hay dato
+    return String.fromCharCode(64 + rowNumber); // rowNumber es 1-based -> 1 => 'A'
   }
 
   // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"

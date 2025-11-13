@@ -76,7 +76,6 @@ input:focus {
 }
 
 .btnRegister {
-  color: white;
   display: flex;
   flex-direction: row;
   width: 40%;
