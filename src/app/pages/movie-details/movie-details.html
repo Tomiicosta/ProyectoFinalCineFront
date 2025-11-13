@@ -28,19 +28,19 @@
             <section class="section-details font-open-sans">
                 <div class="div-details">
                     <h1 class="title-peli" title="{{ peli.title }}"> {{ peli.title }} </h1>
-                    <h3 class="genre-peli">
+                    <p class="genre-peli">
                         @for (g of peli.genres; track $index) {
-                        {{ g.toString() }} |
+                        <b>{{ g.toString() }}</b> |
                         }
-                    </h3>
-                    <h4 class="runtime-peli">Duracion {{ peli.runtime }} mins.</h4>
+                    </p>
+                    <p class="runtime-peli">Duracion {{ peli.runtime }} mins.</p>
                     <p class="description-peli">{{ peli.overview }}</p>
-                    <h5 class="release-peli">Estrenada el {{ peli.releaseDate }}</h5>
+                    <p class="release-peli">Estrenada en: {{ peli.releaseDate }}</p>
 
                 </div>
                 <div class="div-funciones">
-                    <h1 class="title-function">PROYECCIONES</h1>
-                    <h4 class="age-peli">APTA PARA MAYORES DE +13</h4>
+                    <h2 class="title-function">PROYECCIONES</h2>
+                    <h4 class="age-peli">{{ peli.adult ? 'APTA PARA MAYORES +18' : 'APTA PARA TODAS LAS EDADES' }}</h4>
                     <ul class="lista-funciones">
                         @for (f of funciones; track f.id) {
                             <li class="funcion">

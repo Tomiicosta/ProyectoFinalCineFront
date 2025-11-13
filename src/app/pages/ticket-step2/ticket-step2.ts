@@ -51,11 +51,17 @@ export class TicketStep2 implements OnInit {
   }
 
   mostrarFunciones(id: number) {
-    this.functionService.getDisponiblesPorPelicula(id).subscribe({
-      next: (data) => { this.funciones = data } ,
-      error: (e) => { this.errorHandlerService.handleHttpError(e) }
-    })
-  }
+  this.functionService.getDisponiblesPorPelicula(id).subscribe({
+    next: (data) => { 
+      // Ordenar las funciones desde (la mas temprana) y (la mas lejana)
+      this.funciones = data.sort((f1, f2) => {
+        return new Date(f1.date).getTime() - new Date(f2.date).getTime();
+      });
+    },
+    error: (e) => { this.errorHandlerService.handleHttpError(e) }
+  });
+}
+
 
   // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
   formatearFecha(fecha: string): string {
@@ -85,15 +91,13 @@ export class TicketStep2 implements OnInit {
     console.log("Función seleccionada:", this.funcionSeleccionada);
   }
 
-  
+  // Lógica de confirmación e ir al paso 3
   confirmarPaso2() {
     
     if (!this.peliculaSeleccionada) return;
-    if (!this.funcionSeleccionada) return;
 
-    // Lógica de confirmación:
-    if (this.funcionSeleccionada === undefined) {
-      this.errorMessage.set("ERROR: Seleccione al menos una butaca para continuar.");
+    if (!this.funcionSeleccionada) {
+      this.errorMessage.set("ERROR: Seleccione una función para continuar.");
       return;
     }
 

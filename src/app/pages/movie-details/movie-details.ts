@@ -49,17 +49,22 @@ export class MovieDetails {
     });
   }
 
-  traerPeliculaPorId(id:string){
+  traerPeliculaPorId(id: string) {
     this.movieService.getMovieBd(id).subscribe({
-      next:(data)=>{ this.peliculaSeleccionada = data },
-      error: (e) => { this.errorHandlerService.handleHttpError(e)}
+      next: (data) => { this.peliculaSeleccionada = data },
+      error: (e) => { this.errorHandlerService.handleHttpError(e) }
     })
   }
 
   traerFuncionesPorPeliculaId(id: number) {
     this.functionService.getDisponiblesPorPelicula(id).subscribe({
-      next: (data) => { this.funciones = data } ,
-      error: (e) => { console.log("Error: "+ e) }
+      next: (data) => {
+        // Ordenar las funciones desde (la mas temprana) y (la mas lejana)
+        this.funciones = data.sort((f1, f2) => {
+          return new Date(f1.date).getTime() - new Date(f2.date).getTime();
+        });
+      },
+      error: (e) => { console.log("Error: " + e) }
     })
   }
 
@@ -68,7 +73,7 @@ export class MovieDetails {
 
     // 2. Usar el servicio para establecer la película como la "actual"
     if (this.peliculaSeleccionada) {
-      
+
       // MANEJAR EXCEPCION SI NO HAY FUNCIONES DE LA PELICULA
 
       // 3. Navegar al paso 2

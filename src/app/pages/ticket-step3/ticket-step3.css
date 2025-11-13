@@ -123,15 +123,19 @@ main {
 }
 
 .c-1 {
-    background-color: #000000; /* Negro - Butaca Disponible */
+    background-color: #ffffff;
+    border: 1px solid black;
+    /* Negro - Butaca Disponible */
 }
 
 .c-2 {
-    background-color: #4CAF50; /* Rojo - Butaca Elegida */
+    background-color: #4CAF50;
+    /* Rojo - Butaca Elegida */
 }
 
 .c-3 {
-    background-color: #ff4d4d; /* Rojo - Butaca Ocupada */
+    background-color: #ff4d4d;
+    /* Rojo - Butaca Ocupada */
 }
 
 .btn-reiniciar {
@@ -176,7 +180,7 @@ main {
 }
 
 .pantalla {
-    background-color:#f0f0f0;
+    background-color: #f0f0f0;
     width: 500px;
     height: 20px;
 }
@@ -201,27 +205,31 @@ main {
 
 /* 1. Butacas Ocupadas (Rojo) */
 .ocupada {
-    background-color: #ff4d4d; /* Rojo */
+    background-color: #ff4d4d;
+    /* Rojo */
     border-color: #ffa3a3;
     cursor: not-allowed;
-    pointer-events: none; /* Deshabilita clics e interacción */
+    pointer-events: none;
+    /* Deshabilita clics e interacción */
 }
 
 /* 2. Butacas Seleccionadas (Verde) */
 .seleccionada {
-    background-color: #4CAF50; /* Verde */
+    background-color: #4CAF50;
+    /* Verde */
     border-color: #c5ffc0;
 }
 
 /* 3. Butacas Disponibles (Base: Blanco/Gris) */
 .disponible {
-    background-color: #161616; 
-    border-color: #6d6d6d;
+    background-color: rgb(138, 138, 138);
+    border-color: #ffffff;
 }
 
 /* 4. Efecto Hover (Azul) - Se aplica SÓLO si está disponible */
 .disponible:hover {
-    background-color: #3978ff !important; /* Azul */
+    background-color: #3978ff !important;
+    /* Azul */
     border: 1px solid #87adff;
     transform: scale(1.1);
 }
@@ -234,7 +242,15 @@ main {
 .etiqueta-fila {
     margin-right: 10px;
     font-weight: bold;
+    font-size: 1.25rem;
     color: #fff;
+    display: inline-block;
+    /* ajustá según tu diseño */
+    width: 10px;
+    /* centra la letra */
+    text-align: center;
+    /*  hace que todas las letras ocupen lo mismo */
+    font-family: monospace;
 }
 
 /* BANNER -------------------------------------------------------------------- */
@@ -297,9 +313,202 @@ main {
 
 .div-error {
     color: #ff4d4d;
+    font-size: 0.75rem;
 }
 
 .error-message {
-  color: red;
-  font-weight: bold;
+    color: red;
+    font-weight: bold;
+}
+
+@media (max-width: 1100px) {
+
+    /* SECCION DE INFO Y MAPA BUTACAS -------------------------------------------------------------------- */
+    .ticket-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        flex-direction: column-reverse;
+        gap: 2em;
+        margin: 3em 3em 0 3em;
+    }
+
+    /* ASIDE INFO PELICULA (VER MAS) --------------------------------------------------------------- */
+    .banner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        gap: 20px;
+    }
+
+    /* BOTONES (SIGUIENTE) - (VOLVER)*/
+    .btns-ticket {
+        width: 75%;
+        right: 0;
+        position: relative;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    main {
+        margin-top: -50px;
+    }
+
+    /* SECTION "SELECCIONA TU PELICULA - PASO 1" ------------------------------------------------ */
+    .ticket-info {
+        gap: 0;
+        padding: 5px 5px;
+        font-size: 1.25rem;
+    }
+
+    .step {
+        gap: 0;
+        margin-bottom: -2px;
+        font-size: 1.75rem;
+    }
+
+    .step-num {
+        margin-bottom: -8px;
+        font-size: 3.5rem;
+    }
+
+    /* SECCION DE INFO Y MAPA BUTACAS -------------------------------------------------------------------- */
+
+    .ticket-section {
+        gap: 1em;
+        margin: 1em 0 0.5em 0;
+    }
+
+    /* DIV DE INFO TICKET -------------------------------------------------------------------- */
+
+    .div-info {
+
+        border-radius: 5px;
+        width: 80%;
+    }
+
+    .info-title {
+        padding-bottom: 10px;
+        font-size: 1.5rem;
+    }
+
+    .info-peli {
+        padding-bottom: 15px;
+        font-size: 0.9rem;
+    }
+
+    .info-peli .title-peli {
+        font-size: 1.7rem;
+        margin-bottom: 8px;
+    }
+
+    .info-peli .funcion-peli {
+        font-size: 1.1rem;
+    }
+
+    .cinema-funcion {
+        font-size: 2rem;
+    }
+
+    .title-butacas {
+        font-size: 0.8rem;
+    }
+
+    .num-butacas {
+        font-size: 2rem;
+    }
+
+    .subtitle-butacas {
+        font-size: 0.9rem;
+    }
+
+    .color {
+        height: 15px;
+        width: 15px;
+        border-radius: 50px;
+    }
+
+    .btn-reiniciar {
+        padding: 10px 50px;
+        border-radius: 50px;
+    }
+
+    /* DIV DE SALA CON MAPA DE BUTACAS -------------------------------------------------------------------- */
+    .div-sala {
+        gap: 1em;
+        width: 100vw;
+        border-radius: 0;
+
+    }
+
+    .div-pantalla {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pantalla {
+        width: 300px;
+        height: 10px;
+    }
+
+    .div-butacas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .butaca {
+        width: 25px;
+        height: 25px;
+        border: 1px solid #ccc;
+        margin: 5px;
+        cursor: pointer;
+        display: inline-block;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        width: 12px;
+        height: 12px;
+        margin: 3px;
+        border-radius: 2px;
+    }
+
+    /* ASIDE INFO PELICULA (VER MAS) --------------------------------------------------------------- */
+    .banner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        gap: 20px;
+    }
+
+    /* BOTONES (SIGUIENTE) - (VOLVER)*/
+    .btns-ticket {
+        width: 90%;
+        right: 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #btn-step {
+        width: 100%;
+    }
+
+    #btn-back {
+        width: 100%;
+    }
+
 }

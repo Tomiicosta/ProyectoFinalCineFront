@@ -70,10 +70,10 @@
                 @for (fila of mapaButacas(); track $index) {
                 <div class="fila-butacas">
 
-                    <!-- Etiqueta de fila, ej: A, B, C, D... 
-                    <span class="etiqueta-fila font-inter">
-                        {{ String.fromCharCode(65 + $index) }}
-                    </span>-->
+                    <!-- Etiqueta de fila -->
+                    <span class="etiqueta-fila">
+                        {{ getFilaLetra(fila[0]?.rowNumber) }}
+                    </span>
 
                     <!-- Iterar cada butaca dentro de la fila -->
                     @for (butaca of fila; track butaca?.id) {

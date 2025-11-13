@@ -121,7 +121,7 @@ main {
 
 /* TABLA FUNCIONES PELICULA ---------------------- */
 .div-tabla {
-  height: 400px;
+  min-height: 400px;
 
   background-color: #fff;
   border-radius: 5px;
@@ -131,6 +131,8 @@ main {
 .title-peli {
   padding: 0 0 0 5px;
   font-size: 1.6rem;
+  color: blueviolet;
+    text-transform: uppercase;
 }
 
 .runtime-peli {
@@ -238,7 +240,17 @@ main {
   font-size: 0.95rem;
 }
 
-@media (max-width: 900px) {
+.div-error {
+  color: #ff4d4d;
+  font-size: 0.75rem;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+@media (max-width: 1100px) {
 
   /* ASIDE INFO PELICULA (VER MAS) --------------------------------------------------------------- */
   .banner {
