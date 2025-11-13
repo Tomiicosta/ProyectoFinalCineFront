@@ -49,17 +49,94 @@ main {
   margin: 3em 3em 0 3em;
 }
 
-.div-img img {
-  height: 350px;
-  border-radius: 10px;
+/* --- SECTION IMAGEN DE LA PELÍCULA -------------------------------- */
+.div-poster {
+  /* Es crucial para que .marco-peli (position: absolute)
+       se posicione respecto a este contenedor. */
+  position: relative;
+  /* Define un tamaño para el área de la imagen, ajusta según necesites */
+  width: 300px;
+  height: 395px;
 }
 
+/* --- ESTILO DE LA IMAGEN DE LA PELÍCULA (Base) --- */
+.div-img {
+  /* Debe estar en la capa inferior */
+  z-index: 1;
+  /* Asegura que ocupe todo el espacio del contenedor padre */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Opcional: para que se vea bien si es más grande o pequeña */
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-peli {
+  width: 80%;
+  height: 80%;
+
+  /* Ajusta la imagen para cubrir el div sin distorsión */
+  object-fit: cover;
+  display: block;
+}
+
+/* --- ESTILO DEL MARCO PNG (Superpuesto) --- */
+.div-marco {
+  /* Colocación encima de todo */
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Asegura que el div .marco-peli no se interponga con el cursor,
+       aunque la sombra seguiría visible. */
+  pointer-events: none;
+
+}
+
+.img-marco {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Para que la imagen del marco no se corte ni distorsione */
+  display: block;
+
+  /* ¡La clave de tu requerimiento! */
+  /* La sombra se aplica a la imagen PNG. Gracias a la transparencia,
+       solo el borde visible del marco proyectará la sombra sobre la imagen de la película. */
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+
+  /* Opcional: También podrías usar box-shadow si el PNG tiene un borde sólido que
+       quieres que proyecte la sombra, pero 'filter: drop-shadow' es lo ideal para
+       imágenes PNG con formas irregulares o transparencia. */
+  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.8); */
+}
+
+/* TABLA FUNCIONES PELICULA ---------------------- */
 .div-tabla {
   height: 400px;
 
   background-color: #fff;
   border-radius: 5px;
-  padding: 1em;
+  padding: 1em 1em;
+}
+
+.title-peli {
+  padding: 0 0 0 5px;
+  font-size: 1.6rem;
+}
+
+.runtime-peli {
+  color: #646464;
+  padding: 0 0 5px 10px;
+  border-bottom: 1px solid black;
 }
 
 .div-funciones {
@@ -71,9 +148,15 @@ main {
   margin-top: 1em;
 }
 
+.funciones-title {
+  font-size: 1rem;
+}
+
 .funciones {
-  padding: 1em 2em;
+  padding: 10px 15px 10px 10px;
   list-style: none;
+  border-radius: 5px;
+  border: 1px solid rgb(0, 140, 255);
 }
 
 .funcion {
@@ -108,6 +191,8 @@ main {
 }
 
 .btns-ticket {
+  width: 225px;
+
   position: absolute;
   right: 75px;
 
@@ -119,7 +204,7 @@ main {
 }
 
 #btn-step {
-  width: 225px;
+  width: 100%;
 
   cursor: pointer;
   border: none;
@@ -141,7 +226,8 @@ main {
 }
 
 #btn-back {
-  width: 225px;
+  width: 100%;
+
   cursor: pointer;
   border: none;
   border-radius: 5px;
@@ -150,4 +236,92 @@ main {
   color: #000000;
   font-weight: 600;
   font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+
+  /* ASIDE INFO PELICULA (VER MAS) --------------------------------------------------------------- */
+  .banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    gap: 20px;
+  }
+
+  /* BOTONES (SIGUIENTE) - (VOLVER)*/
+  .btns-ticket {
+    width: 75%;
+    right: 0;
+    position: relative;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 700px) {
+
+  main {
+    margin-top: -50px;
+  }
+
+  /* SECTION "SELECCIONA TU PELICULA - PASO 1" ------------------------------------------------ */
+  .ticket-info {
+    gap: 0;
+    padding: 5px 5px;
+    font-size: 1.25rem;
+  }
+
+  .step {
+    gap: 0;
+    margin-bottom: -2px;
+    font-size: 1.75rem;
+  }
+
+  .step-num {
+    margin-bottom: -8px;
+    font-size: 3.5rem;
+  }
+
+  /* SECTION FUNCIONES --------------------------------------------------------------- */
+  .funciones-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .div-img {
+    width: 100%;
+    text-align: center;
+  }
+
+  .div-img img {
+    height: 350px;
+    border-radius: 10px;
+  }
+
+  /* ASIDE INFO PELICULA (VER MAS) --------------------------------------------------------------- */
+  .banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .about-peli {
+    max-width: 330px;
+    font-size: 0.9rem;
+  }
+
+  /* BOTONES (SIGUIENTE) - (VOLVER)*/
+  .btns-ticket {
+    width: 90%;
+    right: 0;
+    position: relative;
+    gap: 10px;
+  }
+
 }

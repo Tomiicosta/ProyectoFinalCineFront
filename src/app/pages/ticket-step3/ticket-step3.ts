@@ -50,7 +50,7 @@ export class TicketStep3 implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // La lógica de inicialización y carga del servicio se mantiene
+    // La lógica de inicialización es NECESARIA para que no se cargue el HTML antes que el mapa de butacas
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     this.funcionSeleccionada = this.ticketService.getFuncion();
     
@@ -95,11 +95,6 @@ export class TicketStep3 implements OnInit {
         },
         error: (err) => console.error('Error al cargar butacas:', err)
       });
-  }
-
-  cargarMapaButacas(functionId: number, cinemaId: number) {
-
-    
   }
 
   // Método para manejar el click en una butaca disponible
