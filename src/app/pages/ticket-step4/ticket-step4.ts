@@ -8,6 +8,8 @@ import { Funcion } from '../../models/funcion';
 import Movie from '../../models/movie';
 import { FunctionService } from '../../services/function/function-service';
 import { CinemaService } from '../../services/cinema/cinema-service';
+import { Compra } from '../../models/compra';
+import { FormsModule } from '@angular/forms';
 
 // declarar MercadoPago globalmente
 declare var MercadoPago: any;
@@ -15,7 +17,7 @@ declare var MercadoPago: any;
 @Component({
   selector: 'app-ticket-step4',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './ticket-step4.html',
   styleUrl: './ticket-step4.css',
 })
@@ -25,6 +27,7 @@ export class TicketStep4 implements OnInit {
   tipoOperacion: string | null = null;
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
+  compra! : Compra | null;
 
   compraInfo: any = {
     nombre: '',
@@ -45,11 +48,9 @@ export class TicketStep4 implements OnInit {
   ngOnInit(): void {
     //  Verificar sesión
     this.usuarioLogueado = this.authService.isLoggedIn();
-
     //  Cargar datos
-    this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     this.funcionSeleccionada = this.ticketService.getFuncion();
-
+    this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada()
     if (!this.peliculaSeleccionada || !this.funcionSeleccionada) {
       console.warn('No se encontraron datos de película o función seleccionadas.');
       return;
@@ -69,6 +70,10 @@ export class TicketStep4 implements OnInit {
     };
   }
 
+  getCompra(){
+    this.compra = this.ticketService.getCompra() || null;
+  }
+
   /**
    *  Se ejecuta al hacer clic en "CONFIRMAR COMPRA"
    */
@@ -79,13 +84,13 @@ export class TicketStep4 implements OnInit {
     }
 
     const payload = {
-      title: this.peliculaSeleccionada?.title,
-      description: this.peliculaSeleccionada?.title,
-      userEmail: this.authService.getUserEmail(),
-      quantity: this.ticketService.getCantidadButacasSeleccionadas(),
-      unitPrice: this.ticketService.getPrecioPorEntrada(),
-      seats: this.ticketService.getButacasSeleccionadas(),
-      functionId: this.funcionSeleccionada?.id
+      title: this.compra?.title,
+      description: this.compra?.description,
+      userEmail: this.compra?.userEmail,
+      quantity: this.compra?.quantity,
+      unitPrice: this.compra?.unitPrice,
+      seats: this.compra?.seats,
+      functionId: this.compra?.functionId
     };
 
     this.pagoService.crearPreferencia(payload).subscribe({
@@ -108,20 +113,34 @@ export class TicketStep4 implements OnInit {
 
   //  Cálculo total de la compra
   calcularTotal(): number {
-    return this.ticketService.getCantidadButacasSeleccionadas() * this.ticketService.getPrecioPorEntrada();
+    const cantidad = this.compra?.quantity ?? 0;
+    const precio = this.compra?.unitPrice ?? 0;
+  
+    const total = cantidad * precio;
+  
+    return total;
   }
 
-  //  Fecha legible
+  // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
   formatearFecha(fecha: string): string {
     const [year, month, day] = fecha.split('-').map(Number);
     const dateObj = new Date(year, month - 1, day);
-    const opciones: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' };
-    return dateObj.toLocaleDateString('es-ES', opciones);
+
+    const opciones: Intl.DateTimeFormatOptions = {
+      weekday: 'long',  // agrega el día de la semana
+      day: 'numeric',
+      month: 'long'
+    };
+
+    // Esto devuelve algo como: "viernes, 14 de noviembre"
+    const fechaFormateada = dateObj.toLocaleDateString('es-ES', opciones);
+    // Eliminamos la coma y capitalizamos la primera letra
+    return fechaFormateada.replace(',', '');
   }
 
-  //  Hora legible
+  // Formatear hora: "HH:mm:ss" → "HH:mm"
   formatearHora(hora: string): string {
-    return hora.slice(0, 5);
+    return hora.slice(0, 5); // corta los segundos
   }
 
   redirigirALogin(): void {

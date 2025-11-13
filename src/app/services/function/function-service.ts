@@ -50,7 +50,9 @@ export class FunctionService {
 
   // ELIMINAR
   deleteFuncion(id: number) {
-    return this.http.delete<Funcion>(`/api/functions/delete/${id}`);
+    return this.http.delete(`/api/functions/delete/${id}`, {
+      responseType: 'text' as 'json'
+    });
   }
 
 }

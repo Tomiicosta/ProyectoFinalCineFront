@@ -58,12 +58,9 @@
 
             <div class="div-butacas">
                 <p><b>Asientos Seleccionados:</b></p>
-                <p class="num-butacas"><b>{{ totalButacasSeleccionadas() }}</b></p>
+                <p class="num-butacas"><b>{{ compra?.seats?.length }}</b></p>
 
                 <p>Butacas:</p>
-                <p class="butacas-info">
-                    <b>{{ listaButacasSeleccionadas() || 'Ninguna' }}</b>
-                </p>
             </div>
 
             <button class="btn-reiniciar" (click)="volverASeleccionButacas()">
@@ -81,9 +78,9 @@
 
             <div class="resumen-compra">
                 <p><b>Película:</b> {{ peliculaSeleccionada?.title }}</p>
-                <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada?.date) }}</p>
-                <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada?.time) }} hs</p>
-                <p><b>Entradas:</b> {{ totalButacasSeleccionadas() }}</p>
+                <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada!.date) }}</p>
+                <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada!.time) }} hs</p>
+                <p><b>Entradas:</b> {{compra?.seats?.length }}</p>
                 <p><b>Total:</b> ${{ calcularTotal() }}</p>
             </div>
 
@@ -123,11 +120,11 @@
             <button id="btn-step" class="" (click)="confirmarPaso4()">SIGUIENTE</button>
             <button id="btn-back" class="" (click)="volverAtras()">ATRÁS</button>
 
-            @if (errorMessage()) {
-            <div class="div-error">
-                {{ errorMessage() }}
-            </div>
-            }
+            <!-- @if (errorMessage()) { -->
+            <!-- <div class="div-error"> -->
+            <!-- {{ errorMessage() }} -->
+            <!-- </div> -->
+            <!-- } -->
         </div>
     </aside>
 </main>

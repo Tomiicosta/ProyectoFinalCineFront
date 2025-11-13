@@ -22,7 +22,7 @@
         <h4>Estreno: {{ movie.releaseDate }}</h4>
 
         <div class="botones-tarjeta">
-          <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id.toString(), movie.title); $event.stopPropagation()"
+          <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id, movie.title); $event.stopPropagation()"
             [disabled]="!authService.isAdmin()">
             Eliminar
           </button>
