@@ -63,7 +63,8 @@
                 <p><b>Asientos Seleccionados:</b></p>
                 <p class="num-butacas"><b>{{ compra?.quantity }}</b></p>
 
-                <p>Butacas:</p>
+                <p><b>Butacas:</b></p>
+                <p>{{ compra?.seats }}</p>
             </div>
 
             <button class="btn-reiniciar" (click)="volverASeleccionButacas()">
@@ -76,38 +77,27 @@
         <div class="div-operacion">
             <h3 class="operacion-title font-open-sans">FINALIZA TU OPERACIÓN</h3>
             <p class="operacion-desc">
-                Revisa los datos de tu compra y selecciona el tipo de operación.
+                Para completar la operación revise todos los datos de su compra, tanto de la pelicula, dia, horario y asientos seleccionados. Luego presione el botón FINALIZAR.
             </p>
 
             <div class="resumen-compra">
                 <p><b>Película:</b> {{ peliculaSeleccionada?.title }}</p>
                 <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada!.date) }}</p>
                 <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada!.time) }} hs</p>
-                <p><b>Entradas:</b> {{ compra?.quantity }}</p>
-                <p><b>Total:</b> ${{ calcularTotal() }}</p>
+                <p><b>Entradas:</b> {{ compra?.seats }}</p>
+                <p><b>Total:</b> ${{ compra?.quantity }}</p>
             </div>
 
             <div class="tipo-operacion">
-                <h4 class="font-open-sans">Tipo de Operación</h4>
+                <h4 class="font-open-sans">Confirmar Operación</h4>
 
                 <label class="radio-option">
-                    <input type="radio" name="tipo" value="compra" [(ngModel)]="tipoOperacion" /> COMPRA
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="tipo" value="reserva" [(ngModel)]="tipoOperacion" /> RESERVA
-                </label>
+                    <input type="radio" name="tipo" value="compra" [(ngModel)]="confirmacion" /> Acepto terminos y condiciones. Una vez realizada la compra, la transacción no puede ser revertida.</label>
             </div>
 
             @if (usuarioLogueado) {
-            <button class="btn-pago" (click)="iniciarPago()" [disabled]="!tipoOperacion">
-                CONFIRMAR {{ tipoOperacion?.toUpperCase() }}
-            </button>
-
-            <!-- CONTENEDOR DEL SDK MERCADO PAGO-->
-            <div id="wallet_container"></div>
-
             <small class="texto-secundario">
-                Serás redirigido al entorno seguro de Mercado Pago.
+                Serás redirigido al entorno seguro de Mercado Pago. Muchas gracias por su compra.
             </small>
             } @else {
             <div class="alerta-login">
@@ -120,14 +110,29 @@
 
     <aside class="banner">
         <div class="btns-ticket font-inter">
-            <button id="btn-step" class="" (click)="confirmarPaso4()">SIGUIENTE</button>
-            <button id="btn-back" class="" (click)="volverAtras()">ATRÁS</button>
+        
+            <button
+                id="btn-step"
+                class="btn-pago"
+                (click)="iniciarPago()"
+                [disabled]="!usuarioLogueado || confirmacion !== 'compra'">
+                <img
+                id="img-btn"
+                src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.20.1/mercadopago/logo__small.png"
+                alt="Mercado Pago"
+                />
+                FINALIZAR
+            </button>
+            <div id="wallet_container"></div>
 
-            <!-- @if (errorMessage()) { -->
-            <!-- <div class="div-error"> -->
-            <!-- {{ errorMessage() }} -->
-            <!-- </div> -->
-            <!-- } -->
+            @if (!usuarioLogueado) {
+                <div class="alerta-login">
+                    <p><b>Debes iniciar sesión</b> para continuar con la compra.</p>
+                    <button class="btn-login" (click)="redirigirALogin()">Iniciar Sesión</button>  
+                </div>
+            }
+
+            <button id="btn-back" class="" (click)="volverAtras()">ATRÁS</button>
         </div>
     </aside>
 </main>

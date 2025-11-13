@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 declare var MercadoPago: any;
 
@@ -34,9 +35,10 @@ export class PaymentService {
   /**
    * Llama al backend para crear una preferencia de pago
    */
-  crearPreferencia(payload: any) {
-    return this.http.post(`${this.apiUrl}/create`, payload);
+  crearPreferencia(payload: any): Observable<{ preferenceId: string; initPoint: string }> {
+    return this.http.post<{ preferenceId: string; initPoint: string }>(`${this.apiUrl}/create`, payload);
   }
+
 
 
 }

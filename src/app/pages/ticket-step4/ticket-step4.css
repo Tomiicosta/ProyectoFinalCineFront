@@ -29,6 +29,15 @@
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.img-btn{
+    height: 20px;
 }
 
 .alerta-login {
