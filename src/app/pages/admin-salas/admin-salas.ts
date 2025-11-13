@@ -35,7 +35,8 @@ export class AdminSalas {
       atmos: [false],
       rowSeat: [0, [Validators.required, Validators.min(1)]],
       columnSeat: [0, [Validators.required, Validators.min(1)]],
-      enabled: [true]
+      enabled: [true],
+      price:[0, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -74,7 +75,8 @@ export class AdminSalas {
             atmos: false,
             rowSeat: 0,
             columnSeat: 0,
-            enabled: true
+            enabled: true,
+            price: 0
           });
 
           if (this.vistaActual === 'habilitadas') {
@@ -108,7 +110,8 @@ export class AdminSalas {
       atmos: !!sala.atmos,
       rowSeat: sala.rowSeat,
       columnSeat: sala.columnSeat,
-      enabled: sala.enabled
+      enabled: sala.enabled,
+      price: sala.price
     });
   }
 
@@ -150,7 +153,8 @@ export class AdminSalas {
         atmos: false,
         rowSeat: 0,
         columnSeat: 0,
-        enabled: true
+        enabled: true,
+        price: 0
       });
     }
 
