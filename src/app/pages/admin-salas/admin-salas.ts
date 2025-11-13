@@ -294,4 +294,3 @@ async eliminarSala(sala: any) {
   }
 
 }
-

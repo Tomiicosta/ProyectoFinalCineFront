@@ -15,13 +15,13 @@ export class HeaderAdmin {
 
   constructor(private authService :AuthService, private router: Router){}
 
-  toggleMenu() {
-    this.menuAbierto = !this.menuAbierto;
-  }
+toggleMenu() {
+  this.menuAbierto = !this.menuAbierto;
+}
 
-   cerrarMenu() {
-    this.menuAbierto = false;
-  }
+cerrarMenu() {
+  this.menuAbierto = false;
+}
 
 // ===== PERFIL =====
 togglePerfilMenu(event: MouseEvent): void {

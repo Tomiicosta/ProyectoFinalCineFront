@@ -124,10 +124,7 @@ anterior() {
   // 🕒 Inicialización y auto-scroll
   // ==============================
   ngOnInit() {
-    this.getAllMovies();
-
-    // Banner principal
-    
+    this.getAllMovies();  
 
       setInterval(() => this.siguiente(), 8000);
 

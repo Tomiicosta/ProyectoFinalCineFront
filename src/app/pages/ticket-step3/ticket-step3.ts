@@ -12,6 +12,7 @@ import { CinemaService } from '../../services/cinema/cinema-service';
 import { Sala } from '../../models/sala';
 import { UserService } from '../../services/user/user';
 import { User } from '../../models/user';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -51,8 +52,10 @@ export class TicketStep3 implements OnInit {
     private ticketService: TicketService,
     private functionService: FunctionService,
     private cinemaService: CinemaService,
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+    private toastr: ToastrService
+
+  ) {}
 
   ngOnInit(): void {
     // La lógica de inicialización es NECESARIA para que no se cargue el HTML antes que el mapa de butacas
@@ -148,39 +151,46 @@ export class TicketStep3 implements OnInit {
       this.errorMessage.set("ERROR: Seleccione al menos una butaca para continuar.");
       return;
     }
-
     // Armar array de butacas tipo ["A1", "C3", ...]
-  const seatsSeleccionados: string[] = this.butacasSeleccionadas().map(b =>
-    `R${b.seatRowNumber}C${b.seatColumnNumber}`
-  );
+    const seatsSeleccionados: string[] = this.butacasSeleccionadas().map(b =>
+      `R${b.seatRowNumber}C${b.seatColumnNumber}`
+    );
 
-   // Opcional: ver en consola qué se está mandando
+    // Opcional: ver en consola qué se está mandando
     console.log('SEATS SELECCIONADOS:', seatsSeleccionados);
     console.log('BUTACAS OBJETO:', this.butacasSeleccionadas());
     
     this.userService.getMyProfile().subscribe({
-  next: (data: User) => {
-    this.userSeleccionado = data;
-    console.log('PROFILE CARGADO:', data);
+      next: (data: User) => {
+      this.userSeleccionado = data;
+      console.log('PROFILE CARGADO:', data);
 
-    // Arma el ticket SOLO después de tener el usuario
-    this.ticketService.setCompra({
-      title: "Entrada de cine",
-      description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + 
-                   " en " + this.funcionSeleccionada?.cinemaName,
-      userEmail: data.email,   // ---> AHORA SÍ EXISTE
-      quantity: 1,
-      unitPrice: this.ticketService.salaActual?.price || 0,
-      functionId: this.funcionSeleccionada?.id || 0,
-      seats: seatsSeleccionados
+      // Arma el ticket SOLO después de tener el usuario
+      this.ticketService.setCompra({
+        title: "Entrada de cine",
+        description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + 
+                    " en " + this.funcionSeleccionada?.cinemaName,
+        userEmail: data.email,   // ---> AHORA SÍ EXISTE
+        quantity: 1,
+        unitPrice: this.ticketService.salaActual?.price || 0,
+        functionId: this.funcionSeleccionada?.id || 0,
+        seats: seatsSeleccionados
+      });
+
+      console.log('ticket:', this.ticketService.getCompra());
+
+      this.router.navigate(['/ticket/step4']);
+    },
+    error: (err) => {
+      let httpError = err;
+        
+      if( httpError.status = 403){
+          this.toastr.error("Debes estar loggeado para ingresar")
+          this.router.navigate(['/login']);
+      }
+
+    }
     });
-
-    console.log('ticket:', this.ticketService.getCompra());
-
-    this.router.navigate(['/ticket/step4']);
-  },
-  error: (err) => console.error(err)
-});
   }
 
   volverAtras(): void {

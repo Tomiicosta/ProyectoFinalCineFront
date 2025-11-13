@@ -7,10 +7,8 @@ declare var MercadoPago: any;
 @Injectable({
   providedIn: 'root'
 })
-export class PaymentService {
 
-  // Base API
-  private apiUrl = 'http://localhost:8080/api/payments';
+export class PaymentService {
 
   // Credencial MP
   private mp : string | undefined;
@@ -22,7 +20,6 @@ export class PaymentService {
     });
   }
 
-  
   /**
    * Inicializa el SDK de Mercado Pago en el frontend
    * (solo si el script fue cargado correctamente en index.html)
@@ -35,11 +32,10 @@ export class PaymentService {
   /**
    * Llama al backend para crear una preferencia de pago
    */
-  crearPreferencia(payload: any): Observable<{ preferenceId: string; initPoint: string }> {
-    return this.http.post<{ preferenceId: string; initPoint: string }>(`${this.apiUrl}/create`, payload);
+
+  crearPreferencia(payload: any) {
+    return this.http.post(`/api/payments/create`, payload);
   }
-
-
 
 }
 

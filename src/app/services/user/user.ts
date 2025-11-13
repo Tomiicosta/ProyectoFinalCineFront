@@ -5,19 +5,19 @@ import { Ticket } from '../../models/ticket';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-
-  private api = 'http://localhost:8080/api/userManagement';
-
   constructor(private http: HttpClient) {}
 
+  //Ver mi perfil
   getMyProfile() {
-    return this.http.get<any>(`${this.api}/me`);
+    return this.http.get<any>(`/api/userManagement/me`);
   }
 
+  //Modificar mi perfil
   updateMyProfile(body: any) {
-    return this.http.put<any>(`${this.api}/me/update`, body);
+    return this.http.put<any>(`/api/userManagement/me/update`, body);
   }
 
+  //Ver mis tickets
   getMyTickets() {
     return this.http.get<Ticket[]>('http://localhost:8080/api/tickets');
   }
