@@ -3,6 +3,7 @@ import { MovieService } from '../../services/movie/movie-service';
 import { Router } from '@angular/router';
 import { SlicePipe } from '@angular/common';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
+import Movie from '../../models/movie';
 
 @Component({
   selector: 'app-home',
@@ -29,15 +30,22 @@ export class Home implements OnInit, OnDestroy {
   // 🟢 Obtener todas las películas
   getAllMovies() {
     this.movieService.getMovies().subscribe({
-      next: (data) => { this.movieService.moviesCartelera = data },
-      error: (e) => { this.errorHandlerService.handleHttpError(e)}
+      next: (data) => { this.movieService.moviesCartelera = data  || []},
+      error: (e) => { this.errorHandlerService.handleHttpError(e);
+        this.movieService.moviesCartelera = []; 
+      }
     });
   }
 
   // 🟢 Filtrar próximas películas
-  get upcomingMovies() {
-    return this.movieService.moviesCartelera.filter(movie => this.isUpcoming(movie.releaseDate));
-  }
+  get upcomingMovies(): Movie[] {
+  const movies = this.movieService.moviesCartelera || [];
+
+  return movies.filter(movie =>
+    movie?.releaseDate && this.isUpcoming(movie.releaseDate)
+  );
+}
+
 
   // 🟢 Ver detalles
   verDetalles(id: number | undefined) {
@@ -46,16 +54,23 @@ export class Home implements OnInit, OnDestroy {
 
   // 🟢 Carrusel principal
   siguiente() {
-    const total = this.movieService.moviesCartelera.length;
-    if (total === 0) return;
-    this.indiceActual = (this.indiceActual + 1) % total;
-  }
+  const movies = this.movieService.moviesCartelera || [];
+  const total = movies.length;
 
-  anterior() {
-    const total = this.movieService.moviesCartelera.length;
-    if (total === 0) return;
-    this.indiceActual = (this.indiceActual - 1 + total) % total;
-  }
+  if (total === 0) return;
+
+  this.indiceActual = (this.indiceActual + 1) % total;
+}
+
+anterior() {
+  const movies = this.movieService.moviesCartelera || [];
+  const total = movies.length;
+
+  if (total === 0) return;
+
+  this.indiceActual = (this.indiceActual - 1 + total) % total;
+}
+
 
   // 🟢 Verificar si la película aún no se estrenó
   isUpcoming(movieReleaseDate: string): boolean {
@@ -112,7 +127,9 @@ export class Home implements OnInit, OnDestroy {
     this.getAllMovies();
 
     // Banner principal
-    setInterval(() => this.siguiente(), 8000);
+    
+
+      setInterval(() => this.siguiente(), 8000);
 
     // 🔹 Movimiento automático del carrusel de CARTELERA
     this.autoScrollCartelera = setInterval(() => {
@@ -123,6 +140,8 @@ export class Home implements OnInit, OnDestroy {
     this.autoScrollEstrenos = setInterval(() => {
       this.moverDerechaEstrenos();
     }, 5000);
+    
+    
   }
 
   ngOnDestroy() {
