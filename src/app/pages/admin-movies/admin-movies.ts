@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 import { DecimalPipe } from '@angular/common';
 import Swal from 'sweetalert2';
+import { FunctionService } from '../../services/function/function-service';
 
 @Component({
   selector: 'app-admin-movies',
@@ -26,7 +27,7 @@ export class AdminMovies implements OnInit{
   movieForm!: FormGroup;   
   movieIsFromDb: boolean = false;
 
-  constructor(public movieService: MovieService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler,private fb: FormBuilder     ) {}
+  constructor(public movieService: MovieService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler,private fb: FormBuilder, public funcionService : FunctionService     ) {}
 
    // ========================
   // FORM INIT / PATCH
@@ -187,45 +188,60 @@ export class AdminMovies implements OnInit{
 
 
 
-/* método DELETE con confirmación */
-async eliminarDeCartelera(id: string, titulo: string) {
+/* método DELETE con validación de funciones */
+async eliminarDeCartelera(id: number, titulo: string) {
   if (!id) return;
 
-  const result = await Swal.fire({
-    title: 'Confirmar eliminación',
-    html: `¿Eliminar la película <b>"${titulo}"</b> de la cartelera?`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Eliminar',
-    cancelButtonText: 'Cancelar'
-  });
-
-  // Si el usuario cancela
-  if (!result.isConfirmed) {
-    this.toastr.error('Eliminación cancelada por el usuario.');
-    return;
-  }
-
-  this.movieService.deleteMovie(id).subscribe({
-    next: () => {
-      this.toastr.success('Película eliminada correctamente.');
-
-      // Si justo estabas viendo esa película, limpiamos el panel derecho
-      if (this.selectedMovie && this.selectedMovie.id.toString() === id) {
-        this.selectedMovie = undefined;
-        this.mostrarAgregar = false;
-        this.editMode = false;
+  // 1) Consultar si la película está usada en alguna función
+  this.funcionService.getDisponiblesPorPelicula(id).subscribe({
+    next: async (funciones) => {
+      if (funciones && funciones.length > 0) {
+        this.toastr.error('No podés eliminar esta película porque está asignada a una función.');
+        return;
       }
 
-      this.getAllMovies();
+      // 2) Si NO tiene funciones, pedimos confirmación
+      const result = await Swal.fire({
+        title: 'Confirmar eliminación',
+        html: `¿Eliminar la película <b>"${titulo}"</b> de la cartelera?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (!result.isConfirmed) {
+        this.toastr.error('Eliminación cancelada por el usuario.');
+        return;
+      }
+
+      // 3) Si confirmó, eliminamos
+      this.movieService.deleteMovie(id.toString()).subscribe({
+        next: () => {
+          this.toastr.success('Película eliminada correctamente.');
+
+          // Si justo la estabas viendo en el panel derecho, lo limpiamos
+          if (this.selectedMovie && this.selectedMovie.id === id) {
+            this.selectedMovie = undefined;
+            this.mostrarAgregar = false;
+            this.editMode = false;
+          }
+
+          this.getAllMovies();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.errorHandlerService.handleHttpError(error);
+        }
+      });
     },
     error: (error: HttpErrorResponse) => {
       this.errorHandlerService.handleHttpError(error);
     }
   });
 }
+
 
 
   
