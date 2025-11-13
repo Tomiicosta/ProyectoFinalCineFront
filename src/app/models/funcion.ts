@@ -1,4 +1,3 @@
-import { Butaca2 } from "./butaca2";
 
 export interface Funcion {
     id: number;

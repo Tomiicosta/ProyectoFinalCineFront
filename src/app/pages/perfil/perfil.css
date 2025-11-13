@@ -1,0 +1,530 @@
+/* ===== FONDO GENERAL ===== */
+#perfilPage {
+    width: 100%;
+    min-height: 100vh;
+    padding: 64px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    padding-top: 150px;
+}
+
+/* ===== HEADER ===== */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 32px;
+    align-items: center;
+}
+
+.profile-header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+.profile-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    color: #E8E8E8;
+}
+
+.profile-header.has-form {
+    align-items: flex-start;
+}
+
+/* ===== CONTENIDO PRINCIPAL ===== */
+.profile-content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    gap: 32px;
+    padding-bottom: 80px;
+    justify-content: center;
+}
+
+.profile-content.has-form {
+    justify-content: space-between;
+}
+
+/* ===== COLUMNA IZQUIERDA ===== */
+.profile-summary {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ===== CARD PRINCIPAL ===== */
+.profile-card {
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(6px);
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    border: 2px solid rgba(229,9,20,0.3);
+}
+
+.profile-card h2 {
+    margin-bottom: 24px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ff0000;
+}
+
+/* ===== LISTA DE INFORMACIÓN ===== */
+.profile-data {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+.profile-row dt {
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.profile-row dd {
+    opacity: 0.85;
+    color: #E8E8E8;
+}
+
+/* ===== BOTÓN EDITAR ===== */
+.profile-actions {
+    margin-top: 26px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.profile-actions button {
+    padding: 10px 20px;
+    background: #E50914;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #FFFFFF;
+    transition: 0.25s;
+}
+
+.profile-actions button:hover {
+    background: #B20710;
+}
+
+/* ===== CARD DE ACCIONES ===== */
+.profile-extra {
+    background: rgba(18,18,18,0.92);
+    padding: 24px;
+    border-radius: 20px;
+    border: 2px solid rgba(229,9,20,0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.65);
+    display: flex;
+    flex-direction: column;
+}
+.action-buttons{
+    display: flex;
+    gap: 20px;
+}
+
+.profile-extra h3 {
+    margin-bottom: 14px;
+    font-size: 1.2rem;
+    color: #FFFFFF;
+}
+
+.profile-extra button {
+    padding: 8px 16px;
+    background: rgba(240, 12, 23, 0.77);
+    border: 1px solid rgba(229,9,20,0.25);
+    border-radius: 999px;
+    cursor: pointer;
+    color: #ded9d9;
+    font-weight: 700;
+    transition: 0.25s;
+}
+
+.profile-extra button:hover {
+    background: rgba(229,9,20,0.28);
+}
+
+/* ===== FORMULARIO ===== */
+.profile-form-section {
+    width: 60%;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(7px);
+    padding: 32px;
+    border-radius: 20px;
+    border: 2px solid rgba(229,9,20,0.3);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.7);
+}
+
+.profile-form-section h2 {
+    margin-bottom: 24px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ff0000;
+}
+
+/* ===== INPUTS (CONTRASTE EQUILIBRADO) ===== */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.form-row label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #F2F2F2; /* suave, no blanco puro */
+}
+
+.form-row input {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: none;
+
+    /* contraste medio */
+    background: rgba(28, 28, 28, 0.9);  /* entre lo antiguo y lo nuevo */
+    color: #FFFFFF;
+
+    outline: none;
+
+    /* borde leve, no invasivo */
+    border: 1px solid rgba(229,9,20,0.22);
+
+    /* sombra más suave */
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.35);
+
+    transition: 0.25s;
+}
+
+.form-row input:focus {
+    border-color: #E50914;
+    background: rgba(34, 34, 34, 0.95); /* leve aclarado */
+    box-shadow:
+        0 0 6px rgba(229,9,20,0.45),
+        inset 0 0 6px rgba(229,9,20,0.18);
+}
+
+
+
+/* ===== BOTONES FORMULARIO ===== */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.form-actions button {
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.form-actions button[type="submit"] {
+    background: #E50914;
+    color: #FFFFFF;
+}
+
+.form-actions button[type="submit"]:hover {
+    background: #B20710;
+}
+
+.form-actions button[type="button"] {
+    background: rgba(229,9,20,0.15);
+    color: #FFFFFF;
+    border: 1px solid rgba(229,9,20,0.22);
+}
+
+.form-actions button[type="button"]:hover {
+    background: rgba(229,9,20,0.3);
+}
+
+/* --- BOTÓN GUARDAR DISABLED --- */
+.form-actions button[type="submit"]:disabled {
+    background: #7a1c1c;        
+    color: #cccccc;             
+    cursor: not-allowed;         
+    opacity: 0.55;               
+    border: none;
+}
+
+/* ===== LOADING ===== */
+.profile-loading p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    color: #E8E8E8;
+}
+
+/* ===== CONTRASEÑAS ===== */
+.form-contraseña{
+    margin-top: 12px;
+}
+.form-row#password-group {
+    margin-top: 24px;
+}
+
+/* Etiquetas iguales a las demás */
+.form-row label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #F2F2F2;
+}
+
+/* Input del bloque de contraseñas */
+.form-row input {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: none;
+
+    background: rgba(28, 28, 28, 0.9); /* contraste equilibrado */
+    color: #FFFFFF;
+
+    outline: none;
+    border: 1px solid rgba(229, 9, 20, 0.22);
+
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.35);
+    transition: 0.25s;
+}
+
+.form-row input:focus {
+    border-color: #E50914;
+    background: rgba(34, 34, 34, 0.95);
+    box-shadow:
+        0 0 6px rgba(229,9,20,0.45),
+        inset 0 0 6px rgba(229,9,20,0.18);
+}
+
+/* Separación entre bloque "contraseña actual" y "nueva contraseña" */
+#currentPassword {
+    border-left: 3px solid #E50914;
+}
+
+/* ===== INPUTS DE CONTRASEÑA CON OJO ===== */
+
+.password-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input input {
+    width: 100%;
+    padding-right: 44px; /* espacio para el icono */
+}
+
+/* Botón del ojo */
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.password-toggle:hover img {
+    opacity: 1;
+}
+
+/* Título del bloque de password */
+.password-title {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Mensaje de error simple para contraseñas */
+.password-error {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    color: #ff6b6b;
+}
+
+
+#password, #confirmPassword {
+    border-left: 3px solid rgba(229,9,20,0.45);
+}
+
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .profile-content {
+        flex-direction: column;
+    }
+
+    .profile-summary,
+    .profile-form-section {
+        width: 100%;
+    }
+}
+
+
+/* ===== SECCIÓN MIS ENTRADAS ===== */
+
+.tickets-section {
+    width: 60%;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(7px);
+    padding: 32px;
+    border-radius: 20px;
+    border: 2px solid rgba(229,9,20,0.3);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tickets-section h2 {
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ff0000;
+}
+
+/* Selector de tickets */
+
+.ticket-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.ticket-selector label {
+    font-weight: 500;
+    color: #F2F2F2;
+}
+
+.ticket-selector select {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(229,9,20,0.22);
+    background: rgba(28, 28, 28, 0.9);
+    color: #FFFFFF;
+    outline: none;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.35);
+    transition: 0.25s;
+}
+
+.ticket-selector select:focus {
+    border-color: #E50914;
+    background: rgba(34, 34, 34, 0.95);
+    box-shadow:
+        0 0 6px rgba(229,9,20,0.45),
+        inset 0 0 6px rgba(229,9,20,0.18);
+}
+
+/* Detalle del ticket */
+
+.ticket-detail {
+    margin-top: 8px;
+    padding: 20px 22px;
+    border-radius: 16px;
+    background: rgba(18, 18, 18, 0.92);
+    border: 1px solid rgba(229,9,20,0.25);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.65);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ticket-detail p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #E8E8E8;
+}
+
+.ticket-detail strong {
+    color: #ffffff;
+}
+
+/* Lista de butacas */
+
+.ticket-detail ul {
+    margin: 4px 0 0 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ticket-detail li {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(229,9,20,0.18);
+    border: 1px solid rgba(229,9,20,0.35);
+    font-size: 0.85rem;
+    color: #ffffff;
+}
+
+/* Mensaje cuando no hay entradas */
+
+.tickets-section > p {
+    margin-top: 4px;
+    font-size: 0.95rem;
+    color: #E8E8E8;
+    opacity: 0.85;
+}
+
+/* ===== RESPONSIVE TICKETS ===== */
+@media (max-width: 900px) {
+    .tickets-section {
+        width: 100%;
+    }
+}
+.tickets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.tickets-header h2 {
+    margin: 0;
+}
+
+.tickets-back {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(229,9,20,0.3);
+    background: rgba(229,9,20,0.15);
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.tickets-back:hover {
+    background: rgba(229,9,20,0.3);
+}

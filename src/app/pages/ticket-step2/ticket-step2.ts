@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pelicula } from '../../models/pelicula';
 import { TicketService } from '../../services/ticket/ticket-service';
@@ -20,6 +20,9 @@ export class TicketStep2 implements OnInit {
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
   funciones: Funcion[] | undefined;
+
+  // Signal para mostrar mensajes de error en la UI
+  errorMessage: WritableSignal<string | null> = signal(null);
 
   constructor(
     private location: Location,
@@ -48,18 +51,33 @@ export class TicketStep2 implements OnInit {
   }
 
   mostrarFunciones(id: number) {
-    this.functionService.getDisponiblesPorPelicula(id).subscribe({
-      next: (data) => { this.funciones = data } ,
-      error: (e) => { this.errorHandlerService.handleHttpError(e) }
-    })
-  }
+  this.functionService.getDisponiblesPorPelicula(id).subscribe({
+    next: (data) => { 
+      // Ordenar las funciones desde (la mas temprana) y (la mas lejana)
+      this.funciones = data.sort((f1, f2) => {
+        return new Date(f1.date).getTime() - new Date(f2.date).getTime();
+      });
+    },
+    error: (e) => { this.errorHandlerService.handleHttpError(e) }
+  });
+}
 
-  // Formatear fecha: "YYYY-MM-DD" → "11 de septiembre"
+
+  // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
   formatearFecha(fecha: string): string {
     const [year, month, day] = fecha.split('-').map(Number);
-    const dateObj = new Date(year, month - 1, day); // esto usa la zona local
-    const opciones: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' };
-    return dateObj.toLocaleDateString('es-ES', opciones);
+    const dateObj = new Date(year, month - 1, day);
+
+    const opciones: Intl.DateTimeFormatOptions = {
+      weekday: 'long',  // agrega el día de la semana
+      day: 'numeric',
+      month: 'long'
+    };
+
+    // Esto devuelve algo como: "viernes, 14 de noviembre"
+    const fechaFormateada = dateObj.toLocaleDateString('es-ES', opciones);
+    // Eliminamos la coma y capitalizamos la primera letra
+    return fechaFormateada.replace(',', '').replace(/^./, c => c.toUpperCase());
   }
 
   // Formatear hora: "HH:mm:ss" → "HH:mm"
@@ -73,11 +91,15 @@ export class TicketStep2 implements OnInit {
     console.log("Función seleccionada:", this.funcionSeleccionada);
   }
 
-  
+  // Lógica de confirmación e ir al paso 3
   confirmarPaso2() {
     
     if (!this.peliculaSeleccionada) return;
-    if (!this.funcionSeleccionada) return;
+
+    if (!this.funcionSeleccionada) {
+      this.errorMessage.set("ERROR: Seleccione una función para continuar.");
+      return;
+    }
 
     // Setear la funcion elegida
     this.ticketService.setFuncion(this.funcionSeleccionada);

@@ -30,7 +30,7 @@ header {
 
 .container {
   position: fixed;
-  top: 20px;
+  top: 10px;
   z-index: 10;
   /* solucion: para mantener header por encima de todo */
 
@@ -38,7 +38,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 0 6px 0 17px;
   gap: 100px;
   background: rgba(36, 40, 51, 0.8);
   /* <- 0.8 es el nivel de opacidad (0 a 1) */
@@ -64,49 +64,74 @@ header {
     padding: 16px;
 }
 
-.list a{
-    display: inline-block; 
-    position: relative;
-    text-decoration: none;
-    color: rgb(220, 217, 217);
-    font-weight: 600;
-    font-size: 16px ;
-    letter-spacing: .2px;
-    padding: 10px 8px;
-    border-radius: 10px;
-    outline: none;
-    transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
-  }
-  .list a:hover::after{ transform: scaleX(1); }
-
-/* Hover/active feedback visual */
-.list a:hover{
-  background: rgba(255,255,255,0.10);
-  transform: scale(1.07); 
+.list .nav-a {
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: rgb(220, 217, 217);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: .2px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  outline: none;
+  transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
 }
 
-.list a:active{
+.list .nav-a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Hover/active feedback visual */
+.list .nav-a:hover {
+  background: rgba(255, 255, 255, 0.10);
+  transform: scale(1.07);
+}
+
+.list .nav-a:active {
   transform: translateY(1px);
 }
 
 /* Focus accesible */
-.list a:focus-visible{
-  outline: 3px solid rgba(255,255,255,.55);
+.list .nav-a:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, .55);
   outline-offset: 2px;
 }
 
-.btnLogin{
+.btnLogin {
+  cursor:pointer;
+
   border-radius: 20px;
   border: 1px solid white;
   background-color: white;
-  
+
+  display: inline-block;
+  position: relative;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: .2px;
+  padding: 10px 14px;
+  outline: none;
+  transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
 
 }
-.btnLogin a{
+
+.btnLogin a {
   color: #000000;
+  text-decoration: none;
+
 }
 
-/* ---------------- MEDIA QUERIES ---------------- */
+.btnLogin:hover::after {
+  transform: scaleX(1);
+}
+
+/* Hover/active feedback visual */
+.btnLogin:hover {
+  transform: scale(1.1);
+}
+
+
 /* 🔹 Botón hamburguesa oculto por defecto */
 .menu-toggle {
   display: none;
@@ -117,11 +142,85 @@ header {
   cursor: pointer;
 }
 
+/* ===== Alinear el icono con los otros <li> ===== */
+.profile-menu {
+  position: relative;
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+}
+
+/* ===== Botón del icono ===== */
+.profile-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-btn img {
+  width: 26px;
+  height: 26px;
+}
+
+/* ===== Hover del icono ===== */
+.profile-btn:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.08);
+}
+
+/* ===== Dropdown  ===== */
+.profile-dropdown {
+  position: absolute;
+  top: 120%;
+  right: -20px;      /* mueve más a la derecha */
+  background: rgba(10,10,10,0.96);
+  padding: 8px 0;
+  min-width: 160px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  display: none;
+  z-index: 999;
+}
+
+/* al abrirlo */
+.profile-menu.open .profile-dropdown {
+  display: block;
+}
+
+/* items */
+.profile-dropdown a,
+.profile-dropdown button {
+  width: 100%;
+  text-decoration: none;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: block;                
+  transition: background .2s, transform .15s;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+  transform: scale(1.05);
+}
 
 
 
 
 
+
+/* ---------------- MEDIA QUERIES ---------------- */
 
 /* 📱 Responsive para móviles */
 @media (max-width: 768px) {
@@ -132,6 +231,7 @@ header {
   .container {
     width: 70%;
   }
+
 
   nav {
     display: none;
@@ -177,9 +277,57 @@ header {
     font-weight: 600;
   }
 
+  /* Boton profile */
+  .profile-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: static !important;   
+    margin-top: 10px;
+  }
+
+  /* Botón */
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+
+  .profile-btn img {
+    width: 32px;
+    height: 32px;
+    
+  }
+
+  /* Dropdown dentro del flujo del menú */
+  .profile-dropdown {
+    position: static !important;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 12px;
+    padding: 8px 0;
+    background: rgba(10,10,10,0.8);
+    box-shadow: none;
+  }
+
+  .profile-dropdown a,
+  .profile-dropdown button {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    width: 100%;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
+  
+
 

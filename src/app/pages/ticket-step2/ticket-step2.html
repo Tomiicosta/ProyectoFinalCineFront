@@ -7,44 +7,54 @@
 
   <section class="funciones-section">
     @if (peliculaSeleccionada; as peli) {
-      <div class="div-img">
-        <img [src]="peli.posterUrl" [alt]="peli.title">
+    <div class="div-poster">
+      <div class="div-marco">
+        <img class="img-marco" src="/img/details/marco_movie.png" alt="Imagen del marco png">
       </div>
-      <div class="div-tabla font-open-sans">
-        <div class="titulo-peli">
-          <h2>{{ peli.title }}</h2>
-        </div>
-        <div class="div-funciones">
-            <h3>Elige tu FUNCIÓN preferida</h3>
+      <div class="div-img">
+        <img class="img-peli" [src]="peli.posterUrl" [alt]="peli.title">
+      </div>
+    </div>
+    <div class="div-tabla font-open-sans">
+      <h1 class="title-peli">{{ peli.title }}</h1>
+      <h4 class="runtime-peli">Duracion {{ peli.runtime }} mins.</h4>
+      <div class="div-funciones">
+        <h3 class="funciones-title">Elige tu función preferida:</h3>
+        <ul class="funciones">
+          @if (funciones) {
+          @for (f of funciones; track f.id) {
+          <li class="funcion" (click)="seleccionarFuncion(f)"
+            [style.background]="f.id === funcionSeleccionada?.id ? '#007bff' : ''"
+            [style.color]="f.id === funcionSeleccionada?.id ? 'white' : ''">
+            {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — <b>{{ f.cinemaName }}</b>
+          </li>
+          }
+          } @else {
+          <li class="funcion">
+            No hay funciones disponibles..
+          </li>
+          }
+        </ul>
 
-            <ul class="funciones">
-              @for (f of funciones; track f.id) {
-                <li class="funcion" (click)="seleccionarFuncion(f)" 
-                  [style.background]="f.id === funcionSeleccionada?.id ? '#007bff' : ''" 
-                    [style.color]="f.id === funcionSeleccionada?.id ? 'white' : ''">
-                      {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} ({{ f.cinemaName }})
-                </li>
-              }
-            </ul>
-        </div>
       </div>
+    </div>
     } @else {
-      <div class="div-img">
-        <img [src]="" [alt]="">
+    <div class="div-img">
+      <img [src]="" [alt]="">
+    </div>
+    <div class="div-tabla font-open-sans">
+      <div class="titulo-peli">
+        <h2>Pelicula no disponible</h2>
       </div>
-      <div class="div-tabla font-open-sans">
-        <div class="titulo-peli">
-          <h2>Pelicula no disponible</h2>
-        </div>
-        <div class="div-funciones">
-          <div class="div-dias">
-            <h3>Elige tu FUNCIÓN preferida</h3>
-            <div class="dias">
-              No hay funciones disponibles..
-            </div>
-          </div>
-        </div>
+      <div class="div-funciones">
+        <h3>Elige tu FUNCIÓN preferida</h3>
+        <ul class="funciones">
+          <li class="funcion">
+            No hay funciones disponibles..
+          </li>
+        </ul>
       </div>
+    </div>
     }
   </section>
 
@@ -52,6 +62,13 @@
     <div class="btns-ticket">
       <button id="btn-step" class=" " (click)="confirmarPaso2()">SIGUIENTE</button>
       <button id="btn-back" class=" " (click)="volverAtras()">ATRÁS</button>
+
+      <!-- DIV DE ERRORES -->
+      @if (errorMessage()) {
+        <div class="div-error ">
+          {{ errorMessage() }}
+        </div>
+      }
     </div>
   </aside>
 </main>

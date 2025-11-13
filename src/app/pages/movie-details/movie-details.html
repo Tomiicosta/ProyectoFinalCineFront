@@ -1,6 +1,21 @@
 <main>
     <div class="div-sections">
-        <!-- Panel de Información (INFO PELICULA) -->
+        <!-- Panel de Información (INFO PELICULA) 
+         export default interface Movie {
+            id: number; 
+            title: string;
+            releaseDate: string; 
+            runtime: number;
+            originalLanguage: string;
+            genres: string[];
+            voteAverage: number; 
+            voteCount: number;
+            posterUrl: string;
+            bannerUrl: string;
+            overview: string; 
+            imdbId?: string; 
+            adult: Boolean;
+        }-->
         @if (peliculaSeleccionada; as peli) {
             <section class="section-img">
                 <div class="div-marco">
@@ -13,21 +28,25 @@
             <section class="section-details font-open-sans">
                 <div class="div-details">
                     <h1 class="title-peli" title="{{ peli.title }}"> {{ peli.title }} </h1>
-                    <h3 class="genre-peli">
+                    <p class="genre-peli">
                         @for (g of peli.genres; track $index) {
-                            {{ g.toString() }}
+                        <b>{{ g.toString() }}</b> |
                         }
-                    </h3>
+                    </p>
+                    <p class="runtime-peli">Duracion {{ peli.runtime }} mins.</p>
                     <p class="description-peli">{{ peli.overview }}</p>
+                    <p class="release-peli">Estrenada en: {{ peli.releaseDate }}</p>
+
                 </div>
                 <div class="div-funciones">
-                    <h1 class="title-function">PROYECCIONES</h1>
-                    <h4 class="age-peli">APTA PARA MAYORES DE +13</h4>
+                    <h2 class="title-function">PROYECCIONES</h2>
+                    <h4 class="age-peli">{{ peli.adult ? 'APTA PARA MAYORES +18' : 'APTA PARA TODAS LAS EDADES' }}</h4>
                     <ul class="lista-funciones">
-                        <li>LUNES 14 DE JUNIO 2026</li>
-                        <li>MARTES 15 DE JUNIO 2026</li>
-                        <li>JUEVES 17 DE JUNIO 2026</li>
-                        <li>VIERNES 18 DE JUNIO 2026</li>
+                        @for (f of funciones; track f.id) {
+                            <li class="funcion">
+                                {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — {{ f.cinemaName }}
+                            </li>
+                        }
                     </ul>
                 </div>
             </section>
@@ -38,12 +57,12 @@
         <div class="btns-ticket font-inter">
             <button id="btn-step" class=" " (click)="comprarEntrada()">COMPRAR ENTRADA</button>
             <button id="btn-back" class=" " (click)="volverAtras()">ATRÁS</button>
-            
+
             <!-- DIV DE ERRORES -->
             @if (errorMessage()) {
-                <div class="div-error">
-                    {{ errorMessage() }}
-                </div>
+            <div class="div-error">
+                {{ errorMessage() }}
+            </div>
             }
         </div>
     </aside>

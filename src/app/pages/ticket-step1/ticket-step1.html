@@ -6,25 +6,30 @@
     <h1 class="step">PASO <span class="step-num">1</span></h1>
   </section>
 
-  <section class="galeria">
+  <section class="galeria-section">
     <ul class="lista-pelis">
-      @for (peli of ticketService.peliculas; track $index) {
-        <li
-          class="item"
-          #item
-          [style.backgroundImage]="'url(' + peli.posterUrl + ')'"
-          [attr.aria-label]="peli.title">
-        </li>
+      @if (ticketService.peliculas.length) {
+        @for (peli of ticketService.peliculas; track $index) {
+          <li
+            class="item"
+            #item
+            [style.backgroundImage]="'url(' + peli.posterUrl + ')'"
+            [attr.aria-label]="peli.title">
+          </li>
+        }
+      } @else {
+        <li>No hay funciones proximas a la fecha..</li>  
       }
-      <button id="prev" (click)="prevSlide()"><</button>
-      <button id="next" (click)="nextSlide()">></button>
+      
+      <button id="prev" (click)="prevSlide()"><i class="fa-solid fa-circle-arrow-left"></i></button>
+      <button id="next" (click)="nextSlide()"><i class="fa-solid fa-circle-arrow-right"></i></button>
     </ul>
   </section>
 
   <aside class="banner font-inter">
     <div class="about-peli">
-      <h1>{{ ticketService.peliculaSeleccionada?.title }}</h1>
-      <p>{{ displayedDescription }}</p>
+      <h1 class="title-peli">{{ ticketService.peliculaSeleccionada?.title }}</h1>
+      <p class="description-peli">{{ displayedDescription }}</p>
       <button id="btn-ver" (click)="verDetalles()">Ver más</button>
     </div>
 
