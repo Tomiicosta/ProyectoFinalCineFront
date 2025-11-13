@@ -46,7 +46,7 @@ La seguridad de la Aplicación se basa en la utilización de un AuthGuard y un R
 
 ## Como correr el proyecto
 
-**NECESARIO** utilizar el siguiente repositorio para utilizar el mismo BackEnd --> [https://github.com/ilgazzolo/cinema-management-api.git]
+**NECESARIO** utilizar el siguiente repositorio para utilizar el mismo BackEnd --> https://github.com/ilgazzolo/cinema-management-api.git
 
  1. Clonar el repositorio:   
     ```bash
