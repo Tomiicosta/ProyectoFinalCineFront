@@ -33,9 +33,8 @@ export class PaymentService {
    * Llama al backend para crear una preferencia de pago
    */
 
-  crearPreferencia(payload: any) {
-    return this.http.post(`/api/payments/create`, payload);
+  crearPreferencia(payload: any): Observable<{ preferenceId: string; initPoint: string }> {
+    return this.http.post<{ preferenceId: string; initPoint: string }>(`/api/payments/create`, payload);
   }
-
 }
 
