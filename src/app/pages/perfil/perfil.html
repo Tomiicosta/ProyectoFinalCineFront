@@ -1,0 +1,213 @@
+<main id="perfilPage">
+
+    <!-- Encabezado -->
+    <section class="profile-header" [class.has-form]="editMode">
+      <h1>Mi perfil</h1>
+  
+      @if (user) {
+        <p>
+          Hola, {{ user.name }} {{ user.surname }} 👋
+        </p>
+      }
+    </section>
+  
+    <!-- Contenido principal -->
+    @if (user) {
+  
+      <section class="profile-content" [class.has-form]="editMode">
+  
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="profile-summary">
+          <div class="profile-card">
+            <h2>Datos de la cuenta</h2>
+  
+            <dl class="profile-data">
+              <div class="profile-row">
+                <dt>Nombre</dt>
+                <dd>{{ user.name }}</dd>
+              </div>
+  
+              <div class="profile-row">
+                <dt>Apellido</dt>
+                <dd>{{ user.surname }}</dd>
+              </div>
+  
+              <div class="profile-row">
+                <dt>Usuario</dt>
+                <dd>@{{ user.username }}</dd>
+              </div>
+  
+              <div class="profile-row">
+                <dt>Email</dt>
+                <dd>{{ user.email }}</dd>
+              </div>
+            </dl>
+  
+            <div class="profile-actions">
+              <button type="button" (click)="toggleEdit()">
+                {{ editMode ? 'Cancelar' : 'Editar perfil' }}
+              </button>
+            </div>
+          </div>
+  
+          <div class="profile-extra">
+            <h3>Acciones</h3>
+            <div class="action-buttons">
+                @if(  user.role === "CLIENT" ){
+                    <button type="button" routerLink="/mis-entradas">
+                        Ver mis entradas
+                      </button>
+                }
+            
+                  @if(editMode){
+                    <button type="button" (click)="showPasswordForm = !showPasswordForm">
+                        {{ showPasswordForm ? 'Ocultar' : 'Actualizar contraseña' }}
+                      </button>
+                  }
+                  
+            </div>
+            
+          </div>
+        </div>
+  
+        <!-- FORMULARIO DE EDICIÓN -->
+        @if (editMode) {
+          <section class="profile-form-section">
+            <h2>Editar mis datos</h2>
+  
+            <form #profileForm="ngForm" (ngSubmit)="onSubmit(profileForm)">
+
+                <!-- CAMPOS BÁSICOS -->
+              
+                <div class="form-row">
+                  <label for="name">Nombre</label>
+                  <input id="name" name="name" type="text"
+                         [(ngModel)]="editUser.name" required />
+                </div>
+              
+                <div class="form-row">
+                  <label for="surname">Apellido</label>
+                  <input id="surname" name="surname" type="text"
+                         [(ngModel)]="editUser.surname" required />
+                </div>
+              
+                <div class="form-row">
+                  <label for="username">Usuario</label>
+                  <input id="username" name="username" type="text"
+                         [(ngModel)]="editUser.username" required />
+                </div>
+              
+                <div class="form-row">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email"
+                         [(ngModel)]="editUser.email" required />
+                </div>
+              
+                <!-- BLOQUE DE CONTRASEÑA (solo si showPasswordForm = true) -->
+                @if (showPasswordForm ) {
+              
+                  <h3 class="password-title">Actualizar contraseña</h3>
+              
+                  <!-- Contraseña actual -->
+                  <div class="form-row">
+                    <label for="currentPassword">Contraseña actual</label>
+                    <div class="password-input">
+                      <input
+                        id="currentPassword"
+                        name="currentPassword"
+                        [type]="showCurrentPassword ? 'text' : 'password'"
+                        [(ngModel)]="editUser.currentPassword"
+                        required
+                      />
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        (click)="toggleCurrentPasswordVisibility()"
+                      >
+                        <img
+                          [src]="showCurrentPassword ? '/img/password/eye-open-svgrepo-com.svg' : '/img/password/eye-closed.svg'"
+                          alt="Ver/ocultar contraseña actual"
+                        >
+                      </button>
+                    </div>
+                  </div>
+              
+                  <!-- Nueva contraseña -->
+                  <div class="form-row">
+                    <label for="password">Nueva contraseña</label>
+                    <div class="password-input">
+                      <input
+                        id="password"
+                        name="password"
+                        [type]="showNewPassword ? 'text' : 'password'"
+                        [(ngModel)]="editUser.password"
+                      />
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        (click)="toggleNewPasswordVisibility()"
+                      >
+                        <img
+                          [src]="showNewPassword ? '/img/password/eye-open-svgrepo-com.svg' : '/img/password/eye-closed.svg'"
+                          alt="Ver/ocultar nueva contraseña"
+                        >
+                      </button>
+                    </div>
+                  </div>
+              
+                  <!-- Confirmar contraseña -->
+                  <div class="form-row">
+                    <label for="confirmPassword">Repetir nueva contraseña</label>
+                    <div class="password-input">
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        [type]="showConfirmPassword ? 'text' : 'password'"
+                        [(ngModel)]="editUser.confirmPassword"
+                      />
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        (click)="toggleConfirmPasswordVisibility()"
+                      >
+                        <img
+                          [src]="showConfirmPassword ? '/img/password/eye-open-svgrepo-com.svg' : '/img/password/eye-closed.svg'"
+                          alt="Ver/ocultar confirmación contraseña"
+                        >
+                      </button>
+                    </div>
+                  </div>
+              
+                  <!-- Mensaje simple si no coinciden -->
+                  @if (editUser.password && editUser.confirmPassword && editUser.password !== editUser.confirmPassword) {
+                    <p class="password-error">Las contraseñas nuevas no coinciden.</p>
+                  }
+              
+                }
+              
+                <!-- BOTONES -->
+                <div class="form-actions">
+                  <button type="submit" [disabled]="profileForm.invalid">
+                    Guardar cambios
+                  </button>
+              
+                  <button type="button" (click)="toggleEdit()">
+                    Cancelar
+                  </button>
+                </div>
+              
+              </form>
+              
+          </section>
+        }
+  
+      </section>
+  
+    } @else {
+      <section class="profile-loading">
+        <p>Cargando perfil...</p>
+      </section>
+    }
+  
+  </main>
+  
