@@ -13,7 +13,7 @@ Link al BackEnd --> https://github.com/ilgazzolo/cinema-management-api.git
 ---
 
 ## Arquitectura
-Para el desarrollo de la Aplicación, utilizamos models y formularios reactivos para un mejor manejo de la logica dentro de los forms y en el HTML en general.
+Para el desarrollo de la Aplicación, utilizamos una arquitectura modular y basada en componentes, aprovechando las características del framework Angular. La estructura del proyecto se organiza de la siguiente manera:
 
 ```
   src
@@ -27,7 +27,7 @@ Para el desarrollo de la Aplicación, utilizamos models y formularios reactivos 
 ```
 ---
 ## Seguridad 
-La seguridad de la Aplicación se basa en la utilización de un AuthGuard y un RoleGuard, para la protección de rutas dentro de la web. Tambien se implementó un AuthInterceptor, el cual verifica que el token de inicio de sesión no este caducado o sea invalido. Por otra parte, un AuthService el cual contiene metodos para obtener y eliminar el token de sesión el cual se almacena dentro del Local Storage del navegador, entre otros. Y Por ultimo, utilización de un errorHandler para podes usar todas las validaciones ya hechas dentro del backEnd.
+La seguridad de la Aplicación se basa en la utilización de un AuthGuard y un RoleGuard, para la protección de rutas dentro de la web. Tambien se implementó un AuthInterceptor, el cual intercepta las peticiones HTTP, verificando que el token de inicio de sesión no este caducado o sea invalido.
 
 ---
 
