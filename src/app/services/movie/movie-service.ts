@@ -62,6 +62,13 @@ export class MovieService {
     return this.http.get<Movie>(`/api/movies/bd/${id}`);
   }
 
+  updateMovie(id: string, movie: Movie) {
+    if (!this.authService.isAdmin()) {
+      console.error('Se requiere rol ADMIN.');
+      return throwError(() => new Error('Acceso Denegado: Rol insuficiente.'));
+    } 
+    return this.http.put<Movie>(`/api/movies/update/${id}`, movie);
+  }
 
 
 }

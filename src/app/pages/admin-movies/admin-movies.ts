@@ -2,15 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import Movie from '../../models/movie';
 import { MovieService } from '../../services/movie/movie-service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
+import { DecimalPipe } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-movies',
-  imports: [FormsModule],
+  imports: [FormsModule, DecimalPipe, ReactiveFormsModule],
   templateUrl: './admin-movies.html',
   styleUrl: './admin-movies.css',
 })
@@ -20,24 +22,111 @@ export class AdminMovies implements OnInit{
   nombreInput: string = '';
   selectedMovie?: Movie; 
   mostrarAgregar : boolean = false;
+  editMode: boolean = false;
+  movieForm!: FormGroup;   
+  movieIsFromDb: boolean = false;
 
-  constructor(public movieService: MovieService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler) {}
+  constructor(public movieService: MovieService, public authService: AuthService, private toastr: ToastrService, private errorHandlerService: ErrorHandler,private fb: FormBuilder     ) {}
 
+   // ========================
+  // FORM INIT / PATCH
+  // ========================
+  private buildForm(): void {
+    this.movieForm = this.fb.group({
+      title: ['', [Validators.required, Validators.maxLength(100)]],
+      adult: [false],
+      posterUrl: [''],
+      bannerUrl: [''], 
+      genres: [Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúñÑ ,]+$/)],   
+      overview: ['', Validators.maxLength(2000)],
+    });
+  }
+
+  private patchForm(movie: Movie): void {
+    this.movieForm.patchValue({
+      title: movie.title,
+      adult: movie.adult,
+      runtime: movie.runtime,
+      posterUrl: (movie as any).posterUrl || '',
+      bannerUrl: (movie as any).bannerUrl || '',
+      genres: movie.genres ? movie.genres.join(', ') : '',
+      overview: movie.overview,
+    });
+  }
+
+  toggleEditar(): void {
+    this.editMode = !this.editMode;
+
+    if (this.editMode && this.selectedMovie) {
+      if (!this.movieForm) {
+        this.buildForm();
+      }
+      this.patchForm(this.selectedMovie);
+    }
+  }
+
+  onSubmitEdit(): void {
+    if (!this.selectedMovie || this.movieForm.invalid) {
+      return;
+    }
+
+    const formValue = this.movieForm.value;
+
+    // Transformar géneros string -> array
+    const genresArray = formValue.genres
+      ? (formValue.genres as string)
+          .split(',')
+          .map(g => g.trim())
+          .filter(g => g.length > 0)
+      : [];
+
+    const updatedMovie: any = {
+      ...this.selectedMovie,
+      title: formValue.title,
+      adult: formValue.adult,
+      overview: formValue.overview,
+      genres: genresArray,
+      posterUrl: formValue.posterUrl,
+      bannerUrl: formValue.bannerUrl
+    };
+
+    this.movieService.updateMovie(this.selectedMovie.id.toString(), updatedMovie).subscribe({
+      next: (data) => {
+        this.toastr.success('Película actualizada correctamente.');
+        this.selectedMovie = data;     // refrescamos detalles
+        this.patchForm(this.selectedMovie);
+        this.editMode = false;
+        this.getAllMovies();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errorHandlerService.handleHttpError(error);
+      }
+    });
+  }
 
   seleccionar(id: string) {
     this.getMovieById(id);
     this.mostrarAgregar = true;
+    this.editMode = false;
+    this.movieIsFromDb = false; 
   }
 
-  seleccionarBD(id:string){
+  seleccionarBD(id: string) {
     this.movieService.getMovieBd(id).subscribe({
-      next: (data) => { this.selectedMovie = data;
+      next: (data) => {
+        this.selectedMovie = data;
         this.mostrarAgregar = true;
+        this.editMode = false;
+        this.movieIsFromDb = true; 
+        if (!this.movieForm) {
+          this.buildForm();
+        }
+        this.patchForm(this.selectedMovie!);
       },
       error: (error: HttpErrorResponse) => {
-        this.errorHandlerService.handleHttpError(error);  
+        this.errorHandlerService.handleHttpError(error);
       }
-    })
+    });
   }
 
   getMovieById(id:string){
@@ -96,27 +185,55 @@ export class AdminMovies implements OnInit{
     this.mostrarAgregar = false;
   }
 
-  esArray(valor: any): boolean {
-    return Array.isArray(valor);
+
+
+/* método DELETE con confirmación */
+async eliminarDeCartelera(id: string, titulo: string) {
+  if (!id) return;
+
+  const result = await Swal.fire({
+    title: 'Confirmar eliminación',
+    html: `¿Eliminar la película <b>"${titulo}"</b> de la cartelera?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Eliminar',
+    cancelButtonText: 'Cancelar'
+  });
+
+  // Si el usuario cancela
+  if (!result.isConfirmed) {
+    this.toastr.error('Eliminación cancelada por el usuario.');
+    return;
   }
 
+  this.movieService.deleteMovie(id).subscribe({
+    next: () => {
+      this.toastr.success('Película eliminada correctamente.');
 
-  eliminarDeCartelera(id : string){
-    this.movieService.deleteMovie(id).subscribe({
-      next: () => {
-        this.getAllMovies();
-        this.toastr.success("Película eliminada correctamente.");
-
-      },
-      error: (error: HttpErrorResponse) => {
-        this.errorHandlerService.handleHttpError(error);  
+      // Si justo estabas viendo esa película, limpiamos el panel derecho
+      if (this.selectedMovie && this.selectedMovie.id.toString() === id) {
+        this.selectedMovie = undefined;
+        this.mostrarAgregar = false;
+        this.editMode = false;
       }
-  })
+
+      this.getAllMovies();
+    },
+    error: (error: HttpErrorResponse) => {
+      this.errorHandlerService.handleHttpError(error);
+    }
+  });
 }
+
+
   
 
   ngOnInit(): void {
+    this.buildForm();
     this.getAllMovies();
+    
   }
 
 }
