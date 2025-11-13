@@ -45,7 +45,7 @@ main {
 .ticket-section {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     gap: 2em;
     margin: 3em 3em 0 3em;
 }
@@ -61,6 +61,7 @@ main {
     align-items: center;
     flex-direction: column;
     gap: 20px;
+    border-radius: 5px;
 
     text-align: center;
 }
@@ -152,7 +153,7 @@ main {
 /* DIV DE SALA CON MAPA DE BUTACAS -------------------------------------------------------------------- */
 
 .div-sala {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(37, 37, 37);
     min-height: 400px;
     border-radius: 5px;
     padding: 1em 3em 2em 3em;
@@ -214,8 +215,8 @@ main {
 
 /* 3. Butacas Disponibles (Base: Blanco/Gris) */
 .disponible {
-    background-color: #272727; 
-    border-color: #c0e0ff;
+    background-color: #161616; 
+    border-color: #6d6d6d;
 }
 
 /* 4. Efecto Hover (Azul) - Se aplica SÓLO si está disponible */

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pelicula } from '../../models/pelicula';
 import { TicketService } from '../../services/ticket/ticket-service';
@@ -20,6 +20,9 @@ export class TicketStep2 implements OnInit {
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
   funciones: Funcion[] | undefined;
+
+  // Signal para mostrar mensajes de error en la UI
+  errorMessage: WritableSignal<string | null> = signal(null);
 
   constructor(
     private location: Location,
@@ -87,6 +90,12 @@ export class TicketStep2 implements OnInit {
     
     if (!this.peliculaSeleccionada) return;
     if (!this.funcionSeleccionada) return;
+
+    // Lógica de confirmación:
+    if (this.funcionSeleccionada === undefined) {
+      this.errorMessage.set("ERROR: Seleccione al menos una butaca para continuar.");
+      return;
+    }
 
     // Setear la funcion elegida
     this.ticketService.setFuncion(this.funcionSeleccionada);

@@ -17,39 +17,39 @@
             adult: Boolean;
         }-->
         @if (peliculaSeleccionada; as peli) {
-        <section class="section-img">
-            <div class="div-marco">
-                <img class="img-marco" src="/img/details/marco_movie.png" alt="Imagen del marco png">
-            </div>
-            <div class="div-img">
-                <img class="img-peli" [src]="peli.posterUrl" alt=" peli.title ">
-            </div>
-        </section>
-        <section class="section-details font-open-sans">
-            <div class="div-details">
-                <h1 class="title-peli" title="{{ peli.title }}"> {{ peli.title }} </h1>
-                <h3 class="genre-peli">
-                    @for (g of peli.genres; track $index) {
-                    {{ g.toString() }} |
-                    }
-                </h3>
-                <h4 class="runtime-peli">Duracion {{ peli.runtime }} mins.</h4>
-                <p class="description-peli">{{ peli.overview }}</p>
-                <h5 class="release-peli">Estrenada el {{ peli.releaseDate }}</h5>
+            <section class="section-img">
+                <div class="div-marco">
+                    <img class="img-marco" src="/img/details/marco_movie.png" alt="Imagen del marco png">
+                </div>
+                <div class="div-img">
+                    <img class="img-peli" [src]="peli.posterUrl" alt=" peli.title ">
+                </div>
+            </section>
+            <section class="section-details font-open-sans">
+                <div class="div-details">
+                    <h1 class="title-peli" title="{{ peli.title }}"> {{ peli.title }} </h1>
+                    <h3 class="genre-peli">
+                        @for (g of peli.genres; track $index) {
+                        {{ g.toString() }} |
+                        }
+                    </h3>
+                    <h4 class="runtime-peli">Duracion {{ peli.runtime }} mins.</h4>
+                    <p class="description-peli">{{ peli.overview }}</p>
+                    <h5 class="release-peli">Estrenada el {{ peli.releaseDate }}</h5>
 
-            </div>
-            <div class="div-funciones">
-                <h1 class="title-function">PROYECCIONES</h1>
-                <h4 class="age-peli">APTA PARA MAYORES DE +13</h4>
-                <ul class="lista-funciones">
-                    @for (f of funciones; track f.id) {
-                        <li class="funcion">
-                            {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — {{ f.cinemaName }}
-                        </li>
-                    }
-                </ul>
-            </div>
-        </section>
+                </div>
+                <div class="div-funciones">
+                    <h1 class="title-function">PROYECCIONES</h1>
+                    <h4 class="age-peli">APTA PARA MAYORES DE +13</h4>
+                    <ul class="lista-funciones">
+                        @for (f of funciones; track f.id) {
+                            <li class="funcion">
+                                {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — {{ f.cinemaName }}
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
         }
     </div>
 

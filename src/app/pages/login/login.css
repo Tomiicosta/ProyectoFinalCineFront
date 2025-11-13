@@ -44,20 +44,20 @@
   gap: 32px;
 }
 
-.UserField{
+.UserField {
   display: flex;
   flex-direction: column;
   gap: 12px;
   border: none;
-  
+
 }
 
 .PasswordField {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    border: none;
-    /* Asegúrate de que el fieldset ocupe el ancho correcto si es necesario */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: none;
+  /* Asegúrate de que el fieldset ocupe el ancho correcto si es necesario */
 }
 
 label {
@@ -115,12 +115,13 @@ input:focus {
   border-radius: 20px;
   padding: 16px;
   gap: 8px;
+  color: white;
   border: 2px solid black;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   font-size: 14px;
- 
+
 
 }
 
@@ -141,37 +142,60 @@ input:focus {
 
 }
 
-.error-message{
+.error-message {
   color: white;
 }
 
 .password-input-wrapper {
-    position: relative; 
-    width: 100%; 
+  position: relative;
+  width: 100%;
 }
 
-.cambiarCampo{
-    display: flex;
-    justify-content: center ;
-    position: absolute; 
-    
-    left: 85%;
-    
-   
-    top: 50%; 
-    transform: translateY(-50%);
-    
-    padding: 0%;
-    margin: 0%;
-  
-    cursor: pointer; 
-  
-    color: #eaeaea;
+.cambiarCampo {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+
+  left: 85%;
+
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  padding: 0%;
+  margin: 0%;
+
+  cursor: pointer;
+
+  color: #eaeaea;
 }
 
-.im{
+.im {
   display: flex;
 
   height: 40%;
   width: 40%;
+}
+
+@media (max-width: 700px) {
+
+  .container {
+    width: 95%;
+    border-radius: 20px;
+    gap: 35px;
+    padding: 50px 0;
+  }
+
+  .registerForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 80%;
+  }
+
+  .btnLogin {
+    width: 60%;
+    height: 40px;
+  }
+
 }
