@@ -1,8 +1,6 @@
 <header>
   <div class="container font-inter" [class.menu-abierto]="menuAbierto">
-    <div class="logo">
-      <img src="/img/logo/logo.png" alt="Logo cine">
-    </div>
+    <div class="logo"><img src="/img/logo/logo.png" alt="Logo cine"></div>
 
     <button class="menu-toggle" (click)="toggleMenu()">☰</button>
 
@@ -11,8 +9,17 @@
         <li><a class="nav-a" routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
         <li><a class="nav-a" routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li>
 
-        @if (authService.isLoggedIn()) {
-          <li class="btnLogin"><a (click)="onLogout(); cerrarMenu()" routerLink="/">Cerrar Sesión</a></li>
+        @if(authService.isLoggedIn()) {
+          <li class="profile-menu" [class.open]="perfilMenuAbierto">
+            <button class="profile-btn" (click)="togglePerfilMenu($event)">
+              <img src="/img/icons/profile.svg" alt="Perfil">
+            </button>
+
+            <ul class="profile-dropdown">
+              <li><a routerLink="/profile" (click) = "onVerPerfil()">Ver perfil</a></li>
+              <li><button (click)="onLogoutClick()">Cerrar sesión</button></li>
+            </ul>
+          </li>
         } @else {
           <li class="btnLogin"><a routerLink="/login" (click)="cerrarMenu()">Iniciar sesión</a></li>
         }

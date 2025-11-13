@@ -12,6 +12,7 @@ import { AdminFunciones } from './pages/admin-funciones/admin-funciones';
 import { AdminSalas } from './pages/admin-salas/admin-salas';
 import { RoleGuard } from './guards/roleGuard';
 import { TicketStep4 } from './pages/ticket-step4/ticket-step4';
+import { Perfil } from './pages/perfil/perfil';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -24,6 +25,7 @@ export const routes: Routes = [
     {path: 'ticket/step3', component: TicketStep3},
     {path: 'ticket/step4', component: TicketStep4},
     {path: 'details/:id', component: MovieDetails},
+    {path: 'profile', component: Perfil},
     {path: 'adminMovies',component: AdminMovies, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminFunciones',component: AdminFunciones, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminSalas',component:AdminSalas, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
