@@ -116,6 +116,12 @@ main {
   font-weight: bold;
   cursor: pointer;
   z-index: 10;
+  transition: 0.3s all ;
+}
+
+#next:hover,
+#prev:hover {
+  color: rgb(255, 228, 78);
 }
 
 #prev {

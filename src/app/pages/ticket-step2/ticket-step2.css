@@ -301,6 +301,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 1em;
   }
 
   .div-img {
@@ -313,7 +314,7 @@ main {
     border-radius: 10px;
   }
 
-  /* ASIDE INFO PELICULA (VER MAS) --------------------------------------------------------------- */
+  /* ASIDE --------------------------------------------------------------- */
   .banner {
     display: flex;
     flex-direction: column;
@@ -321,11 +322,6 @@ main {
     align-items: center;
     padding: 15px;
     gap: 20px;
-  }
-
-  .about-peli {
-    max-width: 330px;
-    font-size: 0.9rem;
   }
 
   /* BOTONES (SIGUIENTE) - (VOLVER)*/
