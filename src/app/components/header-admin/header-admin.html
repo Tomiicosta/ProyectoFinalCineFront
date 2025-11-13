@@ -15,7 +15,17 @@
           <li><a class="nav-a" routerLink="/adminMovies" (click)="cerrarMenu()">Cartelera</a></li>
           <li><a class="nav-a" routerLink="/adminSalas" (click)="cerrarMenu()">Salas</a></li>
           <li><a class="nav-a" routerLink="/adminFunciones" (click)="cerrarMenu()">Funciones</a></li>
-          <li class="btnLogin"><a (click)="onLogout()" routerLink="/">Perfil</a></li>
+          <li class="profile-menu" [class.open]="perfilMenuAbierto">
+            <button class="profile-btn" (click)="togglePerfilMenu($event)">
+              <img src="/img/icons/profile.svg" alt="Perfil">
+            </button>
+
+            <ul class="profile-dropdown">
+              <li><a routerLink="/profile" (click) = "onVerPerfil()">Ver perfil</a></li>
+              <li><button (click)="onLogoutClick()">Cerrar sesión</button></li>
+            </ul>
+          </li>
+        
         </ul>
       </div>
     </nav>
