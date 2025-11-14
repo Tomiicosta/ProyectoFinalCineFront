@@ -1,41 +1,3 @@
-<!-- <main>
-    <section class="ticket-info font-open-sans">
-        <h1 class="info"><span class="color">REALIZA</span> TU <span class="color">OPERACIÓN</span></h1>
-        <h1 class="step">PASO <span class="step-num">4</span></h1>
-    </section>
-
-    <section class="ticket-section font-inter">
-        
-        <div *ngIf="compraInfo">
-            <h3>Resumen de la Compra</h3>
-            <p>Producto: {{ compraInfo.nombre }}</p>
-            <hr>
-            
-            <ng-container *ngIf="usuarioLogueado; else mensajeNoLogueado">
-                <button 
-                    (click)="iniciarPago()" 
-                    class="btn btn-primary"
-                    [disabled]="!compraInfo.preferenceId">
-                    Ir a Pagar
-                </button>
-                <small class="form-text text-muted">Serás redirigido al entorno seguro de Mercado Pago.</small>
-            </ng-container>
-        
-            <ng-template #mensajeNoLogueado>
-                <div class="alert alert-warning" role="alert">
-                    <b>Debes iniciar sesión</b> para continuar con la compra.
-                </div>
-                <button (click)="redirigirALogin()" class="btn btn-success">
-                    Iniciar Sesión
-                </button>
-            </ng-template>
-        </div>
-        
-    </section>
-
-</main> -->
-
-
 <main>
     <!-- Panel Principal -->
     <section class="ticket-info font-open-sans">
@@ -45,7 +7,7 @@
         <h1 class="step">PASO <span class="step-num">4</span></h1>
     </section>
 
-    
+
     <section class="ticket-section font-inter">
         <!-- Panel de Información (igual al del paso 3) -->
         @if (peliculaSeleccionada && funcionSeleccionada) {
@@ -65,7 +27,7 @@
                 <p class="num-butacas"><b>{{ compra?.quantity }}</b></p>
 
                 <p><b>Butacas:</b></p>
-                <p>{{ compra?.seats }}</p>
+                <p id="list-butacas">{{ compra?.seats }}</p>
             </div>
 
             <button class="btn-reiniciar" (click)="volverASeleccionButacas()">
@@ -77,7 +39,7 @@
 
         <!-- Panel de Pago -->
         <div class="div-operacion">
-            <h3 class="operacion-title font-open-sans">FINALIZA TU OPERACIÓN</h3>
+            <h3 class="operacion-title font-open-sans"><span> FINALIZA TU OPERACIÓN </span></h3>
             <p class="operacion-desc">
                 Para completar la operación revise todos los datos de su compra, tanto de la pelicula, dia, horario y asientos seleccionados. Luego presione el botón FINALIZAR.
             </p>
@@ -86,12 +48,12 @@
                 <p><b>Película:</b> {{ peliculaSeleccionada?.title }}</p>
                 <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada!.date) }}</p>
                 <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada!.time) }} hs</p>
-                <p><b>Entradas:</b> {{ compra?.seats }}</p>                
-                <p><b>Precio:</b> {{ compra?.unitPrice }}</p>
+                <p id="list-butacas"><b>Entradas:</b> {{ compra?.seats }}</p>                
+                <p><b>Precio:</b> ${{ compra?.unitPrice }}</p>
                 <p><b>Total a Pagar:</b> ${{ calcularTotal() }}</p>
             </div>
 
-            <div class="tipo-operacion">
+            <div class="terminos-container">
                 <h4 class="font-open-sans">Confirmar Operación</h4>
 
                 <label class="radio-option">

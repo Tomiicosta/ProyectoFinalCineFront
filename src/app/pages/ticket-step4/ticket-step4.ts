@@ -203,6 +203,8 @@ export class TicketStep4 implements OnInit {
       this.router.navigate(['/confirmacion-reserva']);
     }
   }
+
+  
 }
 
 
