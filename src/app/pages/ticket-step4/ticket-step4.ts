@@ -29,6 +29,7 @@ export class TicketStep4 implements OnInit {
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
   compra! : Compra | undefined;
+  totalButacasSeleccionadas : number = 0;
 
   // Signal para mostrar mensajes de error en la UI
   errorMessage: WritableSignal<string | null> = signal(null);
@@ -53,6 +54,10 @@ export class TicketStep4 implements OnInit {
 
 
   ngOnInit(): void {
+
+    this.totalButacasSeleccionadas = this.ticketService.totalButacas;
+  
+    this.ticketService
     //  Verificar sesión
     this.usuarioLogueado = this.authService.isLoggedIn();
     //  Cargar datos
@@ -63,7 +68,8 @@ export class TicketStep4 implements OnInit {
       console.warn('No se encontraron datos de película o función seleccionadas.');
       return;
     }
-
+ 
+    this.butacasFilasLetras = this.ticketService.getButacasFilasLetras();
     //  Obtener sala
     this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
       next: (data) => this.cinemaService.selectedSala = data,
@@ -132,11 +138,11 @@ export class TicketStep4 implements OnInit {
       functionId: this.compra.functionId
     };
 
-    console.log('Payload enviado:', payload);
+    
 
     this.pagoService.crearPreferencia(payload).subscribe({
       next: (response) => {
-        console.log('Respuesta del backend:', response);
+        
 
         // Inicializar Mercado Pago una sola vez
         const mp = this.pagoService.inicializarMercadoPago();
