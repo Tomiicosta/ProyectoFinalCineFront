@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { TicketService } from '../../services/ticket/ticket-service';
 import { PaymentService } from '../../services/payment/payment-service';
@@ -10,6 +10,7 @@ import { FunctionService } from '../../services/function/function-service';
 import { CinemaService } from '../../services/cinema/cinema-service';
 import { Compra } from '../../models/compra';
 import { FormsModule } from '@angular/forms';
+import { Butaca } from '../../models/butaca';
 
 // declarar MercadoPago globalmente
 declare var MercadoPago: any;
@@ -85,9 +86,18 @@ export class TicketStep4 implements OnInit {
 
   }
 
-
+  
+  // Obtiene los datos de la compra
   getCompra(){
     this.compra = this.ticketService.getCompra();
+  }
+
+
+  /**
+   *  Devuelve la cantidad de butacas seleccionadas
+   */
+  getTotalButacas():number{
+    return this.compra?.seats.length ?? 0;
   }
 
 

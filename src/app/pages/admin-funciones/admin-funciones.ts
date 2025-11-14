@@ -184,7 +184,7 @@ export class AdminFunciones {
         this.toastr.success("Función eliminada correctamente.");
       },
       error: (error: HttpErrorResponse) => {
-       this.errorHandlerService.handleHttpError(error);  
+       this.toastr.error('No se puede eliminar una función con tickets vendidos.');  
       }
     });
   }
