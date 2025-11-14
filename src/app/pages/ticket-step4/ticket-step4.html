@@ -59,7 +59,8 @@
                 <h4 class="font-open-sans">Confirmar Operación</h4>
 
                 <label class="radio-option">
-                    <input type="radio" name="tipo" value="compra" [(ngModel)]="confirmacion" /> Acepto terminos y condiciones. Una vez realizada la compra, la transacción no puede ser revertida.</label>
+                    <input type="radio" name="tipo" value="compra" [(ngModel)]="confirmacion" /> Acepto terminos y condiciones. Una vez realizada la compra, la transacción no puede ser revertida.
+                </label>
             </div>
 
             @if (usuarioLogueado) {
@@ -83,7 +84,7 @@
                 id="btn-step"
                 class="btn-pago"
                 (click)="iniciarPago()"
-                [disabled]="!usuarioLogueado || confirmacion !== 'compra'">
+                >
                 <img
                 id="img-btn"
                 src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.20.1/mercadopago/logo__small.png"
@@ -101,6 +102,12 @@
             }
 
             <button id="btn-back" class="" (click)="volverAtras()">ATRÁS</button>
+        
+            @if (errorMessage()) {
+                <div class="div-error ">
+                {{ errorMessage() }}
+                </div>
+            }
         </div>
     </aside>
 </main>
