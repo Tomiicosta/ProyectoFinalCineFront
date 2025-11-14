@@ -23,8 +23,10 @@
             </div>
 
             <div class="div-butacas">
-                <p><b>Asientos Seleccionados:</b></p>
-                <p class="num-butacas"><b>{{ compra?.quantity }}</b></p>
+                <p>
+                    <b>Asientos Seleccionados:</b>
+                </p>
+                <p class="num-butacas"><b>{{ getTotalButacas() }}</b></p>
 
                 <p><b>Butacas:</b></p>
                 <p id="list-butacas">{{ compra?.seats }}</p>
