@@ -24,10 +24,10 @@
 
             <div class="div-butacas">
                 <p><b>Asientos Seleccionados:</b></p>
-                <p class="num-butacas"><b>{{ compra?.quantity }}</b></p>
+                <p class="num-butacas"><b>{{ totalButacasSeleccionadas }}</b></p>
 
                 <p><b>Butacas:</b></p>
-                <p id="list-butacas">{{ compra?.seats }}</p>
+                <p id="list-butacas">{{ butacasFilasLetras }}</p>
             </div>
 
             <button class="btn-reiniciar" (click)="volverASeleccionButacas()">

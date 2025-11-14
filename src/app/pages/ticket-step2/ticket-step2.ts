@@ -88,7 +88,7 @@ export class TicketStep2 implements OnInit {
   // Guardar datos de la función seleccionada
   seleccionarFuncion(f: Funcion) {
     this.funcionSeleccionada = f;
-    console.log("Función seleccionada:", this.funcionSeleccionada);
+    
   }
 
   // Lógica de confirmación e ir al paso 3
