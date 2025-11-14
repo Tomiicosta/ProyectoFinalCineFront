@@ -106,4 +106,28 @@
         </div>
 
     </aside>
+
+    <!-- MODAL DE LOGIN REQUERIDO -->
+    @if (mostrarModalLogin) {
+        <div class="modal-backdrop">
+            <div class="modal-box font-inter">
+
+                <h2 class="modal-title">Inicia sesión</h2>
+                <p class="modal-text">
+                    Debes haber iniciado sesión primero para continuar con el proceso de compra.
+                </p>
+
+                <button class="btn-login" (click)="redirigirLogin()" [disabled]="cargandoRedireccion">
+
+                    @if (!cargandoRedireccion) {
+                        Iniciar Sesión
+                    } @else {
+                        <span class="spinner"></span> Redireccionando...
+                    }
+                </button>
+
+            </div>
+        </div>
+    }
+
 </main>
