@@ -30,7 +30,8 @@ export class TicketStep4 implements OnInit {
   funcionSeleccionada: Funcion | undefined;
   compra! : Compra | undefined;
   totalButacasSeleccionadas : number = 0;
-
+  butacasFilasLetras: string = ''; // un solo string
+  
   // Signal para mostrar mensajes de error en la UI
   errorMessage: WritableSignal<string | null> = signal(null);
 
