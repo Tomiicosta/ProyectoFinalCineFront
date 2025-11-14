@@ -66,7 +66,7 @@ export class AdminSalas {
     if (this.salaForm.valid) {
       const nuevaSala = this.salaForm.value;
 
-      console.log('Nueva sala:', nuevaSala);
+      
 
       this.cinemaService.postSala(nuevaSala).subscribe({
         next: () => {

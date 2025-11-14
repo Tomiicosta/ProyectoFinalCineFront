@@ -171,7 +171,6 @@ export class AdminMovies implements OnInit{
   manejarEnvio(id:string){
     this.movieService.postMovie(id).subscribe({
       next: (data) => {
-        console.log(data);
         this.toastr.success("Película agregada correctamente a la cartelera.");
       this.getAllMovies();},
       error: (error: HttpErrorResponse) => {

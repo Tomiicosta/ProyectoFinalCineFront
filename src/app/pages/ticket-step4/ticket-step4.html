@@ -48,7 +48,7 @@
                 <p><b>Película:</b> {{ peliculaSeleccionada?.title }}</p>
                 <p><b>Fecha:</b> {{ formatearFecha(funcionSeleccionada!.date) }}</p>
                 <p><b>Hora:</b> {{ formatearHora(funcionSeleccionada!.time) }} hs</p>
-                <p id="list-butacas"><b>Entradas:</b> {{ compra?.seats }}</p>                
+                <p id="list-butacas"><b>Entradas:</b> {{ butacasFilasLetras }}</p>                
                 <p><b>Precio:</b> ${{ compra?.unitPrice }}</p>
                 <p><b>Total a Pagar:</b> ${{ calcularTotal() }}</p>
             </div>

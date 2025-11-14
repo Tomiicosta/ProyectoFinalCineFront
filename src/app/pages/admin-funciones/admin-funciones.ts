@@ -107,7 +107,7 @@ export class AdminFunciones {
   verDetalleFuncion(f: Funcion) {
     this.selectedFuncion = null;
     this.detalleFuncion = f;
-    console.log(f)
+    
     
   }
 

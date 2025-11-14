@@ -55,7 +55,7 @@ export class Register {
 
       this.authService.register(userData).subscribe({
         next: (response) => {
-          console.log('Registro exitoso:', response);
+
           this.toastr.success("¡Ya estas registrado!");
 
           this.router.navigate(['/login']);
