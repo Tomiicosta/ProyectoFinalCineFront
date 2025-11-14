@@ -79,7 +79,6 @@ export class TicketService {
       next: (data) => {
         // Almacena los datos recibidos en la variable privada
         this.peliculas = data;
-        console.log('Películas cargadas y almacenadas:', this.peliculas);
       },
       error: (error) => {
         console.error('Error al obtener las películas:', error);

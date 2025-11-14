@@ -278,7 +278,7 @@ export class  Perfil implements OnInit {
     this.functionService.getFuncionById(this.selectedTicket.funcionId).subscribe({
       next: (data: Funcion) => {
         this.selectedFuncion = data;
-        console.log('FUNCION CARGADA:', data);
+        
       },
       error: (err) => console.error('Error cargando función:', err)
     });
@@ -297,7 +297,7 @@ export class  Perfil implements OnInit {
       });
     });
 
-    console.log('SELECTED TICKET:', this.selectedTicket);
+    
   }
 
 
