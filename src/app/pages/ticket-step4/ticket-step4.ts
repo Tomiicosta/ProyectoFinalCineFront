@@ -31,7 +31,8 @@ export class TicketStep4 implements OnInit {
   compra! : Compra | undefined;
   totalButacasSeleccionadas : number = 0;
 
-  butacasFilasLetras: string = ''; // un solo string
+  // Signal para mostrar mensajes de error en la UI
+  errorMessage: WritableSignal<string | null> = signal(null);
 
   compraInfo: any = {
     nombre: '',
@@ -105,17 +106,22 @@ export class TicketStep4 implements OnInit {
    *  Se ejecuta al hacer clic en "FINALIZAR"
    */
   iniciarPago(): void {
+    // Seguimiento en consola
+    console.log('FINALIZAR PRESIONADO', this.compra)
     
+    // Limpia error previo
+    this.errorMessage.set(null); 
+    
+    if(this.confirmacion !== 'compra'){
+      this.errorMessage.set('Debe aceptar los terminos y condiciones antes de terminar.');
+      return;
+    }
 
     if (!this.usuarioLogueado) {
       this.redirigirALogin();
       return;
     }
 
-    if (this.confirmacion !== 'compra') {
-      alert('Debes aceptar los términos y condiciones antes de continuar.');
-      return;
-    }
 
     if (!this.compra) {
       console.error('No hay datos de compra disponibles.');
