@@ -5,12 +5,29 @@
 
     <section id="buscarId">
       <form>
-        <input id="inputNombre" name="nombreInput" placeholder="Buscar pelicula" type="string"
-          [(ngModel)]="nombreInput" />
-        <button type="button" (click)="getMoviesByName(nombreInput)" [disabled]="!authService.isAdmin()">
+        <input
+          id="inputNombre"
+          name="nombreInput"
+          placeholder="Buscar pelicula"
+          type="text"
+          [(ngModel)]="nombreInput"
+          (keyup.enter)="getMoviesByName(nombreInput)"
+        />
+    
+        <button
+          type="button"
+          (click)="getMoviesByName(nombreInput)"
+          [disabled]="!authService.isAdmin()">
           Buscar
         </button>
-        <button class="btn-volver" (click)="getAllMovies()" [disabled]="!authService.isAdmin()">Volver</button>
+    
+        <button
+          class="btn-volver"
+          type="button"
+          (click)="getAllMovies()"
+          [disabled]="!authService.isAdmin()">
+          Volver
+        </button>
       </form>
     </section>
 
