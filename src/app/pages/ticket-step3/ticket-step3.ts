@@ -46,6 +46,9 @@ export class TicketStep3 implements OnInit {
   salaSeleccionada: Sala | undefined;
   userSeleccionado!: User | null;
 
+  mostrarModalLogin = false;
+  cargandoRedireccion = false;
+
   constructor(
     private location: Location,
     private router: Router,
@@ -55,7 +58,7 @@ export class TicketStep3 implements OnInit {
     private userService: UserService,
     private toastr: ToastrService
 
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // La lógica de inicialización es NECESARIA para que no se cargue el HTML antes que el mapa de butacas
@@ -142,6 +145,7 @@ export class TicketStep3 implements OnInit {
     this.errorMessage.set(null);
   }
 
+  // boton para confirmar el paso 3
   confirmarPaso3(): void {
 
     if (!this.peliculaSeleccionada || !this.funcionSeleccionada) return;
@@ -159,51 +163,62 @@ export class TicketStep3 implements OnInit {
     // Opcional: ver en consola qué se está mandando
     console.log('SEATS SELECCIONADOS:', seatsSeleccionados);
     console.log('BUTACAS OBJETO:', this.butacasSeleccionadas());
-    
+
     this.userService.getMyProfile().subscribe({
       next: (data: User) => {
-      this.userSeleccionado = data;
-      console.log('PROFILE CARGADO:', data);
+        this.userSeleccionado = data;
+        console.log('PROFILE CARGADO:', data);
 
-      // Arma el ticket SOLO después de tener el usuario
-      this.ticketService.setCompra({
-        title: "Entrada de cine",
-        description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title + 
-                    " en " + this.funcionSeleccionada?.cinemaName,
-        userEmail: data.email,   // ---> AHORA SÍ EXISTE
-        quantity: 1,
-        unitPrice: this.ticketService.salaActual?.price || 0,
-        functionId: this.funcionSeleccionada?.id || 0,
-        seats: seatsSeleccionados
-      });
+        // Arma el ticket SOLO después de tener el usuario
+        this.ticketService.setCompra({
+          title: "Entrada de cine",
+          description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title +
+            " en " + this.funcionSeleccionada?.cinemaName,
+          userEmail: data.email,   // ---> AHORA SÍ EXISTE
+          quantity: 1,
+          unitPrice: this.ticketService.salaActual?.price || 0,
+          functionId: this.funcionSeleccionada?.id || 0,
+          seats: seatsSeleccionados
+        });
 
-      console.log('ticket:', this.ticketService.getCompra());
+        console.log('ticket:', this.ticketService.getCompra());
 
-      this.router.navigate(['/ticket/step4']);
-    },
-    error: (err) => {
-      let httpError = err;
-        
-      if( httpError.status = 403){
-          this.toastr.error("Debes estar loggeado para ingresar")
-          this.router.navigate(['/login']);
+        this.router.navigate(['/ticket/step4']);
+      },
+      error: (err) => {
+
+        if (err.status === 403) {
+          this.mostrarModalLogin = true;   // muestra el modal
+          return;
+        }
+
+        console.error(err);
+
       }
-
-    }
     });
   }
 
+  // boton para volver atras
   volverAtras(): void {
     this.location.back();
   }
 
-  // Formatear butaca.rowNumber a un indice de fila "A","B","C",etc..
+  // boton para confirmar inicio de sesion si esta deslogueado
+  redirigirLogin() {
+    this.cargandoRedireccion = true;
+
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 1200); // efecto de cargando (1000 = 1seg)
+  }
+
+  // funcion auxiliar: Formatear butaca.rowNumber a un indice de fila "A","B","C",etc..
   getFilaLetra(seatRowNumber?: number): string {
     if (seatRowNumber == null) return '';           // retorna vacío si no hay dato
     return String.fromCharCode(64 + seatRowNumber); // rowNumber es 1-based -> 1 => 'A'
   }
 
-  // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
+  // funcion auxiliar: Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
   formatearFecha(fecha: string): string {
     const [year, month, day] = fecha.split('-').map(Number);
     const dateObj = new Date(year, month - 1, day);
@@ -220,7 +235,7 @@ export class TicketStep3 implements OnInit {
     return fechaFormateada.replace(',', '');
   }
 
-  // Formatear hora: "HH:mm:ss" → "HH:mm"
+  // funcion auxiliar: Formatear hora: "HH:mm:ss" → "HH:mm"
   formatearHora(hora: string): string {
     return hora.slice(0, 5); // corta los segundos
   }
