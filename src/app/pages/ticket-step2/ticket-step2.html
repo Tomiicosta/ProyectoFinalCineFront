@@ -21,12 +21,12 @@
       <div class="div-funciones">
         <h3 class="funciones-title">Elige tu función preferida:</h3>
         <ul class="funciones">
-          @if (funciones) {
+          @if (funciones?.length) {
           @for (f of funciones; track f.id) {
           <li class="funcion" (click)="seleccionarFuncion(f)"
             [style.background]="f.id === funcionSeleccionada?.id ? '#007bff' : ''"
             [style.color]="f.id === funcionSeleccionada?.id ? 'white' : ''">
-            {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — <b>{{ f.cinemaName }}</b>
+            {{ formatearFecha(f.date) }} {{ formatearHora(f.time) }} — <b>{{ f.cinemaName }}</b> — ( Valor: ${{ f.unitPrice || '---' }} )
           </li>
           }
           } @else {

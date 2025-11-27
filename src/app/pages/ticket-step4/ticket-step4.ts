@@ -10,6 +10,7 @@ import { FunctionService } from '../../services/function/function-service';
 import { CinemaService } from '../../services/cinema/cinema-service';
 import { Compra } from '../../models/compra';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user/user';
 
 // declarar MercadoPago globalmente
 declare var MercadoPago: any;
@@ -44,7 +45,8 @@ export class TicketStep4 implements OnInit {
     private router: Router,
     private ticketService: TicketService,
     private functionService: FunctionService,
-    public cinemaService: CinemaService
+    public cinemaService: CinemaService,
+    private userService: UserService
   ) { }
 
 
@@ -52,6 +54,43 @@ export class TicketStep4 implements OnInit {
   ngOnInit(): void {
     //  Verificar sesión
     this.usuarioLogueado = this.authService.isLoggedIn();
+
+    // Verifica si ya habia una compra, pelicula y funcion seleccionada previamente
+    const savedCompra = localStorage.getItem("compra");
+    const savedPelicula = localStorage.getItem("peliculaSeleccionada");
+    const savedFuncion = localStorage.getItem("funcion");
+
+    if (savedCompra && savedPelicula && savedFuncion) {
+      // Setea la Compra previamente definida
+      const compra = JSON.parse(savedCompra);
+      this.ticketService.setCompra(compra);
+      // Setea la pelicula previamente seleccionada
+      const pelicula = JSON.parse(savedPelicula);
+      this.ticketService.setPeliculaSeleccionada(pelicula);
+      // Setea la funcion previamente seleccionada
+      const funcion = JSON.parse(savedFuncion);
+      this.ticketService.setFuncion(funcion);
+    }
+
+    // Intentar obtener usuario
+    this.userService.getMyProfile().subscribe({
+      next: (user) => {
+        // Si está logueado
+        const compra = this.ticketService.getCompra();
+        if (compra) {
+          // SETEA EL EMAIL DEL USUARIO
+          compra.userEmail = user.email;
+          this.ticketService.setCompra(compra);
+        }
+      },
+      error: (err) => {
+        if (err.status === 403) {
+          return;
+        }
+        console.error(err);
+      }
+    });
+
     //  Cargar datos
     this.funcionSeleccionada = this.ticketService.getFuncion();
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada()

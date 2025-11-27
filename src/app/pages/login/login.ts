@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {  FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/user/user';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
 
   tipoDeCampo : boolean = false;
 
@@ -24,8 +25,9 @@ export class Login {
   User: FormControl;
   Password: FormControl;
 
+  returnUrl: string | undefined;
 
-  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) {
+  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService, private route: ActivatedRoute, private userService: UserService) {
     this.User = new FormControl('', Validators.required);
     this.Password = new FormControl('', Validators.required);
 
@@ -33,6 +35,24 @@ export class Login {
       User : this.User,
       Password : this.Password
     })
+  }
+
+  ngOnInit(): void {
+
+    //  Verificar sesión
+    // Intentar obtener usuario
+    this.userService.getMyProfile().subscribe({
+      next: (user) => {
+        // Si está logueado
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+
+    // Recibe el comando previo si ya viene de un step 3 (comprar ticket)
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
   }
 
   onSubmit(): void {
@@ -43,8 +63,16 @@ export class Login {
 
     this.authService.login(this.formLogin.value.User, this.formLogin.value.Password).subscribe({
       next: () => {
+
         this.toastr.success("¡Login exitoso!");
-        this.router.navigate(['/']);
+
+        if (this.returnUrl) {
+          // Redirige a donde venía originalmente el usuario (PASO 3)
+          this.router.navigateByUrl(this.returnUrl);
+        } else {
+          this.router.navigate(['/']);
+        }
+        
       },
       error: () => {
         this.toastr.error('Error de autenticación. Verifica tus credenciales.');

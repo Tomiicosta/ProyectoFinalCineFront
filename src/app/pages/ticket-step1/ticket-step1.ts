@@ -24,16 +24,28 @@ export class TicketStep1 implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    
     this.movieService.getMovies().subscribe({
       next: (data) => {
         // Carga las peliculas en el Ticket Service
         this.ticketService.peliculas = data;
-        // Setea la pelicula seleccionada segun el index y las peliculas
-        this.ticketService.setPeliculaSeleccionada(data[this.ticketService.indexPelicula]);
+
+        // Verifica si ya habia una pelicula seleccionada previamente
+        const saved = localStorage.getItem("peliculaSeleccionada");
+        if (saved) {
+          // Setea la pelicula previamente seleccionada
+          const peli = JSON.parse(saved);
+          this.ticketService.indexPelicula = this.ticketService.peliculas.findIndex( p => p.id === peli.id );
+        } else {
+          // Setea la pelicula seleccionada segun el index y las peliculas
+          this.ticketService.setPeliculaSeleccionada(data[this.ticketService.indexPelicula]);
+        }
+        
         // Setea la descripcion segun la pelicula seleccionada
         this.displayedDescription = this.processDescription(this.ticketService.getPeliculaSeleccionada()?.overview);
       }
     });
+
   }
 
   ngAfterViewInit(): void {
@@ -91,6 +103,8 @@ export class TicketStep1 implements OnInit, AfterViewInit {
         el.style.pointerEvents = 'none';
       }
     }
+
+    
   }
 
   nextSlide() {

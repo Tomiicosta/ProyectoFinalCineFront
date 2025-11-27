@@ -117,10 +117,19 @@
                     Debes haber iniciado sesión primero para continuar con el proceso de compra.
                 </p>
 
-                <button class="btn-login" (click)="redirigirLogin()" [disabled]="cargandoRedireccion">
+                <button class="btn-login" (click)="redirigirLogin()" [disabled]="cargandoRedireccionLogin">
 
-                    @if (!cargandoRedireccion) {
+                    @if (!cargandoRedireccionLogin) {
                         Iniciar Sesión
+                    } @else {
+                        <span class="spinner"></span> Redireccionando...
+                    }
+                </button>
+
+                <button class="btn-login" (click)="redirigirRegister()" [disabled]="cargandoRedireccionRegister">
+
+                    @if (!cargandoRedireccionRegister) {
+                        Registrarme
                     } @else {
                         <span class="spinner"></span> Redireccionando...
                     }

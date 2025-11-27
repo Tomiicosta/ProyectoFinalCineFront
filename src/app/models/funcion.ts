@@ -9,4 +9,5 @@ export interface Funcion {
     movieId: number;
     cinemaName: string;
     cinemaId: number;
+    unitPrice: number; // precio x entrada - funcion
 }
