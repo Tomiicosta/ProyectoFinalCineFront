@@ -2,7 +2,6 @@ import { Component, computed, OnInit, signal, WritableSignal } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router';
 import { TicketService } from '../../services/ticket/ticket-service';
 import { NgClass } from '@angular/common';
-import { Pelicula } from '../../models/pelicula';
 import { Butaca } from '../../models/butaca';
 import { Location } from '@angular/common';
 import { Funcion } from '../../models/funcion';
@@ -47,8 +46,10 @@ export class TicketStep3 implements OnInit {
   salaSeleccionada: Sala | undefined;
   userSeleccionado!: User | null;
 
+  // modal de Login / Register antes del paso 4
   mostrarModalLogin = false;
-  cargandoRedireccion = false;
+  cargandoRedireccionLogin = false;
+  cargandoRedireccionRegister = false;
 
   constructor(
     private location: Location,
@@ -62,6 +63,18 @@ export class TicketStep3 implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    // Verifica si ya habia una pelicula y funcion seleccionada previamente
+    const savedPelicula = localStorage.getItem("peliculaSeleccionada");
+    const savedFuncion = localStorage.getItem("funcion");
+    if (savedPelicula && savedFuncion) {
+      // Setea la pelicula y funcion previamente seleccionadas
+      const pelicula = JSON.parse(savedPelicula);
+      const funcion = JSON.parse(savedFuncion);
+      this.ticketService.setPeliculaSeleccionada(pelicula);
+      this.ticketService.setFuncion(funcion);
+    }
+
     // La lógica de inicialización es NECESARIA para que no se cargue el HTML antes que el mapa de butacas
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     this.funcionSeleccionada = this.ticketService.getFuncion();
@@ -168,30 +181,35 @@ export class TicketStep3 implements OnInit {
     // Opcional: ver en consola qué se está mandando
     
 
+    // 1. Guardar COMPRA PREVIA sin email
+    this.ticketService.setCompra({
+      title: "Entrada de cine",
+      description: `Proyección de la película ${this.peliculaSeleccionada.title} en ${this.funcionSeleccionada.cinemaName}`,
+      userEmail: "", // vacío por ahora
+      quantity: 1,
+      unitPrice: this.ticketService.salaActual?.price || 0,
+      functionId: this.funcionSeleccionada.id,
+      seats: seatsSeleccionados
+    });
+
+    console.log('COMPRA PREVIA GUARDADA', this.ticketService.getCompra());
+
+    // 2. Intentar obtener usuario
     this.userService.getMyProfile().subscribe({
-      next: (data: User) => {
-        this.userSeleccionado = data;
-        
-
-        // Arma el ticket SOLO después de tener el usuario
-        this.ticketService.setCompra({
-          title: "Entrada de cine",
-          description: "Proyeccion de la pelicula " + this.peliculaSeleccionada?.title +
-            " en " + this.funcionSeleccionada?.cinemaName,
-          userEmail: data.email,   // ---> AHORA SÍ EXISTE
-          quantity: 1,
-          unitPrice: this.ticketService.salaActual?.price || 0,
-          functionId: this.funcionSeleccionada?.id || 0,
-          seats: seatsSeleccionados
-        });
-
-        
-
+      next: (user) => {
+        // Si está logueado
+        const compra = this.ticketService.getCompra();
+        if (compra) {
+          // SETEA EL EMAIL DEL USUARIO
+          compra.userEmail = user.email;
+          this.ticketService.setCompra(compra);
+        }
         this.router.navigate(['/ticket/step4']);
       },
       error: (err) => {
 
         if (err.status === 403) {
+          // SI NO está logueado
           this.mostrarModalLogin = true;   // muestra el modal
           return;
         }
@@ -209,10 +227,24 @@ export class TicketStep3 implements OnInit {
 
   // boton para confirmar inicio de sesion si esta deslogueado
   redirigirLogin() {
-    this.cargandoRedireccion = true;
+    this.cargandoRedireccionLogin = true;
 
     setTimeout(() => {
-      this.router.navigate(['/login']);
+      // Construye URL a donde debe volver
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: '/ticket/step4' }
+      });
+    }, 1200); // efecto de cargando (1000 = 1seg)
+  }
+
+  redirigirRegister() {
+    this.cargandoRedireccionRegister = true;
+
+    setTimeout(() => {
+      // Construye URL a donde debe volver
+      this.router.navigate(['/register'], {
+        queryParams: { returnUrl: '/ticket/step4' }
+      });
     }, 1200); // efecto de cargando (1000 = 1seg)
   }
 

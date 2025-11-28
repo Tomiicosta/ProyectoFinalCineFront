@@ -34,6 +34,7 @@ export class TicketService {
 
   setCompra(compra: Compra | undefined): void {
     this.compraActual = compra;
+    localStorage.setItem("compra", JSON.stringify(compra));
   }
 
   getCompra(): Compra | undefined {
@@ -42,6 +43,7 @@ export class TicketService {
 
   setFuncion(funcion: Funcion | undefined): void {
     this.funcionActual = funcion;
+    localStorage.setItem("funcion", JSON.stringify(funcion));
   }
 
   getFuncion(): Funcion | undefined {
@@ -50,6 +52,7 @@ export class TicketService {
 
   setSala(sala: Sala | undefined): void {
     this.salaActual = sala;
+    localStorage.setItem("sala", JSON.stringify(sala));
   }
 
   getSala(): Sala | undefined {
@@ -58,6 +61,7 @@ export class TicketService {
 
   setPeliculaSeleccionada(pelicula: Movie | undefined): void {
     this.peliculaSeleccionada = pelicula;
+    localStorage.setItem("peliculaSeleccionada", JSON.stringify(pelicula));
   }
   
   getPeliculaSeleccionada(): Movie | undefined {

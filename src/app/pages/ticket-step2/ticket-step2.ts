@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Pelicula } from '../../models/pelicula';
 import { TicketService } from '../../services/ticket/ticket-service';
 import { Location, SlicePipe } from '@angular/common';
 import { Funcion } from '../../models/funcion';
@@ -35,6 +34,14 @@ export class TicketStep2 implements OnInit {
   
   ngOnInit(): void {
 
+    // Verifica si ya habia una pelicula seleccionada previamente
+    const saved = localStorage.getItem("peliculaSeleccionada");
+    if (saved) {
+      // Setea la pelicula previamente seleccionada
+      const peli = JSON.parse(saved);
+      this.ticketService.setPeliculaSeleccionada(peli);
+    }
+
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada();
     
     if (this.peliculaSeleccionada) {
@@ -51,16 +58,16 @@ export class TicketStep2 implements OnInit {
   }
 
   mostrarFunciones(id: number) {
-  this.functionService.getDisponiblesPorPelicula(id).subscribe({
-    next: (data) => { 
-      // Ordenar las funciones desde (la mas temprana) y (la mas lejana)
-      this.funciones = data.sort((f1, f2) => {
-        return new Date(f1.date).getTime() - new Date(f2.date).getTime();
-      });
-    },
-    error: (e) => { this.errorHandlerService.handleHttpError(e) }
-  });
-}
+    this.functionService.getDisponiblesPorPelicula(id).subscribe({
+      next: (data) => { 
+        // Ordenar las funciones desde (la mas temprana) y (la mas lejana)
+        this.funciones = data.sort((f1, f2) => {
+          return new Date(f1.date).getTime() - new Date(f2.date).getTime();
+        });
+      },
+      error: (e) => { this.errorHandlerService.handleHttpError(e) }
+    });
+  }
 
 
   // Formatear fecha: "YYYY-MM-DD" → "viernes 14 de noviembre"
