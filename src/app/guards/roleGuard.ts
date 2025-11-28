@@ -29,7 +29,6 @@ export class RoleGuard implements CanActivate {
     
     //No está logueado (no hay roles)
     if (!userRoles || userRoles.length === 0) {
-      console.log('Acceso denegado: Usuario no autenticado.');
       this.router.navigate(['/']); // Redirigir a login
       return false; 
     }
@@ -41,7 +40,7 @@ export class RoleGuard implements CanActivate {
       return true; // Acceso permitido
     } else {
       //Logueado, pero no tiene el rol
-      console.log('Acceso denegado');
+
       this.router.navigate(['/rol-incorrecto']); // Redirigir a una página de acceso denegado
       return false;
     }

@@ -75,7 +75,7 @@ export class Register implements OnInit {
 
       this.authService.register(userData).subscribe({
         next: (response) => {
-          console.log('Registro exitoso:', response);
+
           this.toastr.success("¡Ya estas registrado!");
 
           if (this.returnUrl) {

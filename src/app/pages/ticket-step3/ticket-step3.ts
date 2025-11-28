@@ -39,6 +39,7 @@ export class TicketStep3 implements OnInit {
     this.butacasSeleccionadas().map(b => `${String.fromCharCode(64 + b.seatRowNumber)}${b.seatColumnNumber}`).join(', ')
   );
 
+
   // Variables no-signals
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
@@ -80,14 +81,13 @@ export class TicketStep3 implements OnInit {
 
     if (!this.peliculaSeleccionada || !this.funcionSeleccionada) return;
 
-    //console.log("DATA TicketService getPeliculaSeleccionada = ",this.peliculaSeleccionada);
-    //console.log("DATA TicketService getFuncion = ",this.funcionSeleccionada);
+    
 
     // Recibe la Sala por Funcion
     this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
       next: (data) => {
         this.ticketService.setSala(data);
-        //console.log("DATA CinemaService getSala = ",data);
+        
       },
       error: (e) => { console.error("ERROR CinemaService getSala = ", e) }
     });
@@ -98,7 +98,7 @@ export class TicketStep3 implements OnInit {
     this.functionService.getSeatsByFunction(this.funcionSeleccionada.id)
       .subscribe({
         next: (butacas) => {
-          //console.log("DATA FunctionService getSeatsByFunction = ", butacas);
+          
 
           // Agrupar las butacas por fila
           const matrizButacas: Butaca[][] = Array.from({ length: this.ticketService.salaActual?.rowSeat || 0 }, () =>
@@ -106,17 +106,17 @@ export class TicketStep3 implements OnInit {
           );
 
           for (const b of butacas) {
-            console.log(`${b.seatRowNumber} + COLUMNAS${b.seatColumnNumber}`)
+            
             const rowIndex = b.seatRowNumber - 1; // restamos 1 si las filas empiezan desde 1
             const colIndex = b.seatColumnNumber - 1;
             matrizButacas[rowIndex][colIndex] = b;
           }
 
-          //console.log("DATA matrizButacas = ",matrizButacas);
+          
 
           this.mapaButacas.set(matrizButacas);
 
-          //console.log("DATA mapaButacas = ",this.mapaButacas);
+         
         },
         error: (err) => console.error('Error al cargar butacas:', err)
       });
@@ -173,9 +173,13 @@ export class TicketStep3 implements OnInit {
       `R${b.seatRowNumber}C${b.seatColumnNumber}`
     );
 
+   
+    this.ticketService.setButacasFilasLetras(this.listaButacasSeleccionadas());          ///Guarda las butacas en formato [A1,A2,B4]
+   
+    this.ticketService.totalButacas = this.totalButacasSeleccionadas();
+
     // Opcional: ver en consola qué se está mandando
-    console.log('SEATS SELECCIONADOS:', seatsSeleccionados);
-    console.log('BUTACAS OBJETO:', this.butacasSeleccionadas());
+    
 
     // 1. Guardar COMPRA PREVIA sin email
     this.ticketService.setCompra({

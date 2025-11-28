@@ -16,6 +16,8 @@ export class TicketService {
   // Lista de peliculas (TRAER DESDE LA API PELICULAS)
   public peliculas: Movie[] = [];
 
+  totalButacas: number =0;
+  butacasFilasLetras: string = ''; // un solo string
   // Index de tarjeta PASO 1 comprar ticket
   indexPelicula = 2;
   peliculaSeleccionada: Movie | undefined;
@@ -81,7 +83,6 @@ export class TicketService {
       next: (data) => {
         // Almacena los datos recibidos en la variable privada
         this.peliculas = data;
-        console.log('Películas cargadas y almacenadas:', this.peliculas);
       },
       error: (error) => {
         console.error('Error al obtener las películas:', error);
@@ -89,5 +90,13 @@ export class TicketService {
       }
     });
   }
+
+ setButacasFilasLetras(value: string) {
+  this.butacasFilasLetras = value;
+}
+
+getButacasFilasLetras(): string {
+  return this.butacasFilasLetras;
+}
 
 }

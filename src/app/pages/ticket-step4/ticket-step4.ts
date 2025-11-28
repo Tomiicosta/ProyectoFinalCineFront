@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { TicketService } from '../../services/ticket/ticket-service';
 import { PaymentService } from '../../services/payment/payment-service';
@@ -11,6 +11,7 @@ import { CinemaService } from '../../services/cinema/cinema-service';
 import { Compra } from '../../models/compra';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user/user';
+import { Butaca } from '../../models/butaca';
 
 // declarar MercadoPago globalmente
 declare var MercadoPago: any;
@@ -29,7 +30,11 @@ export class TicketStep4 implements OnInit {
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
   compra! : Compra | undefined;
-  
+  totalButacasSeleccionadas : number = 0;
+  butacasFilasLetras : string = "";
+
+  // Signal para mostrar mensajes de error en la UI
+  errorMessage: WritableSignal<string | null> = signal(null);
 
   compraInfo: any = {
     nombre: '',
@@ -52,6 +57,10 @@ export class TicketStep4 implements OnInit {
 
 
   ngOnInit(): void {
+
+    this.totalButacasSeleccionadas = this.ticketService.totalButacas;
+  
+    this.ticketService
     //  Verificar sesión
     this.usuarioLogueado = this.authService.isLoggedIn();
 
@@ -99,7 +108,8 @@ export class TicketStep4 implements OnInit {
       console.warn('No se encontraron datos de película o función seleccionadas.');
       return;
     }
-
+ 
+    this.butacasFilasLetras = this.ticketService.getButacasFilasLetras();
     //  Obtener sala
     this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
       next: (data) => this.cinemaService.selectedSala = data,
@@ -117,9 +127,18 @@ export class TicketStep4 implements OnInit {
 
   }
 
-
+  
+  // Obtiene los datos de la compra
   getCompra(){
     this.compra = this.ticketService.getCompra();
+  }
+
+
+  /**
+   *  Devuelve la cantidad de butacas seleccionadas
+   */
+  getTotalButacas():number{
+    return this.compra?.seats.length ?? 0;
   }
 
 
@@ -127,17 +146,22 @@ export class TicketStep4 implements OnInit {
    *  Se ejecuta al hacer clic en "FINALIZAR"
    */
   iniciarPago(): void {
+    // Seguimiento en consola
     console.log('FINALIZAR PRESIONADO', this.compra)
+    
+    // Limpia error previo
+    this.errorMessage.set(null); 
+    
+    if(this.confirmacion !== 'compra'){
+      this.errorMessage.set('Debe aceptar los terminos y condiciones antes de terminar.');
+      return;
+    }
 
     if (!this.usuarioLogueado) {
       this.redirigirALogin();
       return;
     }
 
-    if (this.confirmacion !== 'compra') {
-      alert('Debes aceptar los términos y condiciones antes de continuar.');
-      return;
-    }
 
     if (!this.compra) {
       console.error('No hay datos de compra disponibles.');
@@ -154,11 +178,11 @@ export class TicketStep4 implements OnInit {
       functionId: this.compra.functionId
     };
 
-    console.log('Payload enviado:', payload);
+    
 
     this.pagoService.crearPreferencia(payload).subscribe({
       next: (response) => {
-        console.log('Respuesta del backend:', response);
+        
 
         // Inicializar Mercado Pago una sola vez
         const mp = this.pagoService.inicializarMercadoPago();

@@ -10,6 +10,8 @@ import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 import { DecimalPipe } from '@angular/common';
 import Swal from 'sweetalert2';
 import { FunctionService } from '../../services/function/function-service';
+import { AbstractControl } from '@angular/forms';
+import { ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-movies',
@@ -32,9 +34,18 @@ export class AdminMovies implements OnInit{
    // ========================
   // FORM INIT / PATCH
   // ========================
+
+  espacioVacio(abs:AbstractControl): ValidationErrors | null{
+    const value = abs.value || ""
+    if(value.trim().length===0){
+      return {vacio:true}
+    }
+    return null;
+  }
+
   private buildForm(): void {
     this.movieForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(100)]],
+      title: ['', [Validators.required, Validators.maxLength(100), this.espacioVacio]],
       adult: [false],
       posterUrl: [''],
       bannerUrl: [''], 
@@ -54,6 +65,8 @@ export class AdminMovies implements OnInit{
       overview: movie.overview,
     });
   }
+
+  
 
   toggleEditar(): void {
     this.editMode = !this.editMode;
@@ -158,7 +171,6 @@ export class AdminMovies implements OnInit{
   manejarEnvio(id:string){
     this.movieService.postMovie(id).subscribe({
       next: (data) => {
-        console.log(data);
         this.toastr.success("Película agregada correctamente a la cartelera.");
       this.getAllMovies();},
       error: (error: HttpErrorResponse) => {

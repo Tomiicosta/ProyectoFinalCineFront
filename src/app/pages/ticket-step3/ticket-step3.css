@@ -444,6 +444,11 @@ main {
         margin: 3em 3em 0 3em;
     }
 
+    .div-sala {
+        width: 95vw;
+        border-radius: 5px;
+    }
+
     /* ASIDE INFO PELICULA (VER MAS) --------------------------------------------------------------- */
     .banner {
         display: flex;
@@ -552,8 +557,8 @@ main {
     /* DIV DE SALA CON MAPA DE BUTACAS -------------------------------------------------------------------- */
     .div-sala {
         gap: 1em;
-        width: 100vw;
-        border-radius: 0;
+        width: 95vw;
+        border-radius: 5px;
 
     }
 
