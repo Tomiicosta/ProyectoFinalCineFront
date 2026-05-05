@@ -66,7 +66,7 @@ Este proyecto es de uso académico. Todos los derechos reservados.
 Luciano Gazzolo  
 Sebastian Aguilera  
 Daniel Herrera 
-Tomás Constantini  
+Tomás Costantini  
 Nahuel Ramirez  
 
 ---
