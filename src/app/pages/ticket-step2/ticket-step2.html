@@ -60,7 +60,9 @@
 
   <aside class="banner font-inter">
     <div class="btns-ticket">
+      @if (funciones?.length) {
       <button id="btn-step" class=" " (click)="confirmarPaso2()">SIGUIENTE</button>
+      }
       <button id="btn-back" class=" " (click)="volverAtras()">ATRÁS</button>
 
       <!-- DIV DE ERRORES -->
