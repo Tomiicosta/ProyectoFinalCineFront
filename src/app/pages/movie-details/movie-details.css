@@ -100,6 +100,8 @@ main {
 .title-peli {
     color: blueviolet;
     text-transform: uppercase;
+    border-bottom: 3px solid blueviolet;
+    margin-bottom: 0.25em;
 }
 
 .genre-peli {}
@@ -130,6 +132,9 @@ main {
 .title-function {
     color: blueviolet;
     text-transform: uppercase;
+    border-bottom: 3px solid blueviolet;
+    margin-bottom: 0.25em;
+    padding: 0.2em 0;
 }
 
 .lista-funciones {
