@@ -138,8 +138,11 @@ main {
 }
 
 .lista-funciones {
-    list-style: none;
-    padding: 5px;
+    margin-top: 0.5em;
+  padding: 10px 15px 10px 10px;
+  list-style: none;
+  border-radius: 5px;
+  border: 1px solid rgb(0, 140, 255);
 }
 
 .funcion {}
