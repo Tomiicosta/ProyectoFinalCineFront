@@ -2,7 +2,9 @@
   <div class="container font-inter" [class.menu-abierto]="menuAbierto">
     
     <div class="logo">
-      <img src="/img/logo/logo.png" alt="Logo cine">
+      <a class="nav-a" routerLink="/" (click)="cerrarMenu()">
+        <img src="/img/logo/logo.png" alt="Logo cine">
+      </a>
     </div>
 
     <button class="menu-toggle" (click)="toggleMenu()">☰</button>

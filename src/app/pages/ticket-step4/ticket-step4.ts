@@ -26,12 +26,19 @@ declare var MercadoPago: any;
 export class TicketStep4 implements OnInit {
 
   usuarioLogueado: boolean = false;
+  funcionCaducada: boolean = false;
   confirmacion: string | null = null;
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
   compra! : Compra | undefined;
   totalButacasSeleccionadas : number = 0;
   butacasFilasLetras : string = "";
+
+  // modal de Login / Register / Funcion caducada antes de finalizar compra
+  mostrarModal = false;
+  cargandoRedireccionLogin = false;
+  cargandoRedireccionRegister = false;
+  cargandoRedireccionCaducado = false;
 
   // Signal para mostrar mensajes de error en la UI
   errorMessage: WritableSignal<string | null> = signal(null);
@@ -60,7 +67,6 @@ export class TicketStep4 implements OnInit {
 
     this.totalButacasSeleccionadas = this.ticketService.totalButacas;
   
-    this.ticketService
     //  Verificar sesión
     this.usuarioLogueado = this.authService.isLoggedIn();
 
@@ -70,16 +76,26 @@ export class TicketStep4 implements OnInit {
     const savedFuncion = localStorage.getItem("funcion");
 
     if (savedCompra && savedPelicula && savedFuncion) {
-      // Setea la Compra previamente definida
+      // Setea la Compra, Pelicula y Funcion previamente definida
       const compra = JSON.parse(savedCompra);
-      this.ticketService.setCompra(compra);
-      // Setea la pelicula previamente seleccionada
       const pelicula = JSON.parse(savedPelicula);
-      this.ticketService.setPeliculaSeleccionada(pelicula);
-      // Setea la funcion previamente seleccionada
       const funcion = JSON.parse(savedFuncion);
+
+      this.ticketService.setCompra(compra);
+      this.ticketService.setPeliculaSeleccionada(pelicula);
       this.ticketService.setFuncion(funcion);
+
+      // Verifica si la función ya expiró
+      const fechaFuncion = new Date(`${funcion.date}T${funcion.time}`);
+      this.funcionCaducada = fechaFuncion.getTime() < Date.now();
+      if (this.funcionCaducada) {
+        this.mostrarModal = true;   // muestra el modal
+      }
+
+    } else {
+      this.funcionCaducada = true; // no hay función guardada
     }
+
 
     // Intentar obtener usuario
     this.userService.getMyProfile().subscribe({
@@ -94,6 +110,8 @@ export class TicketStep4 implements OnInit {
       },
       error: (err) => {
         if (err.status === 403) {
+          // SI NO está logueado
+          this.mostrarModal = true;   // muestra el modal
           return;
         }
         console.error(err);
@@ -158,7 +176,7 @@ export class TicketStep4 implements OnInit {
     }
 
     if (!this.usuarioLogueado) {
-      this.redirigirALogin();
+      this.redirigirLogin();
       return;
     }
 
@@ -238,12 +256,6 @@ export class TicketStep4 implements OnInit {
     return hora.slice(0, 5); // corta los segundos
   }
 
-
-  redirigirALogin(): void {
-    this.router.navigate(['/login']);
-  }
-
-
   volverASeleccionButacas(): void {
     this.router.navigate(['/ticket/step3']);
   }
@@ -253,6 +265,37 @@ export class TicketStep4 implements OnInit {
     this.location.back();
   }
 
+  // boton para confirmar inicio de sesion si esta deslogueado
+  redirigirLogin() {
+    this.cargandoRedireccionLogin = true;
+
+    setTimeout(() => {
+      // Construye URL a donde debe volver
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: '/ticket/step4' }
+      });
+    }, 1200); // efecto de cargando (1000 = 1seg)
+  }
+
+  redirigirRegister() {
+    this.cargandoRedireccionRegister = true;
+
+    setTimeout(() => {
+      // Construye URL a donde debe volver
+      this.router.navigate(['/register'], {
+        queryParams: { returnUrl: '/ticket/step4' }
+      });
+    }, 1200); // efecto de cargando (1000 = 1seg)
+  }
+
+  redirigirStep2() {
+    this.cargandoRedireccionCaducado = true;
+
+    setTimeout(() => {
+      // Construye URL a donde debe volver
+      this.router.navigate(['/ticket/step2']);
+    }, 1200); // efecto de cargando (1000 = 1seg)
+  }
 
   confirmarPaso4(): void {
     if (!this.confirmacion) {
