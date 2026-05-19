@@ -142,7 +142,8 @@ input:focus {
 }
 
 .error-message {
-  color: white;
+  color: red;
+  font-size: 12px;
 }
 
 .password-input-wrapper {
