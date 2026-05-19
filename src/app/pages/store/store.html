@@ -1,0 +1,20 @@
+<main>
+     <div id="productos">
+        @for (producto of productService.productos; track producto.id) {
+          <section class="tarjeta" (click)="verDetalleProducto(producto)">
+            <img class="imagenProducto" [src]="producto.imageURL" [alt]= "producto.name">
+            <h3>{{ producto.name }}</h3>
+            <h4>Precio: ${{ producto.unitPrice }}</h4>
+            <h4>Stock disponible: {{ producto.stock }}</h4>
+
+
+            <div class="botones-tarjeta">
+              <button class="btn-comprar">Agregar al carrito</button>
+              <button class="btn-verProducto" (click)="verDetalleProducto(producto); $event.stopPropagation()">Ver Producto</button>
+            </div>
+          </section>
+        } @empty {
+          <h3 style="color: white">No hay productos para mostrar.</h3>
+        }
+      </div>
+</main>

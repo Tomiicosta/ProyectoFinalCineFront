@@ -170,6 +170,24 @@ header {
   height: 26px;
 }
 
+/* ===== Botón del icono ===== */
+.cart-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-btn img {
+  width: 26px;
+  height: 26px;
+}
+
 /* ===== Hover del icono ===== */
 .profile-btn:hover {
   background: rgba(255,255,255,0.1);
