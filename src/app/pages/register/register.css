@@ -49,6 +49,19 @@
 
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: none;
+}
+
+label {
+  color: #eaeaea;
+  font-weight: 500;
+  letter-spacing: .2px;
+  font-size: 20px;
+}
 
 input {
   width: 100%;
@@ -99,8 +112,9 @@ input:focus {
   border: 2px solid white;
 }
 
-.error-message{
-  color: white;
+.error-message {
+  color: red;
+  font-size: 12px;
 }
 
 .password-input-wrapper {
