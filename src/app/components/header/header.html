@@ -29,7 +29,10 @@
             </ul>
           </li>
         } @else {
-          <li class="btnLogin"><a routerLink="/login" (click)="cerrarMenu()">Iniciar sesión</a></li>
+          <ul class="btns">
+            <li class="btnLogin"><a routerLink="/login" (click)="cerrarMenu()">Iniciar sesión</a></li>
+            <li class="btnRegister"><a routerLink="/register" (click)="cerrarMenu()">Regístrate</a></li>
+          </ul>
         }
       </ul>
     </nav>

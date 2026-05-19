@@ -98,7 +98,53 @@ header {
   outline-offset: 2px;
 }
 
+/* BOTONES de Login y Registro */
+
+.btns{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
 .btnLogin {
+  cursor:pointer;
+
+  border-radius: 20px;
+  border: 1px solid white;
+  background-color: rgb(0, 0, 0);
+
+  display: inline-block;
+  position: relative;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: .2px;
+  padding: 10px 14px;
+  outline: none;
+  transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
+
+}
+
+.btnLogin a {
+  color: #fff;
+  text-decoration: none;
+
+}
+
+.btnLogin:hover {
+  box-shadow: 0 0 15px 0px rgba(255, 255, 255, 0.3);
+}
+
+.btnLogin:hover::after {
+  transform: scaleX(1);
+}
+
+/* Hover/active feedback visual */
+.btnLogin:hover {
+  transform: scale(1.1);
+}
+
+.btnRegister {
   cursor:pointer;
 
   border-radius: 20px;
@@ -116,21 +162,20 @@ header {
 
 }
 
-.btnLogin a {
+.btnRegister a {
   color: #000000;
   text-decoration: none;
 
 }
 
-.btnLogin:hover::after {
+.btnRegister:hover::after {
   transform: scaleX(1);
 }
 
 /* Hover/active feedback visual */
-.btnLogin:hover {
+.btnRegister:hover {
   transform: scale(1.1);
 }
-
 
 /* 🔹 Botón hamburguesa oculto por defecto */
 .menu-toggle {
@@ -286,12 +331,33 @@ header {
     padding: 8px 0;
   }
 
+  /* BOTONES de Login y Registro */
+
+  .btns{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
   .btnLogin {
-    width: 80%;
+    width: 100%;
     margin: 10px auto;
+    border-radius: 25px;
   }
 
   .btnLogin a {
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .btnRegister {
+    width: 100%;
+    margin: 10px auto;
+    border-radius: 25px;
+  }
+
+  .btnRegister a {
     color: #000000;
     text-decoration: none;
     font-weight: 600;
