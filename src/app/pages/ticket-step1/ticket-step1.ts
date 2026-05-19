@@ -36,20 +36,28 @@ export class TicketStep1 implements OnInit, AfterViewInit {
           // Setea la pelicula previamente seleccionada
           const peli = JSON.parse(saved);
           this.ticketService.indexPelicula = this.ticketService.peliculas.findIndex( p => p.id === peli.id );
-        } else {
-          // Setea la pelicula seleccionada segun el index y las peliculas
-          this.ticketService.setPeliculaSeleccionada(data[this.ticketService.indexPelicula]);
-        }
+        } 
+
+        // Siempre seteamos la película seleccionada dentro del subscribe
+        this.ticketService.setPeliculaSeleccionada(
+          this.ticketService.peliculas[this.ticketService.indexPelicula]
+        );
         
         // Setea la descripcion segun la pelicula seleccionada
-        this.displayedDescription = this.processDescription(this.ticketService.getPeliculaSeleccionada()?.overview);
+        this.displayedDescription = this.processDescription(
+          this.ticketService.getPeliculaSeleccionada()?.overview
+        );
+
+        // Cargamos la galería recién cuando los datos están disponibles
+        this.cargarGaleria();
       }
     });
 
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.cargarGaleria(), 0);
+    // Solo nos suscribimos a cambios futuros del QueryList (nextSlide, prevSlide, etc.)
+    // El primer render lo dispara el subscribe de ngOnInit
     this.items.changes.subscribe(() => this.cargarGaleria());
   }
 
