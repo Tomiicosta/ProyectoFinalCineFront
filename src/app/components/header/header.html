@@ -11,12 +11,16 @@
     <nav [class.active]="menuAbierto">
       <ul class="list">
         <li><a class="nav-a" routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
-        <li><a class="nav-a" routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li>
+        <li><a class="nav-a" routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li> 
+        <li><a class="nav-a" routerLink="/store" (click)="cerrarMenu()">Tienda</a></li>
 
         @if(authService.isLoggedIn()) {
           <li class="profile-menu" [class.open]="perfilMenuAbierto">
             <button class="profile-btn" (click)="togglePerfilMenu($event)">
               <img src="/img/icons/profile.svg" alt="Perfil">
+            </button>
+            <button class="cart-btn">
+              <img src="/img/store/shoppingcart.png" alt="Carrito">
             </button>
 
             <ul class="profile-dropdown">

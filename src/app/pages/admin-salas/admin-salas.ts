@@ -92,7 +92,7 @@ export class AdminSalas {
         }
       });
     } else {
-      this.toastr.error("Formulario invalido: Completes los campos")
+      this.toastr.error("Formulario invalido: Complete los campos")
       this.salaForm.markAllAsTouched();
     }
   }

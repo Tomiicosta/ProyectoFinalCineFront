@@ -1,0 +1,111 @@
+<main>
+    <section id="productosPage">
+    <!-- Seccion listado de salas -->
+    <!-- Parte superior -->
+    <section id="verProductos">
+      <div class="headerVerProductos">
+        <h2>Productos</h2>
+        <label>
+          <input
+            type="checkbox"
+            name="filtroDisponibles"
+            [(ngModel)]="filtroDisponibles"
+            (change)="actualizarFiltroDisponibles()"
+          >
+          Disponibles
+        </label>
+      </div>
+      
+    
+
+        <!--listado Productos -->
+      <div id="productos">
+        @for (producto of productService.productos; track producto.id) {
+          <section class="tarjeta" (click)="verDetalleProducto(producto)">
+            <h3>{{ producto.name }}</h3>
+            <h4>Precio: ${{ producto.unitPrice }}</h4>
+            <h4>Stock disponible: {{ producto.stock }}</h4>
+
+
+            <div class="botones-tarjeta">
+              <button class="btn-eliminar" (click)="eliminarProducto(producto); $event.stopPropagation()">Eliminar</button>
+              <button class="btn-modificar" (click)="editarProducto(producto); $event.stopPropagation()">Modificar</button>
+            </div>
+          </section>
+        } @empty {
+          <h3 style="color: white">No hay productos para mostrar.</h3>
+        }
+      </div>
+
+    </section>
+   
+
+    <!-- Seccion formularios y detalle-->
+    <section id="agregarProducto">
+      @if (detalleProducto) {
+        <!-- VISTA DE DETALLE -->
+        <article class="detalle-producto">
+          <h2>Detalles de {{ detalleProducto.name }}</h2>
+          <ul class="detalle-lista">
+            <li><span class="label">Nombre</span><span class="value">{{ detalleProducto.name }}</span></li>
+            <li><span class="label">Precio</span><span class="value">{{ detalleProducto.unitPrice }}</span></li>
+            <li><span class="label">Stock</span><span class="value">{{ detalleProducto.stock }}</span></li>
+            <li><span class="label">Imagen del producto</span><span class="value">{{ detalleProducto.imageURL }}</span></li>
+            <li><span class="label">Descripción</span><span class="value">{{ detalleProducto.description }}</span></li>
+            <li><span class="label">Disponible</span><span class="value"><span class="chip" [class.ok]="detalleProducto.available" [class.bad]="!detalleProducto.available">{{ detalleProducto.available ? 'Sí' : 'No' }}</span></span></li>
+            
+          </ul>
+          <div class="acciones-detalle">
+            <button class="btn-form" type="button" (click)="cerrarDetalle()">Cerrar</button>
+          </div>
+        </article>
+      } 
+      <!-- VISTA FORMULARIOS -->
+      @else {
+        <h2>
+          {{ isEditing ? ('Modificando ' + (selectedProducto?.name || 'producto')) : 'Agregar producto' }}
+        </h2>
+        <form [formGroup]="productoForm" (ngSubmit)="isEditing ? actualizarProducto() : agregarProducto()">
+          <fieldset>
+            <label for="name">Nombre</label>
+            <input type="text" id="name" placeholder="Nombre" formControlName="name" required>
+          </fieldset>
+
+          <fieldset>
+            <label for="unitPrice">Precio</label>
+            <input type="number" id="unitPrice" placeholder="Precio" formControlName="unitPrice" min="1.0">
+          </fieldset>
+
+          <fieldset>
+            <label for="stock">Stock</label>
+            <input type="number" id="stock" placeholder="Stock" formControlName="stock" min="0">
+          </fieldset>
+
+          <fieldset>
+            <label for="imagenURL">URL de la imagen del producto</label>
+            <input type="text" id="imageURL" placeholder="URL de la imagen" formControlName="imageURL" required>
+          </fieldset>
+
+           <fieldset>
+            <label for="description">Descripción del producto</label>
+            <input type="text" id="description" placeholder="Descripción del producto" formControlName="description" required>
+          </fieldset>
+
+          <div class="checkbox-group">
+            <label><input type="checkbox" formControlName="available">Disponible</label>
+          </div>
+
+          <div class="botonesForm">
+            <button class="btn-form" type="submit">
+              {{ isEditing ? 'Guardar cambios' : 'Agregar producto' }}
+            </button>
+
+            @if (isEditing) {
+              <button id="btn-cancelar" class="btn-form" type="button" (click)="cancelarEdicion()">Cancelar</button>
+            }
+          </div>
+        </form>
+      }
+    </section>
+  </section>
+</main>
