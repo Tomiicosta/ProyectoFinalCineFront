@@ -1,316 +1,314 @@
 <main>
+  <section id="peliculasPage">
+    <section id="sectionPeliculasCartelera">
+      <h2>Peliculas en cartelera</h2>
 
-  <section id="sectionPeliculasCartelera">
-    <h2>Peliculas en cartelera</h2>
+      <section id="buscarId">
+        <form>
+          <input
+            id="inputNombre"
+            name="nombreInput"
+            placeholder="Buscar pelicula"
+            type="text"
+            [(ngModel)]="nombreInput"
+            (keyup.enter)="getMoviesByName(nombreInput)"
+          />
+      
+          <button
+            type="button"
+            (click)="getMoviesByName(nombreInput)"
+            [disabled]="!authService.isAdmin()">
+            Buscar
+          </button>
+      
+          <button
+            class="btn-volver"
+            type="button"
+            (click)="getAllMovies()"
+            [disabled]="!authService.isAdmin()">
+            Volver
+          </button>
+        </form>
+      </section>
 
-    <section id="buscarId">
-      <form>
-        <input
-          id="inputNombre"
-          name="nombreInput"
-          placeholder="Buscar pelicula"
-          type="text"
-          [(ngModel)]="nombreInput"
-          (keyup.enter)="getMoviesByName(nombreInput)"
-        />
-    
-        <button
-          type="button"
-          (click)="getMoviesByName(nombreInput)"
-          [disabled]="!authService.isAdmin()">
-          Buscar
-        </button>
-    
-        <button
-          class="btn-volver"
-          type="button"
-          (click)="getAllMovies()"
-          [disabled]="!authService.isAdmin()">
-          Volver
-        </button>
-      </form>
+      <div id="peliculasCartelera">
+        
+        @for (movie of movieService.moviesCartelera; track $index) {
+        <section id="tarjeta" (click)="seleccionarBD(movie.id.toString())">
+          <h3>{{ movie.title }}</h3>
+          <h4>Estreno: {{ movie.releaseDate }}</h4>
+
+          <div class="botones-tarjeta">
+            <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id, movie.title); $event.stopPropagation()"
+              [disabled]="!authService.isAdmin()">
+              Eliminar
+            </button>
+          </div>
+        </section>
+        }@empty {
+        }
+      
+      </div>
+
+
+      <div id="buscarMovie">
+        @if (movieService.movies.length) {
+        @for (movie of movieService.movies; track $index) {
+        <section id="tarjeta" (click)="seleccionar(movie.id.toString())">
+          <h3>{{ movie.title }}</h3>
+          <h4>Estreno: {{ movie.releaseDate }}</h4>
+
+          <div class="botones-tarjeta">
+            <button class="btn-agregar" (click)="$event.stopPropagation(); seleccionar(movie.id.toString())"
+              [disabled]="!authService.isAdmin()">
+              Ver info
+            </button>
+          </div>
+        </section>
+
+        }
+        }
+      </div>
     </section>
 
-    <div id="peliculasCartelera">
-      
-      @for (movie of movieService.moviesCartelera; track $index) {
-      <section id="tarjeta" (click)="seleccionarBD(movie.id.toString())">
-        <h3>{{ movie.title }}</h3>
-        <h4>Estreno: {{ movie.releaseDate }}</h4>
-
-        <div class="botones-tarjeta">
-          <button class="btn-eliminar" (click)="eliminarDeCartelera(movie.id, movie.title); $event.stopPropagation()"
-            [disabled]="!authService.isAdmin()">
-            Eliminar
-          </button>
-        </div>
-      </section>
-      }@empty {
-      }
+  <!-- SECTION PARA EDITAR Y VER DETALLE -->
+    <section id="Agregar">
+      @if (mostrarAgregar) {
+        @if (selectedMovie) {
+          <div class="detail-card">
+          
+            <!-- HEADER -->
+            <div class="detail-header">
+              <div class="detail-title-block">
+                <h2 class="tituloPelicula">{{ selectedMovie.title }}</h2>
+                <div class="detail-badges">
+                  <span class="badge badge-year">
+                    {{ selectedMovie.releaseDate }}
+                  </span>
     
-    </div>
-
-
-    <div id="buscarMovie">
-      @if (movieService.movies.length) {
-      @for (movie of movieService.movies; track $index) {
-      <section id="tarjeta" (click)="seleccionar(movie.id.toString())">
-        <h3>{{ movie.title }}</h3>
-        <h4>Estreno: {{ movie.releaseDate }}</h4>
-
-        <div class="botones-tarjeta">
-          <button class="btn-agregar" (click)="$event.stopPropagation(); seleccionar(movie.id.toString())"
-            [disabled]="!authService.isAdmin()">
-            Ver info
-          </button>
-        </div>
-      </section>
-
-      }
-      }
-    </div>
-  </section>
-
-<!-- SECTION PARA EDITAR Y VER DETALLE -->
-  <section id="Agregar">
-    @if (mostrarAgregar) {
-      @if (selectedMovie) {
-        <div class="detail-card">
-        
-          <!-- HEADER -->
-          <div class="detail-header">
-            <div class="detail-title-block">
-              <h2 class="tituloPelicula">{{ selectedMovie.title }}</h2>
-              <div class="detail-badges">
-                <span class="badge badge-year">
-                  {{ selectedMovie.releaseDate }}
-                </span>
-  
-                <span
-                  class="badge badge-adult"
-                  [class.badge-adult-true]="selectedMovie.adult"
-                  [class.badge-adult-false]="!selectedMovie.adult"
-                >
-                  {{ selectedMovie.adult ? '+18' : 'ATP' }}
-                </span>
-              </div>
-            </div>
-  
-            @if (selectedMovie.voteAverage) {
-              <div class="detail-rating">
-                <span class="rating-score">
-                  {{ selectedMovie.voteAverage | number : '1.1-1' }}
-                </span>
-                <span class="rating-out-of">/10</span>
-                <span class="rating-count">
-                  ({{ selectedMovie.voteCount || 0 }} votos)
-                </span>
-              </div>
-            }
-          </div> 
-  
-          <!-- BODY -->
-          <div class="detail-body">
-            <div class="poster-wrapper">
-              <img 
-                [src]="selectedMovie.posterUrl ? selectedMovie.posterUrl : '/img/admin-movie/posterNoImagen.png'"
-                [alt]="selectedMovie.title" 
-              />
-            </div>
-  
-            <div class="meta-wrapper">
-              <ul class="meta-list">
-                <li>
-                  <span class="meta-icon">⏱️</span>
-                  <span class="meta-label">Duración</span>
-                  <span class="meta-value">
-                    {{ selectedMovie.runtime || '—' }} min
+                  <span
+                    class="badge badge-adult"
+                    [class.badge-adult-true]="selectedMovie.adult"
+                    [class.badge-adult-false]="!selectedMovie.adult"
+                  >
+                    {{ selectedMovie.adult ? '+18' : 'ATP' }}
                   </span>
-                </li>
-  
-                <li>
-                  <span class="meta-icon">🎬</span>
-                  <span class="meta-label">Estreno</span>
-                  <span class="meta-value">
-                    {{ selectedMovie.releaseDate || '—' }}
+                </div>
+              </div>
+    
+              @if (selectedMovie.voteAverage) {
+                <div class="detail-rating">
+                  <span class="rating-score">
+                    {{ selectedMovie.voteAverage | number : '1.1-1' }}
                   </span>
-                </li>
-  
-                <li class="meta-genres">
-                  <span class="meta-icon">🧩</span>
-                  <span class="meta-label">Géneros</span>
-                  <div class="genre-chips">
-                    @if (selectedMovie.genres && selectedMovie.genres.length > 0) {
-                      @for (genre of selectedMovie.genres; track $index) {
-                        <span class="chip">{{ genre }}</span>
+                  <span class="rating-out-of">/10</span>
+                  <span class="rating-count">
+                    ({{ selectedMovie.voteCount || 0 }} votos)
+                  </span>
+                </div>
+              }
+            </div> 
+    
+            <!-- BODY -->
+            <div class="detail-body">
+              <div class="poster-wrapper">
+                <img 
+                  [src]="selectedMovie.posterUrl ? selectedMovie.posterUrl : '/img/admin-movie/posterNoImagen.png'"
+                  [alt]="selectedMovie.title" 
+                />
+              </div>
+    
+              <div class="meta-wrapper">
+                <ul class="meta-list">
+                  <li>
+                    <span class="meta-icon">⏱️</span>
+                    <span class="meta-label">Duración</span>
+                    <span class="meta-value">
+                      {{ selectedMovie.runtime || '—' }} min
+                    </span>
+                  </li>
+    
+                  <li>
+                    <span class="meta-icon">🎬</span>
+                    <span class="meta-label">Estreno</span>
+                    <span class="meta-value">
+                      {{ selectedMovie.releaseDate || '—' }}
+                    </span>
+                  </li>
+    
+                  <li class="meta-genres">
+                    <span class="meta-icon">🧩</span>
+                    <span class="meta-label">Géneros</span>
+                    <div class="genre-chips">
+                      @if (selectedMovie.genres && selectedMovie.genres.length > 0) {
+                        @for (genre of selectedMovie.genres; track $index) {
+                          <span class="chip">{{ genre }}</span>
+                        }
+                      } @else {
+                        <span class="meta-value">No especificado</span>
                       }
-                    } @else {
-                      <span class="meta-value">No especificado</span>
-                    }
-                  </div>
-                </li>
-  
-                <li class="meta-imdb">
-                  <span class="meta-icon">🔗</span>
-                  <span class="meta-label">IMDb</span>
-                  <span class="meta-value">
-                    @if (selectedMovie.imdbId) {
-                      <a
-                        class="imdb-link"
-                        href="https://www.imdb.com/title/{{ selectedMovie.imdbId }}"
-                        target="_blank"
-                      >
-                        Ver en IMDb
-                      </a>
-                    } @else {
-                      <span>No disponible</span>
-                    }
-                  </span>
-                </li>
-              </ul>
+                    </div>
+                  </li>
+    
+                  <li class="meta-imdb">
+                    <span class="meta-icon">🔗</span>
+                    <span class="meta-label">IMDb</span>
+                    <span class="meta-value">
+                      @if (selectedMovie.imdbId) {
+                        <a
+                          class="imdb-link"
+                          href="https://www.imdb.com/title/{{ selectedMovie.imdbId }}"
+                          target="_blank"
+                        >
+                          Ver en IMDb
+                        </a>
+                      } @else {
+                        <span>No disponible</span>
+                      }
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-  
-          <!-- SINOPSIS -->
-          <div class="synopsis-block">
-            <h3>Sinopsis</h3>
-            <p>
-              {{ selectedMovie.overview || 'Sin descripción disponible.' }}
-            </p>
-          </div>
-  
-          <!-- Película NO está en BD: se puede agregar -->
-          @if (!editMode && selectedMovie && !movieIsFromDb) {
-              <button
-                class="btn-agregar"
-                type="button"
-                (click)="manejarEnvio(selectedMovie.id.toString())"
-                [disabled]="!authService.isAdmin()"
-              >
-                Agregar a cartelera
-              </button>
-          }
+    
+            <!-- SINOPSIS -->
+            <div class="synopsis-block">
+              <h3>Sinopsis</h3>
+              <p>
+                {{ selectedMovie.overview || 'Sin descripción disponible.' }}
+              </p>
+            </div>
+    
+            <!-- Película NO está en BD: se puede agregar -->
+            @if (!editMode && selectedMovie && !movieIsFromDb) {
+                <button
+                  class="btn-agregar"
+                  type="button"
+                  (click)="manejarEnvio(selectedMovie.id.toString())"
+                  [disabled]="!authService.isAdmin()"
+                >
+                  Agregar a cartelera
+                </button>
+            }
 
-            <!-- Película SÍ está en BD: se puede editar -->
-          @if (!editMode && selectedMovie && movieIsFromDb) {
-              <button
-                class="btn-agregar"
-                type="button"
-                (click)="toggleEditar()"
-                [disabled]="!authService.isAdmin()"
-              >
-                Editar película
-              </button>
-          }
-  
-  
-          <!-- FORMULARIO REACTIVO DE EDICIÓN -->
-@if (editMode) {
-  <form
-    class="edit-form"
-    [formGroup]="movieForm"
-    (ngSubmit)="onSubmitEdit()"
-  >
-    <h3>Editar información</h3>
+              <!-- Película SÍ está en BD: se puede editar -->
+            @if (!editMode && selectedMovie && movieIsFromDb) {
+                <button
+                  class="btn-agregar"
+                  type="button"
+                  (click)="toggleEditar()"
+                  [disabled]="!authService.isAdmin()"
+                >
+                  Editar película
+                </button>
+            }
+    
+    
+            <!-- FORMULARIO REACTIVO DE EDICIÓN -->
+  @if (editMode) {
+    <form
+      class="edit-form"
+      [formGroup]="movieForm"
+      (ngSubmit)="onSubmitEdit()"
+    >
+      <h3>Editar información</h3>
 
-    <div class="edit-form-grid">
-      <!-- TÍTULO -->
-      <div class="form-control">
-        <label for="title">Título</label>
-        <input
-          id="title"
-          type="text"
-          formControlName="title"
-          placeholder="Título de la película"
-        />
-        <small>Maximo 100 caracteres</small>
-      </div>
-
-      <!-- ADULT -->
-      <div class="form-control">
-        <label for="adult">Sólo +18</label>
-        <select id="adult" formControlName="adult">
-          <option [ngValue]="false">No (ATP)</option>
-          <option [ngValue]="true">Sí (+18)</option>
-        </select>
-      </div>
-
-      <!-- POSTER URL -->
-      <div class="form-control form-control-full">
-        <label for="posterUrl">URL del póster</label>
-        <input
-          id="posterUrl"
-          type="text"
-          formControlName="posterUrl"
-          placeholder="https://..."
-        />
-      </div>
-
-      <!-- BANNER URL -->
-      <div class="form-control form-control-full">
-        <label for="bannerUrl">URL del banner</label>
-        <input
-          id="bannerUrl"
-          type="text"
-          formControlName="bannerUrl"
-          placeholder="https://..."
-        />
-      </div>
-
-      <!-- GÉNEROS -->
-      <div class="form-control form-control-full">
-        <label for="genres">Géneros</label>
-        <input
-          id="genres"
-          type="text"
-          formControlName="genres"
-          placeholder="Acción, Drama, Comedia"
-        />
-        <small>Separá los géneros por comas. Solo letras.</small>
-      </div>
-
-      <!-- SINOPSIS -->
-      <div class="form-control form-control-full">
-        <label for="overview">Sinopsis</label>
-        <textarea
-          id="overview"
-          rows="4"
-          formControlName="overview"
-          placeholder="Escribí una sinopsis..."
-        ></textarea>
-        <small>Maximo 2000 caracteres</small>
-      </div>
-    </div>
-
-    <div class="edit-form-actions">
-      <button
-        type="submit"
-        [disabled]="movieForm.invalid || !authService.isAdmin()"
-      >
-        Guardar cambios
-      </button>
-
-      <!--  BOTÓN CANCELAR EDICIÓN -->
-      <button
-        type="button"
-        class="btn-volver"
-        (click)="toggleEditar()"
-      >
-        Cancelar 
-      </button>
-    </div>
-
-  </form>
-}
-
+      <div class="edit-form-grid">
+        <!-- TÍTULO -->
+        <div class="form-control">
+          <label for="title">Título</label>
+          <input
+            id="title"
+            type="text"
+            formControlName="title"
+            placeholder="Título de la película"
+          />
+          <small>Maximo 100 caracteres</small>
         </div>
+
+        <!-- ADULT -->
+        <div class="form-control">
+          <label for="adult">Sólo +18</label>
+          <select id="adult" formControlName="adult">
+            <option [ngValue]="false">No (ATP)</option>
+            <option [ngValue]="true">Sí (+18)</option>
+          </select>
+        </div>
+
+        <!-- POSTER URL -->
+        <div class="form-control form-control-full">
+          <label for="posterUrl">URL del póster</label>
+          <input
+            id="posterUrl"
+            type="text"
+            formControlName="posterUrl"
+            placeholder="https://..."
+          />
+        </div>
+
+        <!-- BANNER URL -->
+        <div class="form-control form-control-full">
+          <label for="bannerUrl">URL del banner</label>
+          <input
+            id="bannerUrl"
+            type="text"
+            formControlName="bannerUrl"
+            placeholder="https://..."
+          />
+        </div>
+
+        <!-- GÉNEROS -->
+        <div class="form-control form-control-full">
+          <label for="genres">Géneros</label>
+          <input
+            id="genres"
+            type="text"
+            formControlName="genres"
+            placeholder="Acción, Drama, Comedia"
+          />
+          <small>Separá los géneros por comas. Solo letras.</small>
+        </div>
+
+        <!-- SINOPSIS -->
+        <div class="form-control form-control-full">
+          <label for="overview">Sinopsis</label>
+          <textarea
+            id="overview"
+            rows="4"
+            formControlName="overview"
+            placeholder="Escribí una sinopsis..."
+          ></textarea>
+          <small>Maximo 2000 caracteres</small>
+        </div>
+      </div>
+
+      <div class="edit-form-actions">
+        <button
+          type="submit"
+          [disabled]="movieForm.invalid || !authService.isAdmin()"
+        >
+          Guardar cambios
+        </button>
+
+        <!--  BOTÓN CANCELAR EDICIÓN -->
+        <button
+          type="button"
+          class="btn-volver"
+          (click)="toggleEditar()"
+        >
+          Cancelar 
+        </button>
+      </div>
+
+    </form>
+  }
+
+          </div>
+        }
+      } @else {
+        <h2>Seleccioná una película para ver los detalles</h2>
       }
-    } @else {
-      <h2>Seleccioná una película para ver los detalles</h2>
-    }
+    </section>
   </section>
-  
-
-
 
 </main>

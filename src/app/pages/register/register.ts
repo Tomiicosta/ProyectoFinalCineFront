@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Registro } from '../../models/registro';
@@ -18,11 +18,12 @@ import { UserService } from '../../services/user/user';
 export class Register implements OnInit {
 
   tipoDeCampo : boolean = false;
+  tipoDeCampoConfirm: boolean = false;
 
   readonly ruta_ojo_cerrado = "img/password/eye-closed.svg";
   readonly ruta_ojo_abierto = "img/password/eye-open-svgrepo-com.svg";
 
-  readonly passwordRegex: RegExp = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.{6,})/;
+  readonly passwordRegex: RegExp = /^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+\[\]{}|;:'",.<>?/\\`~])(?=.*[0-9])(?=.{6,})/; // referencia password OWASP
 
   formRegister: FormGroup;
   name: FormControl;
@@ -30,6 +31,7 @@ export class Register implements OnInit {
   username: FormControl;
   email: FormControl;
   password: FormControl;
+  confirmPassword: FormControl;
 
   returnUrl: string | undefined;
 
@@ -38,15 +40,28 @@ export class Register implements OnInit {
     this.surname = new FormControl ('', [Validators.required, Validators.minLength(3)]),
     this.username = new FormControl ('', [Validators.required, Validators.minLength(3)]),
     this.email = new FormControl ('', [Validators.required, Validators.email]),
-    this.password = new FormControl ('', [Validators.required, Validators.minLength(6), Validators.pattern(this.passwordRegex)])
+    this.password = new FormControl ('', [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern(this.passwordRegex)])
+    this.confirmPassword = new FormControl('', [Validators.required])
 
     this.formRegister = new FormGroup({
       name : this.name,
       surname : this.surname,
       username : this.username,
       email : this.email,
-      password : this.password
-    })
+      password : this.password,
+      confirmPassword: this.confirmPassword
+    },
+      { validators: this.passwordMatchValidator() }
+    );
+  }
+
+  // Validator que compara ambos campos de contrasenia
+  private passwordMatchValidator() {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const password = formGroup.get('password')?.value;
+      const confirmPassword = formGroup.get('confirmPassword')?.value;
+      return password === confirmPassword ? null : { mismatch: true };
+    };
   }
 
   ngOnInit(): void {
@@ -101,8 +116,18 @@ export class Register implements OnInit {
     this.tipoDeCampo = !this.tipoDeCampo;
   }
 
+  verContraseniaConfirm(): void {
+    this.tipoDeCampoConfirm = !this.tipoDeCampoConfirm;
+  }
+
   public obtenerIcono(): string {
     return this.tipoDeCampo 
+      ? this.ruta_ojo_abierto
+      : this.ruta_ojo_cerrado;
+  }
+
+  public obtenerIconoConfirm(): string {
+    return this.tipoDeCampoConfirm
       ? this.ruta_ojo_abierto
       : this.ruta_ojo_cerrado;
   }
