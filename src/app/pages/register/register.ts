@@ -23,7 +23,7 @@ export class Register implements OnInit {
   readonly ruta_ojo_cerrado = "img/password/eye-closed.svg";
   readonly ruta_ojo_abierto = "img/password/eye-open-svgrepo-com.svg";
 
-  readonly passwordRegex: RegExp = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.{6,})/;
+  readonly passwordRegex: RegExp = /^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+\[\]{}|;:'",.<>?/\\`~])(?=.*[0-9])(?=.{6,})/; // referencia password OWASP
 
   formRegister: FormGroup;
   name: FormControl;
@@ -40,7 +40,7 @@ export class Register implements OnInit {
     this.surname = new FormControl ('', [Validators.required, Validators.minLength(3)]),
     this.username = new FormControl ('', [Validators.required, Validators.minLength(3)]),
     this.email = new FormControl ('', [Validators.required, Validators.email]),
-    this.password = new FormControl ('', [Validators.required, Validators.minLength(6), Validators.pattern(this.passwordRegex)])
+    this.password = new FormControl ('', [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern(this.passwordRegex)])
     this.confirmPassword = new FormControl('', [Validators.required])
 
     this.formRegister = new FormGroup({

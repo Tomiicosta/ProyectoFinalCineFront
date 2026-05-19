@@ -55,7 +55,9 @@
                 @if(password.hasError('required') && password.touched){
                     <p class="error-message"> La contraseña es obligatoria.</p>
                 }@else if(password.hasError('minlength')){
-                    <p class="error-message">La contraseña debe tener minimo 6 caracteres. </p>
+                    <p class="error-message">La contraseña debe tener mínimo 6 caracteres. </p>
+                }@else if(password.hasError('maxlength')){
+                    <p class="error-message">La contraseña debe tener máximo 20 caracteres. </p>
                 }@else if(password.hasError('pattern')){
                     <p class="error-message">La contraseña debe contener minimo una mayúscula, una minúscula, un carácter especial y un número. </p>
                 }
