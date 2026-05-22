@@ -31,10 +31,12 @@ export class AdminProductos {
     this.productoForm = this.fb.group({
       name: ['', Validators.required],
       unitPrice:[0, [Validators.required, Validators.min(1)]],
+      priceInPoints:[0, [Validators.required, Validators.min(1)]],
       stock: [0, [Validators.required, Validators.min(0)]],
       imageURL: ['', Validators.required],
       description: ['', Validators.required],
-      available: [true]
+      available: [true],
+      productType: ['', [Validators.required]]
     });
   }
 
@@ -57,10 +59,12 @@ export class AdminProductos {
           this.productoForm.reset({
             name: '',
             unitPrice: 0,
+            priceInPoints: 0,
             stock: 0,
             imageURL: '',
             description: '',
-            available: true
+            available: true,
+            productType: ''
           });
 
           if (this.vistaActual === 'disponibles') {
@@ -79,6 +83,14 @@ export class AdminProductos {
     }
   }
 
+  getProductTypeLabel(type: string): string {
+    switch (type) {
+      case 'COMIDA': return 'Comida';
+      case 'OBJETO':  return 'Objeto';
+      default:         return type ?? '';
+    }
+  }
+
   /* rellena el formulario con los datos del producto seleccionado */
   async editarProducto(producto: any) {
     if (!producto?.id) return;
@@ -91,10 +103,12 @@ export class AdminProductos {
       id: producto.id,
       name: producto.name,
       unitPrice: producto.unitPrice,
+      priceInPoints: producto.priceInPoints,
       stock: producto.stock,
       imageURL: producto.imageURL,
       description: producto.description,
-      available: producto.available
+      available: producto.available,
+      productType: producto.productType
     });
   }
 
@@ -133,10 +147,12 @@ export class AdminProductos {
     this.productoForm.reset({
       name: '',
       unitPrice: 0.0,
+      priceInPoints: 0,
       stock: 0,
       imageURL: '',
       description: '',
-      available: true
+      available: true,
+      productType: ''
     });
   }
 
@@ -202,6 +218,7 @@ export class AdminProductos {
       this.getProductosNoDisponibles();
     }
   }
+
 
   /* refresca el listado que se estaba mostrando */
   private refrescarListadoActual() {

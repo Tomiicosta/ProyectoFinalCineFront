@@ -1,11 +1,15 @@
 <main>
-     <div id="productos">
+  <div id="store">
+     <div id ="productos-">
         @for (producto of productService.productos; track producto.id) {
           <section class="tarjeta" (click)="verDetalleProducto(producto)">
             <img class="imagenProducto" [src]="producto.imageURL" [alt]= "producto.name">
             <h3>{{ producto.name }}</h3>
             <h4>Precio: ${{ producto.unitPrice }}</h4>
+            <h4>Puntos: {{ producto.priceInPoints }}</h4>
             <h4>Stock disponible: {{ producto.stock }}</h4>
+            <h4>Categoria: {{ producto.productType }}</h4>
+
 
 
             <div class="botones-tarjeta">
@@ -17,4 +21,13 @@
           <h3 style="color: white">No hay productos para mostrar.</h3>
         }
       </div>
+      <aside class = "sidebar-categorias">
+        <h3>Categoria</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="filtroDisponibles" [(ngModel)] = 'filtroDisponibles' (change)="actualizarFiltroDisponibles()">Todos los productos</label>
+            <label><input type="checkbox" name="filtroComestibles" [(ngModel)] = 'filtroComestibles' (change)="actualizarFiltroComestibles()">Comida</label>
+            <label><input type="checkbox" name="filtroNoComestibles" [(ngModel)]= 'filtroNoComestibles' (change)="actualizarFiltroNoComestibles()">Objetos</label>
+          </div>
+      </aside>
+    </div>
 </main>
