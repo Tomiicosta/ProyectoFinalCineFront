@@ -28,6 +28,10 @@ export class ProductService {
     return this.http.get<Producto[]>(`/api/products/available/${available}`);
   }
 
+  getProductosByProductType (productType: string){
+    return this.http.get<Producto[]>(`/api/products/productType/${productType}`);
+  }
+
   // POST
   postProducto(producto: Producto): Observable<Producto> {
     return this.http.post<Producto>(`/api/products/create`, producto);

@@ -24,7 +24,10 @@
           <section class="tarjeta" (click)="verDetalleProducto(producto)">
             <h3>{{ producto.name }}</h3>
             <h4>Precio: ${{ producto.unitPrice }}</h4>
+            <h4>Puntos: {{ producto.priceInPoints }}</h4>
             <h4>Stock disponible: {{ producto.stock }}</h4>
+            <h4>Categoria: {{ producto.productType }}</h4>
+
 
 
             <div class="botones-tarjeta">
@@ -49,10 +52,12 @@
           <ul class="detalle-lista">
             <li><span class="label">Nombre</span><span class="value">{{ detalleProducto.name }}</span></li>
             <li><span class="label">Precio</span><span class="value">{{ detalleProducto.unitPrice }}</span></li>
+            <li><span class="label">Precio en puntos</span><span class="value">{{ detalleProducto.priceInPoints }}</span></li>
             <li><span class="label">Stock</span><span class="value">{{ detalleProducto.stock }}</span></li>
             <li><span class="label">Imagen del producto</span><span class="value">{{ detalleProducto.imageURL }}</span></li>
             <li><span class="label">Descripción</span><span class="value">{{ detalleProducto.description }}</span></li>
             <li><span class="label">Disponible</span><span class="value"><span class="chip" [class.ok]="detalleProducto.available" [class.bad]="!detalleProducto.available">{{ detalleProducto.available ? 'Sí' : 'No' }}</span></span></li>
+            <li><span class="label">Categoria del producto</span><span class="value">{{ getProductTypeLabel(detalleProducto.productType) }}</span></li>
             
           </ul>
           <div class="acciones-detalle">
@@ -77,6 +82,11 @@
           </fieldset>
 
           <fieldset>
+            <label for="priceInPoints">Precio en puntos</label>
+            <input type="number" id="priceInPoints" placeholder="Precio en puntos" formControlName="priceInPoints" min="1.0">
+          </fieldset>
+
+          <fieldset>
             <label for="stock">Stock</label>
             <input type="number" id="stock" placeholder="Stock" formControlName="stock" min="0">
           </fieldset>
@@ -94,6 +104,15 @@
           <div class="checkbox-group">
             <label><input type="checkbox" formControlName="available">Disponible</label>
           </div>
+
+          <fieldset>
+            <label for="productType">Categoria</label>
+            <select id="productType" formControlName="productType" required>
+              <option value="" disabled>Seleccionar categoria</option>
+              <option value="COMIDA">Comida</option>
+              <option value="OBJETO">Objeto</option>
+            </select>
+          </fieldset>
 
           <div class="botonesForm">
             <button class="btn-form" type="submit">
