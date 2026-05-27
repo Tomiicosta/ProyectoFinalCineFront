@@ -15,6 +15,7 @@ import { TicketStep4 } from './pages/ticket-step4/ticket-step4';
 import { Perfil } from './pages/perfil/perfil';
 import { Store } from './pages/store/store';
 import { AdminProductos } from './pages/admin-productos/admin-productos';
+import { Recompensas } from './pages/recompensas/recompensas';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -32,7 +33,9 @@ export const routes: Routes = [
     {path: 'adminMovies',component: AdminMovies, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminFunciones',component: AdminFunciones, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminSalas',component:AdminSalas, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
+    {path:"recompensas",component:Recompensas},
     {path: 'adminProductos', component: AdminProductos},
     {path: '', redirectTo: '/inicio', pathMatch: 'full' }, // Si está logueado, va a 'inicio'
     {path: '**', redirectTo: '/inicio' }, // Manejo de rutas no encontradas
+    
 ];

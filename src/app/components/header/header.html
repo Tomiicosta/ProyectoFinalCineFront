@@ -13,6 +13,7 @@
         <li><a class="nav-a" routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
         <li><a class="nav-a" routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li> 
         <li><a class="nav-a" routerLink="/store" (click)="cerrarMenu()">Tienda</a></li>
+        <li><a class="nav-a" routerLink="/recompensas" (click)="cerrarMenu()">  Recompensas</a></li>
 
         @if(authService.isLoggedIn()) {
           <li class="profile-menu" [class.open]="perfilMenuAbierto">

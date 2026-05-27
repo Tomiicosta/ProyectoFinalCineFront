@@ -1,0 +1,97 @@
+<div class="rewards-page">
+
+  <!-- HERO -->
+  <section class="hero-card">
+    <div class="hero-content">
+      <span class="hero-icon">⭐</span>
+
+      <h1>Programa de Recompensas</h1>
+
+      <div class="points-number">
+        {{ user?.puntos || 0 }}
+      </div>
+
+      <p class="points-label">
+        Puntos disponibles
+      </p>
+
+      <div class="level-badge">
+        {{ getNivel() }}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESO -->
+  <section class="progress-card">
+
+    <div class="progress-header">
+      <h2>Próximo nivel</h2>
+      <span>
+  {{ user?.puntos || 0 }}
+  /
+  {{ proximaMeta }}
+  pts
+</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="porcentajeProgreso">
+      </div>
+    </div>
+    <p class="next-level-text">
+
+  Te faltan
+
+  <strong>{{ faltanPuntos }}</strong>
+
+  puntos para llegar a
+
+  <strong>{{ getProximoNivel() }}</strong>
+
+</p>
+<div *ngIf="getProximoNivel() === '🏆 Nivel Máximo'"
+     class="max-level">
+
+  🎉 ¡Felicitaciones! Alcanzaste el nivel máximo.
+
+</div>
+
+  </section>
+
+  
+
+  <!-- RECOMPENSAS -->
+  <section>
+
+    <h2 class="section-title">
+       Recompensas disponibles
+    </h2>
+
+    <div class="rewards-grid">
+
+      <div class="reward-card" *ngFor="let recompensa of recompensas">
+
+        <div class="reward-icon">
+          {{ recompensa.icono }}
+        </div>
+
+        <h3>{{ recompensa.nombre }}</h3>
+
+        <p>{{ recompensa.puntos }} puntos</p>
+
+        <button
+(click)="canjear(recompensa)"
+[disabled]="user?.puntos < recompensa.puntos">
+
+Canjear
+
+</button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+</div>
