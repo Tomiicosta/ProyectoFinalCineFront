@@ -21,4 +21,17 @@ export class UserService {
   getMyTickets() {
     return this.http.get<Ticket[]>('http://localhost:8080/api/tickets');
   }
+
+  claimReward(
+  rewardName: string,
+  pointsRequired: number
+) {
+  return this.http.post(
+    '/api/rewards/claim',
+    {
+      rewardName,
+      pointsRequired
+    }
+  );
+}
 }
