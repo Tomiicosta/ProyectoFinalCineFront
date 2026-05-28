@@ -58,7 +58,8 @@ export class Login implements OnInit {
   onSubmit(): void {
 
     if (this.formLogin.invalid) {
-      this.toastr.error('Por favor, introduzca usuario y contraseña válidos.');
+      this.toastr.error('Por favor, introduzca usuario/email y contraseña válidos.');
+      return;
     }
 
     this.authService.login(this.formLogin.value.User, this.formLogin.value.Password).subscribe({
