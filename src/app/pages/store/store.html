@@ -7,13 +7,11 @@
             <h3>{{ producto.name }}</h3>
             <h4>Precio: ${{ producto.unitPrice }}</h4>
             <h4>Puntos: {{ producto.priceInPoints }}</h4>
-            <h4>Stock disponible: {{ producto.stock }}</h4>
-            <h4>Categoria: {{ producto.productType }}</h4>
 
 
 
             <div class="botones-tarjeta">
-              <button class="btn-comprar">Agregar al carrito</button>
+              <button class="btn-comprar" [disabled]="producto.stock <= 0" [style.opacity]="producto.stock <= 0 ? '0.5' : '1'" [style.cursor]="producto.stock <= 0 ? 'not-allowed' : 'pointer'" (click)="agregarAlCarrito(producto)"> {{ producto.stock <= 0 ? 'Sin Stock' : 'Agregar al carrito' }}</button>              
               <button class="btn-verProducto" (click)="verDetalleProducto(producto); $event.stopPropagation()">Ver Producto</button>
             </div>
           </section>

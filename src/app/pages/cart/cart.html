@@ -1,0 +1,61 @@
+<main>
+<div class="cart-page-container" *ngIf="!loading">
+  
+  <div class="cart-content" *ngIf="cart && cart.items.length > 0; else emptyCart">
+    
+    <div class="cart-items-section">
+      <h2>Tu Carrito de Compras</h2>
+      
+      <div class="cart-item-card" *ngFor="let item of cart.items">
+        <div class="item-details">
+          <h3>{{ item.productName }}</h3> 
+          <img class="imagenProducto" [src]="item.imageURL" [alt]= "item.productName">
+          <p class="item-price">Precio unitario: ${{ item.historicalPrice }}</p>
+          <p class="item-quantity">Cantidad: {{ item.quantity }}</p>
+          <p class="item-subtotal">Subtotal: ${{ item.historicalPrice * item.quantity }}</p>
+        </div>
+        
+        <button class="btn-delete" (click)="eliminarProducto(item.id)">
+          <img class ="icon-basura" src="/img/store/basura.png" alt="">
+        </button>
+      </div>
+    </div>
+
+    <div class="cart-summary-section">
+      <h3>Resumen de Compra</h3>
+      <hr>
+      <div class="summary-row">
+        <span>Productos ({{ cart.items.length }}):</span>
+        <span>${{ cart.totalAmount }}</span>
+      </div>
+      <div class="summary-row" *ngIf="cart.totalAmountInPoints > 0">
+        <span>Puntos acumulados:</span>
+        <span class="points-text">+{{ cart.totalAmountInPoints }} pts</span>
+      </div>
+      <hr>
+      <div class="summary-total">
+        <span>Total a Pagar:</span>
+        <span class="total-price">${{ cart.totalAmount }}</span>
+      </div>
+
+      <button class="btn-checkout">
+        Proceder al pago con MercadoPago
+      </button>
+    </div>
+
+  </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart-container">
+      <h2>Tu carrito está vacío</h2>
+      <p>¡Explora nuestra tienda y encuentra tus productos favoritos!</p>
+      <button class="btn-back-store" routerLink="/store">Ir a la Tienda</button>
+    </div>
+  </ng-template>
+
+</div>
+
+<div class="loading-spinner" *ngIf="loading">
+  <p>Cargando tu carrito...</p>
+</div>
+</main>

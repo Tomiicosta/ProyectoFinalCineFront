@@ -15,6 +15,7 @@ import { TicketStep4 } from './pages/ticket-step4/ticket-step4';
 import { Perfil } from './pages/perfil/perfil';
 import { Store } from './pages/store/store';
 import { AdminProductos } from './pages/admin-productos/admin-productos';
+import { Cart } from './pages/cart/cart';
 import { Recompensas } from './pages/recompensas/recompensas';
 
 export const routes: Routes = [
@@ -24,6 +25,7 @@ export const routes: Routes = [
     {path: 'login', component: Login},
     {path: 'register', component: Register},
     {path: 'store', component: Store},
+    {path: 'cart', component: Cart},
     {path: 'ticket/step1', component: TicketStep1},
     {path: 'ticket/step2', component: TicketStep2},
     {path: 'ticket/step3', component: TicketStep3},

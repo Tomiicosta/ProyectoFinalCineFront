@@ -4,6 +4,8 @@ import { ProductService } from '../../services/product/product-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
+import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-store',
@@ -20,10 +22,10 @@ export class Store {
   selectedProducto: any | null = null;
   detalleProducto: Producto | null = null;
 
-  constructor(public productService: ProductService, private errorHandlerService: ErrorHandler){}
+  constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler){}
 
   verDetalleProducto(producto: Producto) {      
-    this.detalleProducto = producto;       // mostramos la vista de detalle
+    this.detalleProducto = producto;       
   }
 
   cerrarDetalle() {
@@ -36,6 +38,27 @@ export class Store {
       next: (data) => { this.productService.productos = data; },
       error: (error: HttpErrorResponse) => {
         this.errorHandlerService.handleHttpError(error);  
+      }
+    });
+  }
+
+  agregarAlCarrito(producto: any) {
+    const request = {
+      productId: producto.id,
+      quantity: 1, 
+      stock: producto.stock 
+    };
+
+
+    this.storeOrderService.addToCart(request).subscribe({
+      next: (carritoActualizado) => {
+        console.log('Agregado exitosamente', carritoActualizado);
+        producto.stock -= request.quantity;
+        this.toastr.success("Producto agregado al carrito");
+      },
+      error: (err) => {
+        console.error('Error al agregar al carrito', err);
+        this.toastr.error("Error al agregar al carrito");
       }
     });
   }
@@ -90,6 +113,7 @@ export class Store {
 
   ngOnInit(): void {
     this.getProductosDisponibles();
+    this.storeOrderService.getActiveCart();
   }
 
 }
