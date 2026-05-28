@@ -13,6 +13,7 @@
         <li><a class="nav-a" routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
         <li><a class="nav-a" routerLink="/ticket/step1" (click)="cerrarMenu()">Comprar</a></li> 
         <li><a class="nav-a" routerLink="/store" (click)="cerrarMenu()">Tienda</a></li>
+        <li><a class="nav-a" routerLink="/recompensas" (click)="cerrarMenu()">  Recompensas</a></li>
 
         @if(authService.isLoggedIn()) {
           <li class="profile-menu" [class.open]="perfilMenuAbierto">
@@ -33,8 +34,8 @@
           </li>
         } @else {
           <ul class="btns">
-            <li class="btnLogin"><a routerLink="/login" (click)="cerrarMenu()">Iniciar sesión</a></li>
-            <li class="btnRegister"><a routerLink="/register" (click)="cerrarMenu()">Regístrate</a></li>
+            <a routerLink="/login" (click)="cerrarMenu()"><li class="btnLogin">Iniciar sesión</li></a>
+            <a routerLink="/register" (click)="cerrarMenu()"><li class="btnRegister">Regístrate</li></a>
           </ul>
         }
       </ul>

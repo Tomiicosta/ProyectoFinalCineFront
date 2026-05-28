@@ -186,7 +186,7 @@ export class TicketStep3 implements OnInit {
       title: "Entrada de cine",
       description: `Proyección de la película ${this.peliculaSeleccionada.title} en ${this.funcionSeleccionada.cinemaName}`,
       userEmail: "", // vacío por ahora
-      quantity: 1,
+      quantity: this.totalButacasSeleccionadas(),
       unitPrice: this.ticketService.salaActual?.price || 0,
       functionId: this.funcionSeleccionada.id,
       seats: seatsSeleccionados
