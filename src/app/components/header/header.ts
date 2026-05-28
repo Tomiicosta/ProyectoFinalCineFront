@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/AuthService/auth-service';
+import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
 
 @Component({
   selector: 'app-header',
@@ -12,8 +13,9 @@ export class Header {
 
   menuAbierto = false;
   perfilMenuAbierto = false;
+  cartCount: number = 0;
 
-constructor (public authService: AuthService, private router: Router){}
+constructor (public authService: AuthService, private storeOrderService: StoreOrderService, private router: Router){}
 
 
 toggleMenu() {
@@ -50,4 +52,13 @@ onLogoutClick(): void {
   this.menuAbierto = false;
   this.router.navigate(['/']);
 }
+
+ngOnInit() {
+  this.storeOrderService.cartItemCount$.subscribe(count => {
+    this.cartCount = count;
+  });
+  
+  this.storeOrderService.getActiveCart().subscribe();
+}
+
 }

@@ -20,7 +20,10 @@
               <img src="/img/icons/profile.svg" alt="Perfil">
             </button>
             <button class="cart-btn">
-              <img src="/img/store/shoppingcart.png" alt="Carrito">
+              <img src="/img/store/shoppingcart.png" alt="Carrito" routerLink = "/cart">
+              @if (cartCount > 0) {
+                <span class="cart-badge">{{ cartCount }}</span>
+              }
             </button>
 
             <ul class="profile-dropdown">
