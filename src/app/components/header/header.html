@@ -31,8 +31,8 @@
           </li>
         } @else {
           <ul class="btns">
-            <li class="btnLogin"><a routerLink="/login" (click)="cerrarMenu()">Iniciar sesión</a></li>
-            <li class="btnRegister"><a routerLink="/register" (click)="cerrarMenu()">Regístrate</a></li>
+            <a routerLink="/login" (click)="cerrarMenu()"><li class="btnLogin">Iniciar sesión</li></a>
+            <a routerLink="/register" (click)="cerrarMenu()"><li class="btnRegister">Regístrate</li></a>
           </ul>
         }
       </ul>
