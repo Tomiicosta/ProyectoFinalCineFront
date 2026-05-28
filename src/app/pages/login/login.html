@@ -7,8 +7,8 @@
   
       <div class="fields">
         <fieldset class="UserField">
-          <label for="User">Usuario</label>
-          <input type="text" id="User" formControlName="User" placeholder="Ingrese su usuario">
+          <label for="User">Usuario o Email</label>
+          <input type="text" id="User" formControlName="User" placeholder="Ingrese su usuario o email">
           @if(User.invalid && User.touched){
             <p class = "error-message"> Este campo no puede estar vacío.</p>
           }

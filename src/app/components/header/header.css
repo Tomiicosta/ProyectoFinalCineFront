@@ -105,6 +105,9 @@ header {
     display: flex;
     flex-direction: row;
     gap: 12px;
+
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .btnLogin {
@@ -122,13 +125,7 @@ header {
   padding: 10px 14px;
   outline: none;
   transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
-
-}
-
-.btnLogin a {
-  color: #fff;
-  text-decoration: none;
-
+  color: white;
 }
 
 .btnLogin:hover {
@@ -159,13 +156,7 @@ header {
   padding: 10px 14px;
   outline: none;
   transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
-
-}
-
-.btnRegister a {
-  color: #000000;
-  text-decoration: none;
-
+  color: black;
 }
 
 .btnRegister:hover::after {
@@ -338,29 +329,21 @@ header {
     display: flex;
     flex-direction: column;
     gap: 0;
+    text-decoration: none;
+    font-weight: 600;
   }
 
   .btnLogin {
     width: 100%;
     margin: 10px auto;
     border-radius: 25px;
-  }
-
-  .btnLogin a {
-    text-decoration: none;
-    font-weight: 600;
+    color: #0b1a4b;
   }
 
   .btnRegister {
     width: 100%;
     margin: 10px auto;
     border-radius: 25px;
-  }
-
-  .btnRegister a {
-    color: #000000;
-    text-decoration: none;
-    font-weight: 600;
   }
 
   /* Boton profile */

@@ -23,8 +23,8 @@ export class AuthService {
   }
 
   //loggea usuario
-  login(username: string, password: string) {
-    return this.http.post<{ token: string }>(`/api/auth/login`, { username, password })
+  login(usernameOrEmail: string, password: string) {
+    return this.http.post<{ token: string }>(`/api/auth/login`, { usernameOrEmail, password })
       .pipe(
         tap(response => {
           localStorage.setItem('token', response.token);
