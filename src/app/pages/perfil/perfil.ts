@@ -3,13 +3,10 @@ import { FormsModule, NgForm } from '@angular/forms';
 
 import { User } from '../../models/user';
 import { UserService } from '../../services/user/user';
-import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
-import { Compra } from '../../models/compra';
-import { TicketService } from '../../services/ticket/ticket-service';
 import { Ticket } from '../../models/ticket';
 import { CinemaService } from '../../services/cinema/cinema-service';
 import { Sala } from '../../models/sala';
@@ -33,7 +30,7 @@ interface EditUser {
   templateUrl: './perfil.html',  
   styleUrls: ['./perfil.css'],
   standalone: true,
-  imports: [FormsModule, RouterLink]
+  imports: [FormsModule]
 })
 export class  Perfil implements OnInit {
 
