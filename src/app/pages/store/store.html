@@ -2,8 +2,8 @@
   <div id="store">
      <div id ="productos-">
         @for (producto of productService.productos; track producto.id) {
-          <section class="tarjeta" (click)="verDetalleProducto(producto)">
-            <img class="imagenProducto" [src]="producto.imageURL" [alt]= "producto.name">
+          <section class="tarjeta" >
+            <img (click)="verDetalleProducto(producto)" class="imagenProducto" [src]="producto.imageURL" [alt]= "producto.name">
             <h3>{{ producto.name }}</h3>
             <h4>Precio: ${{ producto.unitPrice }}</h4>
             <h4>Puntos: {{ producto.priceInPoints }}</h4>

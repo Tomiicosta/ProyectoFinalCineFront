@@ -1,0 +1,40 @@
+<main>
+  <div class="detail-page-container" *ngIf="!loading && producto">
+  <div class="product-detail-card">
+    
+    <div class="image-section">
+      <img [src]="producto.imageURL" [alt]="producto.name" class="main-image">
+    </div>
+
+    <div class="info-section">
+      <h1 class="product-title">{{ producto.name }}</h1>
+      <span class="category-badge">{{ producto.productType }}</span>
+      
+      <p class="product-description">
+        {{ producto.description }}
+      </p>
+
+      <div class="price-box">
+        <p class="price">Precio: ${{ producto.unitPrice }}</p>
+        <p class="points"> Puntos que suma: {{ producto.priceInPoints }} pts</p>
+      </div>
+
+      <p class="stock-info" [ngClass]="{'out-of-stock': producto.stock <= 0}">
+        Stock disponible: {{ producto.stock }} unidades
+      </p>
+
+      <button 
+        class="btn-add-cart" 
+        [disabled]="producto.stock <= 0"
+        (click)="agregarAlCarrito(producto)">
+        {{ producto.stock > 0 ? 'Agregar al Carrito' : 'Sin Stock' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="loading-state" *ngIf="loading">
+  <p>Cargando información del producto...</p>
+</div>
+</main>

@@ -16,6 +16,10 @@ export class StoreOrderService {
 
   constructor(private http: HttpClient) {}
 
+  actualizarContador(cantidad: number) {
+    this.cartItemCount.next(cantidad);
+  }
+
   // POST
   addToCart(request: orderItemsRequest): Observable<StoreOrderDetail> {
     return this.http.post<StoreOrderDetail>(`/api/store/cart/items`, request).pipe(

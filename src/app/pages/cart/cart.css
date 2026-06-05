@@ -130,23 +130,27 @@
 }
 
 /* Botón de MercadoPago */
-.btn-checkout {
-  width: 100%; 
-  margin-top: 25px; 
-  padding: 12px;
-  background-color: #a31c1c;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 0 20px rgba(255, 30, 30, 0.5);
+.btn-pago {
+   margin-top: 1.5rem;
+    background-color: #ffcc00;
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%; 
+    max-width: 300px;
 }
 
-.btn-checkout:hover {
-  background-color: #8a1515;
+.btn-pago:hover {
+    background-color: #ffcc00;
+    transform: scale(1.05);
 }
+
 
 .item-details {
   display: flex;
