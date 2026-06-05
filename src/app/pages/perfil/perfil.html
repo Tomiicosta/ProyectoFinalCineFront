@@ -1,7 +1,7 @@
 <main id="perfilPage">
 
   <!-- Encabezado -->
-  <section class="profile-header" [class.has-form]="editMode">
+  <section class="profile-header" [class.has-panel]="editMode || showTickets">
     <h1>Mi perfil</h1>
 
     @if (user) {
@@ -14,12 +14,20 @@
   <!-- Contenido principal -->
   @if (user) {
 
-  <section class="profile-content" [class.has-form]="editMode">
+  <section class="profile-content" [class.has-panel]="editMode || showTickets">
 
     <!-- COLUMNA IZQUIERDA -->
     <div class="profile-summary">
       <div class="profile-card">
-        <h2>Datos de la cuenta</h2>
+        <div class="profile-card-header">
+          <div>
+            <span class="profile-eyebrow">Cuenta activa</span>
+            <h2>Datos de la cuenta</h2>
+          </div>
+          <span class="role-pill">
+            {{ user.role === 'CLIENT' ? 'Cliente' : user.role }}
+          </span>
+        </div>
 
         <dl class="profile-data">
           <div class="profile-row">
@@ -44,24 +52,13 @@
         </dl>
 
         <div class="profile-actions">
-          <button type="button" (click)="toggleEdit()">
+          <button type="button" class="primary-action" (click)="toggleEdit()">
             {{ editMode ? 'Cancelar' : 'Editar perfil' }}
           </button>
-        </div>
-      </div>
 
-      <div class="profile-extra">
-        <h3>Acciones</h3>
-        <div class="action-buttons">
           @if (user.role === "CLIENT") {
-          <button type="button" (click)="toggleTickets()">
+          <button type="button" class="secondary-action" (click)="toggleTickets()">
             {{ showTickets ? 'Ocultar entradas' : 'Ver mis entradas' }}
-          </button>
-          }
-
-          @if (editMode) {
-          <button type="button" (click)="showPasswordForm = !showPasswordForm">
-            {{ showPasswordForm ? 'Ocultar' : 'Actualizar contraseña' }}
           </button>
           }
         </div>
@@ -128,7 +125,15 @@
     <!-- FORMULARIO DE EDICIÓN -->
     @if (editMode) {
     <section class="profile-form-section">
-      <h2>Editar mis datos</h2>
+      <div class="form-heading">
+        <div>
+          <span class="profile-eyebrow">Información personal</span>
+          <h2>Editar mis datos</h2>
+        </div>
+        <button type="button" class="password-inline-action" (click)="togglePasswordForm()">
+          {{ showPasswordForm ? 'Ocultar contraseña' : 'Actualizar contraseña' }}
+        </button>
+      </div>
 
       <form #profileForm="ngForm" (ngSubmit)="onSubmit(profileForm)">
 
