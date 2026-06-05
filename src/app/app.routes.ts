@@ -17,6 +17,7 @@ import { Store } from './pages/store/store';
 import { AdminProductos } from './pages/admin-productos/admin-productos';
 import { Cart } from './pages/cart/cart';
 import { Recompensas } from './pages/recompensas/recompensas';
+import { ProductDetails } from './pages/product-details/product-details';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -25,7 +26,8 @@ export const routes: Routes = [
     {path: 'login', component: Login},
     {path: 'register', component: Register},
     {path: 'store', component: Store},
-    {path: 'cart', component: Cart},
+    {path: 'details/:id', component: ProductDetails},
+    {path: 'cart', component: Cart, canActivate: [AuthGuard]},
     {path: 'ticket/step1', component: TicketStep1},
     {path: 'ticket/step2', component: TicketStep2},
     {path: 'ticket/step3', component: TicketStep3},

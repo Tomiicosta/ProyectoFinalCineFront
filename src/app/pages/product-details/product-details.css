@@ -1,0 +1,288 @@
+* {
+    font-family: "Poppins", sans-serif;
+  }
+  
+  body {
+    background-color: #0e0e0e; /* fondo negro elegante */
+    color: #f5f5f5; /* texto blanco */
+  }
+  
+  main {
+    padding: 150px;
+    background-image:
+    linear-gradient(to top,
+      rgba(0,0,0,0.95) 0%,
+      rgba(0,0,0,0.85) 20%,
+      rgba(0,0,0,0.55) 55%,
+      rgba(0,0,0,0.20) 80%,
+      rgba(0,0,0,0.00) 100%
+    ),
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.95) 0%,
+      rgba(0,0,0,0.75) 25%,
+      rgba(0,0,0,0.00) 60%
+    ),
+    url("/img/store/storePic.jpg");
+  }
+
+.detail-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 70vh;
+}
+
+.product-detail-card {
+  display: flex;
+  flex-direction: row;
+  background: rgba(46, 40, 51, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  max-width: 900px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.image-section {
+  flex: 1;
+  background: white; /* Fondo blanco para que resalten tus imágenes con fondo transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.main-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.main-image:hover {
+  transform: scale(1.05);
+}
+
+.info-section {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+}
+
+.product-title {
+  color: #a31c1c; /* Tu rojo característico */
+  font-size: 2.5rem;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.category-badge {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  width: fit-content;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.product-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #ccc;
+  margin-bottom: 30px;
+}
+
+.price-box {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.price {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+.points {
+  color: #f1c40f; /* Color dorado para los puntos */
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.stock-info {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.out-of-stock {
+  color: #ff4d4d;
+}
+
+.btn-add-cart {
+  background-color: #a31c1c;
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-add-cart:hover:not([disabled]) {
+  background-color: #8a1515;
+  transform: translateY(-2px);
+}
+
+.btn-add-cart[disabled] {
+  background-color: #555;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+
+  /* 📱 Responsive para móviles (hasta 700px) */
+@media (max-width: 1000px) {
+
+  main {
+    padding: 20px;
+    padding-top: 120px;
+  }
+
+  #productos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Cada bloque ocupa toda la pantalla */
+  #verProductos, 
+  #agregarProductos {
+    width: 100%;
+    padding: 20px;
+  }
+
+  /* Encabezado de la lista de salas */
+  .headerVerProductos {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Listado de tarjetas */
+  #productos {
+    grid-template-columns: 1fr;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .tarjeta {
+    padding: 12px;
+  }
+
+  .tarjeta h3 {
+    font-size: 1.1rem;
+  }
+
+  .tarjeta h4 {
+    font-size: 0.85rem;
+  }
+
+  .botones-tarjeta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  /* Formularios */
+  form {
+    gap: 12px;
+  }
+
+  fieldset {
+    gap: 6px;
+  }
+
+  input,
+  select {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .checkbox-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .botonesForm {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-form {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  /* Detalle de sala */
+  .detalle-sala {
+    padding: 16px;
+  }
+
+  .detalle-sala h2 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .detalle-lista li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .label {
+    font-size: 0.75rem;
+  }
+
+  .value {
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .acciones-detalle {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .acciones-detalle .btn-form {
+    width: 100%;
+  }
+}

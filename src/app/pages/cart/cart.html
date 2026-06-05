@@ -38,9 +38,19 @@
         <span class="total-price">${{ cart.totalAmount }}</span>
       </div>
 
-      <button class="btn-checkout">
-        Proceder al pago con MercadoPago
-      </button>
+        <button
+                id="btn-step"
+                class="btn-pago"
+                (click)="iniciarPago()"
+                [disabled]="!usuarioLogueado"
+                >
+                <img
+                id="img-btn"
+                src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.20.1/mercadopago/logo__small.png"
+                alt="Mercado Pago"
+                />
+                FINALIZAR COMPRA
+        </button>
     </div>
 
   </div>

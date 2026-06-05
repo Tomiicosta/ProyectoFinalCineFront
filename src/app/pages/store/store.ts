@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
 import { ToastrService } from 'ngx-toastr';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-store',
@@ -22,10 +23,10 @@ export class Store {
   selectedProducto: any | null = null;
   detalleProducto: Producto | null = null;
 
-  constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler){}
+  constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler, private router: Router){}
 
   verDetalleProducto(producto: Producto) {      
-    this.detalleProducto = producto;       
+    this.router.navigate(['/details', producto.id]);       
   }
 
   cerrarDetalle() {
