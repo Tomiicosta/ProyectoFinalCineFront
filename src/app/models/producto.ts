@@ -4,6 +4,7 @@ export interface Producto {
     unitPrice: number,
     priceInPoints: number,
     stock: number,
+    totalCostStock: number,
     imageURL: string,
     description: string,
     available: boolean,
