@@ -1,16 +1,16 @@
-/* ===== Estilo base ===== */
 * {
   font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: #0e0e0e; /* fondo negro elegante */
-  color: #f5f5f5; /* texto blanco */
+  background-color: #0e0e0e;
+  color: #f5f5f5;
 }
 
 main {
-    padding: 150px;
-  }
+  padding: clamp(24px, 5vw, 150px);
+}
 
 h2 {
   font-size: 32px;
@@ -21,29 +21,19 @@ h3 {
   color: white;
 }
 
-/* ===================== */
-/* SECCIONES PRINCIPALES */
-/* ===================== */
-
 #peliculasPage {
   display: grid;
   grid-template-areas:
     "sectionPeliculasCartelera Agregar"
     "sectionPeliculasCartelera Agregar";
-  grid-template-columns: 70% 30%;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 440px);
   grid-template-rows: 10% auto;
   gap: 20px;
+  align-items: start;
 }
 
 #sectionPeliculasCartelera {
   grid-area: sectionPeliculasCartelera;
-}
-
-#Agregar {
-  grid-area: Agregar;
-  display: flex;
-  flex-direction: column;
-  justify-content:center ;
 }
 
 #sectionPeliculasCartelera,
@@ -60,12 +50,11 @@ h3 {
 
 #Agregar {
   grid-area: Agregar;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   background: radial-gradient(circle at top left, #3a1717 0, #141414 45%, #050505 100%);
   border-radius: 16px;
   box-shadow: 0 0 18px rgba(255, 0, 0, 0.25);
+  overflow: hidden;
 }
 
 #sectionPeliculasCartelera,
@@ -76,12 +65,6 @@ h3 {
   min-width: 0; 
 }
 
-#sectionPeliculasCartelera {
-  grid-area: sectionPeliculasCartelera;
-}
-
-/* ===================== */
-/* BUSCADOR */
 #buscarId {
   display: flex;
   gap: 38px;
@@ -90,15 +73,24 @@ h3 {
 #buscarId form {
   display: flex;
   flex-direction: row;
-  width: 80%;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-/* ===================== */
-/* TARJETAS */
+#buscarId input {
+  flex: 1 1 260px;
+  width: auto;
+  min-width: 0;
+}
+
+#buscarId button {
+  flex: 0 0 auto;
+}
+
 #peliculasCartelera,
 #buscarMovie {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
   gap: 15px;
   padding: 10px;
   overflow-y: auto;
@@ -137,8 +129,6 @@ h3 {
   padding-top: 12px;
 }
 
-/* ===================== */
-/* FORMULARIO BÁSICO (BUSCADOR) */
 form {
   display: flex;
   flex-direction: column;
@@ -152,7 +142,6 @@ input {
   border: 1px solid #ff1e1e;
   border-radius: 6px;
   padding: 8px;
-  transition: all 0.3s;
   width: 80%;
 }
 
@@ -162,20 +151,14 @@ input:focus {
   box-shadow: 0 0 5px #ff5555;
 }
 
-/* ===================== */
-/* BOTONES GLOBALES */
-/* ===================== */
-
 button {
   font-weight: 600;
   cursor: pointer;
   border-radius: 6px;
   padding: 8px 14px;
-  transition: background-color 0.2s, transform 0.15s;
   border: none;
 }
 
-/* 🔴 Botón rojo — agregar / editar / aceptar */
 .btn-agregar, .btn-eliminar {
   background-color: #ff1e1e;
   color: #fff;
@@ -186,24 +169,16 @@ button {
   transform: translateY(-1px);
 }
 
-.btn-agregar:active:enabled, .btn-eliminar:active:enabled {
-  transform: scale(0.97);
-
-}
-
-/* Hover específico para el botón "Buscar" */
 #buscarId form button:not(.btn-volver):hover:enabled {
   background-color: #9f9a9a;
   transform: translateY(-1px);
 }
 
-/* Hover específico para el botón "Guardar cambios" */
 .edit-form-actions button:not(.btn-volver):hover:enabled {
   background-color: #9f9a9a;
   transform: translateY(-1px);
 }
 
-/* ⚫ Botón gris — volver / cancelar */
 .btn-volver {
   background-color: #4f4f4f;
   color: #fff;
@@ -214,10 +189,6 @@ button {
   transform: translateY(-1px);
 }
 
-.btn-volver:active:enabled {
-  transform: scale(0.97);
-}
-
 button:disabled,
 .btn-agregar:disabled,
 .btn-volver:disabled {
@@ -226,41 +197,17 @@ button:disabled,
   transform: none;
 }
 
-/* ===================== */
-/* SCROLL CUSTOM */
-/* ===================== */
-#buscarMovie::-webkit-scrollbar,
-#peliculasCartelera::-webkit-scrollbar {
-  width: 8px;
-}
-
-#buscarMovie::-webkit-scrollbar-thumb,
-#peliculasCartelera::-webkit-scrollbar-thumb {
-  background-color: #ff1e1e;
-  border-radius: 4px;
-}
-
-/* ====================================== */
-/* PANEL DERECHO — DETALLE PELÍCULA      */
-/* ====================================== */
-
-#Agregar .placeholder-text {
-  text-align: center;
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 400;
-}
-
 .detail-card {
   display: flex;
   flex-direction: column;
   gap: 20px;
   height: 100%;
+  width: 100%;
 }
 
-/* HEADER */
 .detail-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
@@ -272,6 +219,8 @@ button:disabled,
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
 #Agregar .tituloPelicula {
@@ -294,7 +243,6 @@ button:disabled,
   text-transform: uppercase;
 }
 
-/*  fecha + ATP */
 .badge-year {
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.45);
@@ -314,7 +262,6 @@ button:disabled,
   background: rgba(46, 204, 113, 0.95);
 }
 
-/* pill de rating */
 .detail-rating {
   display: flex;
   align-items: baseline;
@@ -342,16 +289,16 @@ button:disabled,
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* CUERPO */
 .detail-body {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(120px, 140px) minmax(0, 1fr);
   gap: 16px;
   align-items: flex-start;
 }
 
 .poster-wrapper {
   width: 140px;
-  min-width: 140px;
+  min-width: 0;
   height: 210px;
   border-radius: 12px;
   overflow: hidden;
@@ -366,10 +313,6 @@ button:disabled,
   object-fit: cover;
 }
 
-.meta-wrapper {
-  flex: 1;
-}
-
 .meta-list {
   list-style: none;
   padding: 0;
@@ -381,7 +324,7 @@ button:disabled,
 
 .meta-list li {
   display: grid;
-  grid-template-columns: 22px 90px 1fr;
+  grid-template-columns: 22px minmax(72px, 88px) minmax(0, 1fr);
   align-items: center;
   column-gap: 8px;
   font-size: 13px;
@@ -399,13 +342,15 @@ button:disabled,
 
 .meta-value {
   color: rgba(255, 255, 255, 0.9);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-/* chips de géneros */
 .genre-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  min-width: 0;
 }
 
 .chip {
@@ -416,20 +361,21 @@ button:disabled,
   font-size: 11px;
   color: #c6c6c6;
   font-weight: 500;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
-/* IMDb LINK */
 .imdb-link {
   color: #f5c518;
   text-decoration: none;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .imdb-link:hover {
   text-decoration: underline;
 }
 
-/* SINOPSIS */
 .synopsis-block {
   margin-top: 8px;
   padding-top: 10px;
@@ -449,18 +395,6 @@ button:disabled,
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.88);
 }
-
-/* BOTÓN ACCIONES (debajo de la sinopsis si lo necesitás en contenedor propio) */
-.detail-actions {
-  margin-top: auto;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-/* =============== */
-/* FORM EDIT PELI  */
-/* =============== */
 
 .edit-form {
   margin-top: 20px;
@@ -532,26 +466,18 @@ button:disabled,
   margin-top: 4px;
   gap: 10px;
 }
-
-
-
-/* Dentro del form: respetar clases de botón */
-.edit-form-actions .btn-agregar {
-  padding: 8px 16px;
-}
-
-.edit-form-actions .btn-volver {
-  padding: 8px 16px;
-}
-
-/* ===================== */
-/* RESPONSIVE */
-/* ===================== */
-
 @media (max-width: 1320px) {
+  main {
+    padding: 96px 48px;
+  }
 
+  #peliculasPage {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 380px);
+  }
+
+  #sectionPeliculasCartelera,
   #Agregar {
-    padding: 20px;
+    padding: 24px;
   }
 
   .detail-header {
@@ -559,36 +485,142 @@ button:disabled,
     align-items: flex-start;
   }
 
+  .detail-rating {
+    align-self: flex-start;
+  }
+
   .detail-body {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     align-items: stretch;
   }
 
   .poster-wrapper {
-    width: 200px;
+    width: min(200px, 100%);
     height: auto;
-    max-height: 320px;
+    aspect-ratio: 2 / 3;
   }
 
   .poster-wrapper img {
     height: 100%;
-    max-height: 320px;
   }
 
   #peliculasCartelera,
   #buscarMovie {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
     gap: 8px;
   }
 
   #tarjeta {
-    width: 90%;
-    max-width: 180px;
+    width: 100%;
+    max-width: none;
     padding: 10px;
     font-size: 0.9rem;
   }
 
   .edit-form-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  main {
+    padding: 80px 24px 48px;
+  }
+
+  #peliculasPage {
+    grid-template-areas:
+      "sectionPeliculasCartelera"
+      "Agregar";
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+  }
+
+  #Agregar {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 64px 16px 32px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
+  #sectionPeliculasCartelera,
+  #Agregar {
+    padding: 18px;
+    gap: 20px;
+    border-radius: 12px;
+  }
+
+  #buscarId form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #buscarId input,
+  #buscarId button {
+    width: 100%;
+    flex: auto;
+  }
+
+  #peliculasCartelera,
+  #buscarMovie {
+    grid-template-columns: 1fr;
+    max-height: none;
+    padding: 0;
+  }
+
+  #Agregar .tituloPelicula {
+    font-size: 22px;
+  }
+
+  .detail-rating {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 16px;
+  }
+
+  .meta-list li {
+    grid-template-columns: 22px minmax(70px, 1fr);
+    grid-template-areas:
+      "icon label"
+      ". value";
+    align-items: start;
+    row-gap: 4px;
+  }
+
+  .meta-icon {
+    grid-area: icon;
+  }
+
+  .meta-label {
+    grid-area: label;
+  }
+
+  .meta-value,
+  .genre-chips {
+    grid-area: value;
+  }
+
+  .synopsis-block p {
+    font-size: 12px;
+  }
+
+  .edit-form {
+    padding: 14px;
+  }
+
+  .edit-form-actions {
+    flex-direction: column;
+  }
+
+  .edit-form-actions button,
+  .detail-card > .btn-agregar {
+    width: 100%;
   }
 }
