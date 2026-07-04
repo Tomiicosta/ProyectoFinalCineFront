@@ -97,16 +97,22 @@ export class Cart implements OnInit {
     * requiere tu backend para generar la preferencia de Mercado Pago.
     */
     const payload = {
+      storeOrderId: this.cart.id,
       title: `Pedido CinePass #${this.cart.id}`, 
       userEmail: this.cart.userEmail,
       items: this.cart.items.map((item: OrderItems) => ({
         id: item.id,
-        title: item.productName || 'Producto CinePass', 
+        productName: item.productName || 'Producto CinePass',
+        imageURL: item.imageURL,
         quantity: item.quantity,
-        unitPrice: item.historicalPrice,
-        priceInPoints: item.historicalPriceInPoints
+        historicalPrice: item.historicalPrice,
+        historicalUnitCost: item.historicalUnitCost,
+        historicalPriceInPoints: item.historicalPriceInPoints,
+        subtotal: item.subtotal,
+        subtotalInPoints: item.subtotalInPoints
       })),
-      totalAmount: this.cart.totalAmount
+      totalAmount: this.cart.totalAmount,
+      totalAmountInPoints: this.cart.totalAmountInPoints
     };
 
     

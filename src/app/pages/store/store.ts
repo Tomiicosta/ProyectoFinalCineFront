@@ -25,8 +25,8 @@ export class Store {
 
   constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler, private router: Router){}
 
-  verDetalleProducto(producto: Producto) {      
-    this.router.navigate(['/details', producto.id]);       
+  verDetalleProducto(producto: Producto) {
+    this.router.navigate(['/product-details', producto.id]);
   }
 
   cerrarDetalle() {

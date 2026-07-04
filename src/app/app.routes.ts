@@ -18,6 +18,7 @@ import { AdminProductos } from './pages/admin-productos/admin-productos';
 import { Cart } from './pages/cart/cart';
 import { Recompensas } from './pages/recompensas/recompensas';
 import { ProductDetails } from './pages/product-details/product-details';
+import { AdminDashboardPage } from './pages/admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -26,7 +27,7 @@ export const routes: Routes = [
     {path: 'login', component: Login},
     {path: 'register', component: Register},
     {path: 'store', component: Store},
-    {path: 'details/:id', component: ProductDetails},
+    {path: 'product-details/:id', component: ProductDetails},
     {path: 'cart', component: Cart, canActivate: [AuthGuard]},
     {path: 'ticket/step1', component: TicketStep1},
     {path: 'ticket/step2', component: TicketStep2},
@@ -35,6 +36,7 @@ export const routes: Routes = [
     {path: 'details/:id', component: MovieDetails},
     {path: 'profile', component: Perfil, canActivate: [AuthGuard]},
     {path: 'adminMovies',component: AdminMovies, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
+    {path: 'adminDashboard', component: AdminDashboardPage, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminFunciones',component: AdminFunciones, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminSalas',component:AdminSalas, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path:"recompensas",component:Recompensas},

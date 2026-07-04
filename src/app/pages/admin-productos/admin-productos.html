@@ -26,7 +26,7 @@
             <h4>Precio: ${{ producto.unitPrice }}</h4>
             <h4>Puntos: {{ producto.priceInPoints }}</h4>
             <h4>Stock disponible: {{ producto.stock }}</h4>
-            <h4>Costo total del stock: {{ producto.totalCostStock }}</h4>
+            <h4>Costo unitario: ${{ producto.unitCost }}</h4>
             <h4>Categoria: {{ producto.productType }}</h4>
 
 
@@ -55,7 +55,7 @@
             <li><span class="label">Precio</span><span class="value">{{ detalleProducto.unitPrice }}</span></li>
             <li><span class="label">Precio en puntos</span><span class="value">{{ detalleProducto.priceInPoints }}</span></li>
             <li><span class="label">Stock</span><span class="value">{{ detalleProducto.stock }}</span></li>
-            <li><span class="label">Costo total del Stock</span><span class="value">{{ detalleProducto.totalCostStock }}</span></li>
+            <li><span class="label">Costo unitario</span><span class="value">{{ detalleProducto.unitCost }}</span></li>
             <li><span class="label">Imagen del producto</span><span class="value">{{ detalleProducto.imageURL }}</span></li>
             <li><span class="label">Descripción</span><span class="value">{{ detalleProducto.description }}</span></li>
             <li><span class="label">Disponible</span><span class="value"><span class="chip" [class.ok]="detalleProducto.available" [class.bad]="!detalleProducto.available">{{ detalleProducto.available ? 'Sí' : 'No' }}</span></span></li>
@@ -94,8 +94,8 @@
           </fieldset>
 
           <fieldset>
-            <label for="totalCostStock">Costo total del stock</label>
-            <input type="number" id="totalCostStock" placeholder="Costo total del stock" formControlName="totalCostStock" min="1.0">
+            <label for="unitCost">Costo unitario</label>
+            <input type="number" id="unitCost" placeholder="Costo unitario" formControlName="unitCost" min="1.0">
           </fieldset>
 
           <fieldset>

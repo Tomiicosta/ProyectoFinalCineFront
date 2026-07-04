@@ -1,0 +1,136 @@
+<main id="dashboardPage">
+  <section class="dashboard-header">
+    <div>
+      <span class="eyebrow">Panel contable</span>
+      <h1>Admin dashboard</h1>
+      <p>Resumen de ventas, costos y ganancia neta por periodo.</p>
+    </div>
+
+    <form class="filters" (ngSubmit)="loadDashboard()">
+      <fieldset>
+        <label for="from">Desde</label>
+        <div class="date-input-wrap">
+          <input id="from" type="date" name="from" [(ngModel)]="from">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="to">Hasta</label>
+        <div class="date-input-wrap">
+          <input id="to" type="date" name="to" [(ngModel)]="to">
+        </div>
+      </fieldset>
+
+      <button type="submit">Aplicar</button>
+      <button type="button" class="btn-secondary" (click)="setCurrentMonth()">Este mes</button>
+    </form>
+  </section>
+
+  @if (loading) {
+    <section class="dashboard-state">
+      <p>Cargando datos contables...</p>
+    </section>
+  } @else if (dashboard) {
+    <section class="summary-grid">
+      <article class="summary-card">
+        <span>Tickets vendidos</span>
+        <strong>{{ dashboard.summary.ticketsSold }}</strong>
+      </article>
+
+      <article class="summary-card">
+        <span>Ingresos por entradas</span>
+        <strong>{{ formatCurrency(dashboard.summary.ticketRevenue) }}</strong>
+      </article>
+
+      <article class="summary-card">
+        <span>Productos vendidos</span>
+        <strong>{{ dashboard.summary.productsSold }}</strong>
+      </article>
+
+      <article class="summary-card">
+        <span>Ingresos por tienda</span>
+        <strong>{{ formatCurrency(dashboard.summary.storeRevenue) }}</strong>
+      </article>
+
+      <article class="summary-card">
+        <span>Costo de productos</span>
+        <strong>{{ formatCurrency(dashboard.summary.productCost) }}</strong>
+      </article>
+
+      <article class="summary-card profit">
+        <span>Ganancia neta</span>
+        <strong>{{ formatCurrency(dashboard.summary.netProfit) }}</strong>
+      </article>
+    </section>
+
+    <section class="tables-grid">
+      <article class="dashboard-panel">
+        <div class="panel-header">
+          <h2>Ventas por película</h2>
+          <span>{{ dashboard.from }} al {{ dashboard.to }}</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Película</th>
+                <th>Tickets</th>
+                <th>Ingresos</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of dashboard.ticketSales; track row.movieId) {
+                <tr>
+                  <td>{{ row.movieName }}</td>
+                  <td>{{ row.ticketsSold }}</td>
+                  <td>{{ formatCurrency(row.revenue) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="3" class="empty-cell">No hay ventas de entradas en este periodo.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="dashboard-panel">
+        <div class="panel-header">
+          <h2>Ventas por producto</h2>
+          <span>Ganancia calculada por costo unitario</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Ingresos</th>
+                <th>Costo</th>
+                <th>Ganancia</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of dashboard.productSales; track row.productId) {
+                <tr>
+                  <td>{{ row.productName }}</td>
+                  <td>{{ row.quantitySold }}</td>
+                  <td>{{ formatCurrency(row.revenue) }}</td>
+                  <td>{{ formatCurrency(row.cost) }}</td>
+                  <td>{{ formatCurrency(row.profit) }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="empty-cell">No hay ventas de productos en este periodo.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  }
+</main>
