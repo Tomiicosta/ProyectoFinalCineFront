@@ -12,7 +12,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService); // Asumiendo que existe
   const toastr = inject(ToastrService);
   
-  const token = localStorage.getItem('token');
+  const token = authService.getToken();
   let requestWithToken = req;
  
   if (token) {
@@ -27,16 +27,18 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
       catchError((error: HttpErrorResponse) => {
       
         //Revisa si el error es 401 (Unauthorized/Token Caducado) o 403 (Forbidden)
-        if (error.status === 401 || error.status === 403) {
+        if (error.status === 401) {
           console.error('Error de Autenticación: Token inválido o caducado. Redirigiendo a Login.');
           toastr.error('Error de Autenticación: Token inválido o caducado. Redirigiendo a Login.');
         
           //Limpia la sesión (tokens) y datos de usuario
           authService.logout(); 
-          localStorage.removeItem('token'); 
         
           //Redirige al usuario a la página de login
           router.navigate(['/login']); 
+        } else if (error.status === 403) {
+          toastr.error('No tenes permisos para realizar esta accion.');
+          router.navigate(['/']);
         }
         return throwError(() => error);
       })

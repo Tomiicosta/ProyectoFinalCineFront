@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Producto } from '../../models/producto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product/product-service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
+import { AuthService } from '../../services/AuthService/auth-service';
 
 @Component({
   selector: 'app-product-details',
@@ -17,7 +18,7 @@ export class ProductDetails implements OnInit {
   loading: boolean= true;
 
 
-  constructor(private route: ActivatedRoute, private productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService) {}
+  constructor(private route: ActivatedRoute, private productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private authService: AuthService, private router: Router) {}
 
   
 
@@ -35,6 +36,22 @@ export class ProductDetails implements OnInit {
   }
 
   agregarAlCarrito(producto: any) {
+    if (!this.authService.isLoggedIn()) {
+      this.toastr.info('Inicia sesion para agregar productos al carrito.');
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url }
+      });
+      return;
+    }
+
+    const isClient = this.authService.getRol()
+      ?.some(role => role.toUpperCase() === 'CLIENT');
+
+    if (!isClient) {
+      this.toastr.error('Tu usuario no tiene permisos para utilizar el carrito.');
+      return;
+    }
+
     const request = {
       productId: producto.id,
       quantity: 1, 
@@ -64,7 +81,5 @@ export class ProductDetails implements OnInit {
       console.warn('No se encontró ningún ID en la URL');
       this.loading = false;
     }
-
-    this.storeOrderService.getActiveCart();
   }
 }

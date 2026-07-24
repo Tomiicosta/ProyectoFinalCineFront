@@ -7,71 +7,113 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  
-  private loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
-  private administrador = new BehaviorSubject<boolean>(this.isLoggedIn());
+  private readonly jwtHelper = new JwtHelperService();
+  private readonly loggedIn = new BehaviorSubject<boolean>(false);
+  private readonly administrador = new BehaviorSubject<boolean>(false);
+  private currentRoles: string[] = [];
 
-  isLoggedIn$ = this.loggedIn.asObservable();
+  readonly isLoggedIn$ = this.loggedIn.asObservable();
+  readonly isAdmin$ = this.administrador.asObservable();
 
-  isAdmin$ = this.administrador.asObservable();
-
-  constructor(private http: HttpClient) {}
-
-  //Registra usuario
-  register(userData: Registro): Observable <any>{
-    return this.http.post(`/api/auth/register`, userData, {responseType: 'text'});
+  constructor(private http: HttpClient) {
+    // La interfaz nunca debe asumir un rol antes de validar la sesion guardada.
+    this.syncSession();
   }
 
-  //loggea usuario
+  // Registra usuario
+  register(userData: Registro): Observable<any> {
+    return this.http.post(`/api/auth/register`, userData, { responseType: 'text' });
+  }
+
+  // Loggea usuario
   login(usernameOrEmail: string, password: string) {
-    return this.http.post<{ token: string }>(`/api/auth/login`, { usernameOrEmail, password })
+    return this.http
+      .post<{ token: string }>(`/api/auth/login`, { usernameOrEmail, password })
       .pipe(
         tap(response => {
           localStorage.setItem('token', response.token);
-
-          this.loggedIn.next(true);
+          this.syncSession();
         })
       );
   }
 
-  //obtiene el token del usuario loggeado
-  getToken() {
-    return localStorage.getItem('token');
+  // Obtiene solamente un token vigente.
+  getToken(): string | null {
+    return this.syncSession();
   }
 
-  //elimina el token del usuario loggeado
-  logout() {
-  localStorage.removeItem('token');
-  this.loggedIn.next(false);   
-  this.administrador.next(false); 
+  logout(): void {
+    localStorage.removeItem('token');
+    this.setSessionState(false, []);
   }
 
-  //devuelve true o false dependiendo si el usuario esta loggeado o no
   isLoggedIn(): boolean {
-    const token = localStorage.getItem('token');
-    // Implementación más completa verificaría la expiración del token
-    return !!token; 
+    return this.syncSession() !== null;
   }
 
-  // funcion para obtener el rol del token
   getRol(): string[] | null {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const helper = new JwtHelperService();
-      const decodedToken = helper.decodeToken(token);
-      return decodedToken.roles; // Asumiendo que el rol está en 'role'
-    }
-    return null;
+    return this.syncSession() ? [...this.currentRoles] : null;
   }
 
-  //funcion para verificar si el usuario es admin
   isAdmin(): boolean {
-    const userRoles = this.getRol();
-    if(userRoles){
-      return userRoles.includes('ADMIN');
-    }
-
-    return false;
+    this.syncSession();
+    return this.administrador.value;
   }
 
+  /**
+   * Valida la sesion antes de publicarla. Un JWT vencido o malformado
+   * se elimina para que la aplicacion arranque como cliente/invitado.
+   */
+  private syncSession(): string | null {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      this.setSessionState(false, []);
+      return null;
+    }
+
+    try {
+      if (this.jwtHelper.isTokenExpired(token)) {
+        this.clearInvalidSession();
+        return null;
+      }
+
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      if (!decodedToken || typeof decodedToken !== 'object') {
+        this.clearInvalidSession();
+        return null;
+      }
+
+      const rolesClaim = decodedToken['roles'];
+      const roles = Array.isArray(rolesClaim)
+        ? rolesClaim.filter((role): role is string => typeof role === 'string')
+        : typeof rolesClaim === 'string'
+          ? [rolesClaim]
+          : [];
+
+      this.setSessionState(true, roles);
+      return token;
+    } catch {
+      this.clearInvalidSession();
+      return null;
+    }
+  }
+
+  private clearInvalidSession(): void {
+    localStorage.removeItem('token');
+    this.setSessionState(false, []);
+  }
+
+  private setSessionState(isLoggedIn: boolean, roles: string[]): void {
+    this.currentRoles = roles;
+    const isAdmin = roles.some(role => role.toUpperCase() === 'ADMIN');
+
+    if (this.loggedIn.value !== isLoggedIn) {
+      this.loggedIn.next(isLoggedIn);
+    }
+
+    if (this.administrador.value !== isAdmin) {
+      this.administrador.next(isAdmin);
+    }
+  }
 }

@@ -7,6 +7,7 @@ import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/AuthService/auth-service';
 
 @Component({
   selector: 'app-store',
@@ -23,7 +24,7 @@ export class Store {
   selectedProducto: any | null = null;
   detalleProducto: Producto | null = null;
 
-  constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler, private router: Router){}
+  constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler, private router: Router, private authService: AuthService){}
 
   verDetalleProducto(producto: Producto) {
     this.router.navigate(['/product-details', producto.id]);
@@ -44,6 +45,22 @@ export class Store {
   }
 
   agregarAlCarrito(producto: any) {
+    if (!this.authService.isLoggedIn()) {
+      this.toastr.info('Inicia sesion para agregar productos al carrito.');
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url }
+      });
+      return;
+    }
+
+    const isClient = this.authService.getRol()
+      ?.some(role => role.toUpperCase() === 'CLIENT');
+
+    if (!isClient) {
+      this.toastr.error('Tu usuario no tiene permisos para utilizar el carrito.');
+      return;
+    }
+
     const request = {
       productId: producto.id,
       quantity: 1, 
@@ -114,7 +131,6 @@ export class Store {
 
   ngOnInit(): void {
     this.getProductosDisponibles();
-    this.storeOrderService.getActiveCart();
   }
 
 }

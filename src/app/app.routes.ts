@@ -40,8 +40,8 @@ export const routes: Routes = [
     {path: 'adminFunciones',component: AdminFunciones, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: 'adminSalas',component:AdminSalas, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path:"recompensas",component:Recompensas},
-    {path: 'adminProductos', component: AdminProductos},
+    {path: 'adminProductos', component: AdminProductos, canActivate: [RoleGuard], data: {role : 'ADMIN'}},
     {path: '', redirectTo: '/inicio', pathMatch: 'full' }, // Si está logueado, va a 'inicio'
-    {path: '**', redirectTo: '/inicio' }, // Manejo de rutas no encontradas
+    {path: '**', redirectTo: '/' }, // Manejo de rutas no encontradas
     
 ];

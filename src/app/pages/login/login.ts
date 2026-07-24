@@ -39,17 +39,16 @@ export class Login implements OnInit {
 
   ngOnInit(): void {
 
-    //  Verificar sesión
-    // Intentar obtener usuario
-    this.userService.getMyProfile().subscribe({
-      next: (user) => {
-        // Si está logueado
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    if (this.authService.isLoggedIn()) {
+      this.userService.getMyProfile().subscribe({
+        next: () => {
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
 
     // Recibe el comando previo si ya viene de un step 3 (comprar ticket)
     this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';

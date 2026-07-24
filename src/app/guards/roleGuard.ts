@@ -1,48 +1,34 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import { AuthService } from '../services/AuthService/auth-service';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class RoleGuard implements CanActivate {
-
   constructor(private authService: AuthService, private router: Router) {}
 
-  //Metodo para proteger rutas que se necesita ser administrador
-  canActivate( route: ActivatedRouteSnapshot) : boolean | UrlTree {
-    
-    //Obtener el rol requerido de la configuración de la ruta
+  canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     const requiredRole = route.data['role'] as string;
 
     if (!requiredRole) {
-      //Si no se especifica un rol, permite el acceso por defecto
       return true;
     }
 
-    //Obtener los roles del usuario (usa tu método existente)
-    const userRoles = this.authService.getRol(); // Devuelve string[] | null
-    
-    
-    /*Verificaciones de Autenticación y Rol*/
-    
-    //No está logueado (no hay roles)
-    if (!userRoles || userRoles.length === 0) {
-      this.router.navigate(['/']); // Redirigir a login
-      return false; 
+    if (!this.authService.isLoggedIn()) {
+      return this.router.createUrlTree(['/login']);
     }
 
-    //Está logueado, verificar si tiene el rol requerido
-    const hasRequiredRole = userRoles.map(role => role.toUpperCase()).includes(requiredRole.toUpperCase());
+    const userRoles = this.authService.getRol() ?? [];
+    const hasRequiredRole = userRoles
+      .map(role => role.toUpperCase())
+      .includes(requiredRole.toUpperCase());
 
     if (hasRequiredRole) {
-      return true; // Acceso permitido
-    } else {
-      //Logueado, pero no tiene el rol
-
-      this.router.navigate(['/rol-incorrecto']); // Redirigir a una página de acceso denegado
-      return false;
+      return true;
     }
+
+    // El usuario conserva su sesion de cliente, pero no accede al area admin.
+    return this.router.createUrlTree(['/']);
   }
 }

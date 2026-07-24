@@ -58,7 +58,14 @@ ngOnInit() {
     this.cartCount = count;
   });
   
-  this.storeOrderService.getActiveCart().subscribe();
+  const isClient = this.authService.getRol()
+    ?.some(role => role.toUpperCase() === 'CLIENT');
+
+  if (isClient) {
+    this.storeOrderService.getActiveCart().subscribe({
+      error: error => console.error('No se pudo cargar el carrito activo.', error)
+    });
+  }
 }
 
 }

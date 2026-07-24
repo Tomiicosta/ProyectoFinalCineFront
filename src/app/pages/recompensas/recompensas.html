@@ -1,97 +1,179 @@
-<div class="rewards-page">
+<main class="rewards-page font-inter">
+  <div class="rewards-shell">
+    <section class="rewards-hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Club CINEMAS</span>
+        <h1>Tus funciones también tienen recompensa.</h1>
+        <p>
+          Sumá puntos con tus compras y canjealos por beneficios para disfrutar
+          todavía más cada visita al cine.
+        </p>
 
-  <!-- HERO -->
-  <section class="hero-card">
-    <div class="hero-content">
-      <span class="hero-icon">⭐</span>
-
-      <h1>Programa de Recompensas</h1>
-
-      <div class="points-number">
-        {{ user?.puntos || 0 }}
+        <div class="hero-highlights" aria-label="Beneficios del programa">
+          <span><i aria-hidden="true"></i> Canjes simples</span>
+          <span><i aria-hidden="true"></i> Beneficios exclusivos</span>
+          <span><i aria-hidden="true"></i> Más cine</span>
+        </div>
       </div>
 
-      <p class="points-label">
-        Puntos disponibles
-      </p>
+      <aside class="points-panel" aria-live="polite">
+        @if (cargando) {
+          <div class="points-skeleton" aria-label="Cargando puntos">
+            <span>Cargando puntos...</span>
+          </div>
+        } @else if (user) {
+          <span class="points-kicker">Tu saldo actual</span>
+          <strong class="points-value">{{ puntos }}</strong>
+          <span class="points-unit">puntos disponibles</span>
+          <div class="level-pill">
+            <span class="level-dot" aria-hidden="true"></span>
+            Nivel {{ getNivel() }}
+          </div>
+        } @else {
+          <span class="points-kicker">Tu saldo te espera</span>
+          <strong class="guest-title">Ingresá a tu cuenta</strong>
+          <p class="guest-copy">Consultá tus puntos y accedé a todos los canjes.</p>
+          <a
+            class="login-cta"
+            routerLink="/login"
+            [queryParams]="{ returnUrl: '/recompensas' }">
+            Iniciar sesión
+          </a>
+        }
+      </aside>
+    </section>
 
-      <div class="level-badge">
-        {{ getNivel() }}
-      </div>
-    </div>
-  </section>
-
-  <!-- PROGRESO -->
-  <section class="progress-card">
-
-    <div class="progress-header">
-      <h2>Próximo nivel</h2>
-      <span>
-  {{ user?.puntos || 0 }}
-  /
-  {{ proximaMeta }}
-  pts
-</span>
-    </div>
-
-    <div class="progress-bar">
-      <div class="progress-fill" [style.width.%]="porcentajeProgreso">
-      </div>
-    </div>
-    <p class="next-level-text">
-
-  Te faltan
-
-  <strong>{{ faltanPuntos }}</strong>
-
-  puntos para llegar a
-
-  <strong>{{ getProximoNivel() }}</strong>
-
-</p>
-<div *ngIf="getProximoNivel() === '🏆 Nivel Máximo'"
-     class="max-level">
-
-  🎉 ¡Felicitaciones! Alcanzaste el nivel máximo.
-
-</div>
-
-  </section>
-
-  
-
-  <!-- RECOMPENSAS -->
-  <section>
-
-    <h2 class="section-title">
-       Recompensas disponibles
-    </h2>
-
-    <div class="rewards-grid">
-
-      <div class="reward-card" *ngFor="let recompensa of recompensas">
-
-        <div class="reward-icon">
-          {{ recompensa.icono }}
+    @if (user) {
+      <section class="level-section" aria-labelledby="level-title">
+        <div class="section-heading level-heading">
+          <div>
+            <span class="eyebrow">Tu recorrido</span>
+            <h2 id="level-title">Camino a {{ getProximoNivel() }}</h2>
+          </div>
+          <span class="progress-count">{{ puntos }} / {{ proximaMeta }} pts</span>
         </div>
 
-        <h3>{{ recompensa.nombre }}</h3>
+        <div
+          class="progress-track"
+          role="progressbar"
+          [attr.aria-valuenow]="porcentajeProgreso"
+          aria-valuemin="0"
+          aria-valuemax="100">
+          <div class="progress-fill" [style.width.%]="porcentajeProgreso"></div>
+        </div>
 
-        <p>{{ recompensa.puntos }} puntos</p>
+        <div class="level-copy">
+          @if (getProximoNivel() === 'Nivel máximo') {
+            <p>Alcanzaste el nivel más alto del Club CINEMAS.</p>
+          } @else {
+            <p>
+              Te faltan <strong>{{ faltanPuntos }} puntos</strong> para llegar a
+              <strong>{{ getProximoNivel() }}</strong>.
+            </p>
+          }
+          <span>Los puntos se actualizan después de cada compra aprobada.</span>
+        </div>
 
-        <button
-(click)="canjear(recompensa)"
-[disabled]="user?.puntos < recompensa.puntos">
+        <div class="level-steps">
+          @for (nivel of niveles; track nivel.nombre) {
+            <div
+              class="level-step"
+              [class.is-reached]="alcanzoNivel(nivel.puntos)"
+              [class.is-current]="esNivelActual(nivel.nombre)">
+              <span class="step-marker" aria-hidden="true"></span>
+              <strong>{{ nivel.nombre }}</strong>
+              <small>{{ nivel.puntos }} pts</small>
+            </div>
+          }
+        </div>
+      </section>
+    }
 
-Canjear
-
-</button>
-
+    <section class="catalog-section" aria-labelledby="rewards-title">
+      <div class="section-heading catalog-heading">
+        <div>
+          <span class="eyebrow">Catálogo</span>
+          <h2 id="rewards-title">Elegí tu próxima recompensa</h2>
+        </div>
+        <p>Los beneficios están sujetos a disponibilidad en el complejo.</p>
       </div>
 
+      <div class="rewards-grid">
+        @for (recompensa of recompensas; track recompensa.nombre) {
+          <article class="reward-card" [class.featured]="recompensa.destacada">
+            <div class="card-topline">
+              <span class="reward-category">{{ recompensa.categoria }}</span>
+              @if (recompensa.destacada) {
+                <span class="featured-label">Premium</span>
+              }
+            </div>
+
+            <div class="reward-copy">
+              <h3>{{ recompensa.nombre }}</h3>
+              <p>{{ recompensa.descripcion }}</p>
+            </div>
+
+            <div class="reward-footer">
+              <div class="reward-price">
+                <strong>{{ recompensa.puntos }}</strong>
+                <span>puntos</span>
+              </div>
+
+              @if (cargando) {
+                <button type="button" disabled>Cargando</button>
+              } @else if (!user) {
+                <a
+                  class="reward-login"
+                  routerLink="/login"
+                  [queryParams]="{ returnUrl: '/recompensas' }">
+                  Ingresar
+                </a>
+              } @else {
+                <button
+                  type="button"
+                  (click)="canjear(recompensa)"
+                  [disabled]="!puedeCanjear(recompensa)">
+                  {{ canjeando === recompensa.nombre ? 'Canjeando...' : 'Canjear' }}
+                </button>
+              }
+            </div>
+
+            @if (user && puntos < recompensa.puntos) {
+              <span class="points-needed">
+                Te faltan {{ recompensa.puntos - puntos }} puntos
+              </span>
+            }
+          </article>
+        }
+      </div>
+    </section>
+
+  </div>
+
+  @if (codigoCanje) {
+    <div class="claim-backdrop" role="presentation" (click)="cerrarComprobante()">
+      <section
+        class="claim-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="claim-title"
+        (click)="$event.stopPropagation()">
+        <button
+          class="dialog-close"
+          type="button"
+          aria-label="Cerrar comprobante"
+          (click)="cerrarComprobante()">
+          ×
+        </button>
+        <div class="claim-check" aria-hidden="true">✓</div>
+        <span class="eyebrow">Canje confirmado</span>
+        <h2 id="claim-title">{{ recompensaCanjeada }}</h2>
+        <p>Presentá este código en el complejo para retirar tu beneficio.</p>
+        <div class="claim-code">{{ codigoCanje }}</div>
+        <button class="dialog-action" type="button" (click)="cerrarComprobante()">
+          Entendido
+        </button>
+      </section>
     </div>
-
-  </section>
-
-
-</div>
+  }
+</main>
