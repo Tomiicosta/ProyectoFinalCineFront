@@ -23,7 +23,7 @@ export class Register implements OnInit {
   readonly ruta_ojo_cerrado = "img/password/eye-closed.svg";
   readonly ruta_ojo_abierto = "img/password/eye-open-svgrepo-com.svg";
 
-  readonly passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\[\]{}|;:'",.<>?/\\`~])[A-Za-z\d!@#$%^&*()\-_=+\[\]{}|;:'",.<>?/\\`~]{6,64}$/; // referencia password OWASP
+  readonly passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\[\]{}|;:'",.<>?/\\`~])[A-Za-z\d!@#$%^&*()\-_=+\[\]{}|;:'",.<>?/\\`~]{6,20}$/; // referencia password OWASP
 
   formRegister: FormGroup;
   name: FormControl;
