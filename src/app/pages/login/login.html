@@ -26,9 +26,10 @@
           @if(Password.invalid && Password.touched){
             <p class = "error-message"> Este campo no puede estar vacío.</p>
           }
+          <p class="olvidasteContrasenia"><a routerLink="/forgot-password">¿Olvidaste tu contraseña?</a></p>
         </fieldset>
       </div>
-  
+
       <div class="registerText">
         <p>¿No tienes una cuenta?</p>
         <p class="registrate"><a routerLink="/register" class="registrate">Regístrate</a></p>
