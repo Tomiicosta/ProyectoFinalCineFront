@@ -19,6 +19,8 @@ import { Cart } from './pages/cart/cart';
 import { Recompensas } from './pages/recompensas/recompensas';
 import { ProductDetails } from './pages/product-details/product-details';
 import { AdminDashboardPage } from './pages/admin-dashboard/admin-dashboard';
+import { ForgotPassword } from './pages/forgot-password/forgot-password';
+import { ResetPassword } from './pages/reset-password/reset-password';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -26,6 +28,8 @@ export const routes: Routes = [
     {path: 'cinemas', component: Home },
     {path: 'login', component: Login},
     {path: 'register', component: Register},
+    {path: 'forgot-password', component: ForgotPassword},
+    {path: 'reset-password', component: ResetPassword},
     {path: 'store', component: Store},
     {path: 'product-details/:id', component: ProductDetails},
     {path: 'cart', component: Cart, canActivate: [AuthGuard]},

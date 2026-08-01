@@ -25,6 +25,16 @@ export class AuthService {
     return this.http.post(`/api/auth/register`, userData, { responseType: 'text' });
   }
 
+  // Solicita el email de recuperación de contraseña
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`/api/auth/forgot-password`, { email }, { responseType: 'text' });
+  }
+
+  // Restablece la contraseña a partir del token recibido por email
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post(`/api/auth/reset-password`, { token, newPassword }, { responseType: 'text' });
+  }
+
   // Loggea usuario
   login(usernameOrEmail: string, password: string) {
     return this.http
