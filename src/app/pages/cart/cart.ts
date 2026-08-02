@@ -7,11 +7,12 @@ import { PaymentStoreService } from '../../services/paymentStore/payment-store-s
 import { OrderItems } from '../../models/StoreModels/orderItems';
 import { AuthService } from '../../services/AuthService/auth-service';
 import { orderItemsRequest } from '../../models/StoreModels/orderItemsRequest';
+import { UserService } from '../../services/user/user';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, RouterLink], 
+  imports: [CommonModule, RouterLink],
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })
@@ -27,7 +28,7 @@ export class Cart implements OnInit {
   cargandoRedireccionLogin = false;
 
 
-  constructor(private storeOrderService: StoreOrderService, private paymentStoreService: PaymentStoreService, private authService: AuthService, private router: Router) {}
+  constructor(private storeOrderService: StoreOrderService, private paymentStoreService: PaymentStoreService, private authService: AuthService, private router: Router, private userService: UserService) { }
 
   cargarCarrito(): void {
     this.storeOrderService.getActiveCart().subscribe({
@@ -45,9 +46,9 @@ export class Cart implements OnInit {
   eliminarProducto(itemId: number): void {
     this.storeOrderService.deleteItemFromCart(itemId).subscribe({
       next: () => {
-       this.cart.items = this.cart.items.filter((item: any) => item.id !== itemId);
-        
-        this.storeOrderService.actualizarContador(this.cart.items.length); 
+        this.cart.items = this.cart.items.filter((item: any) => item.id !== itemId);
+
+        this.storeOrderService.actualizarContador(this.cart.items.length);
         this.recalcularTotales();
       },
       error: (err) => {
@@ -58,12 +59,12 @@ export class Cart implements OnInit {
   }
 
   recalcularTotales() {
-    const itemsValidos = this.cart.items.filter((item:OrderItems) => item && item.historicalPrice !== undefined);
+    const itemsValidos = this.cart.items.filter((item: OrderItems) => item && item.historicalPrice !== undefined);
 
-    this.cart.totalAmount = itemsValidos.reduce((acc: number, item: OrderItems) => 
+    this.cart.totalAmount = itemsValidos.reduce((acc: number, item: OrderItems) =>
       acc + (item.historicalPrice * item.quantity), 0);
-    
-    this.cart.totalAmountInPoints = itemsValidos.reduce((acc: number, item: OrderItems) => 
+
+    this.cart.totalAmountInPoints = itemsValidos.reduce((acc: number, item: OrderItems) =>
       acc + (item.historicalPriceInPoints * item.quantity), 0);
   }
 
@@ -71,10 +72,10 @@ export class Cart implements OnInit {
 
     // Seguimiento en consola para depuración
     console.log('FINALIZAR PRESIONADO', this.cart);
-  
+
     // Limpia errores previos de la señal o variable
-    this.errorMessage.set(null); 
-  
+    this.errorMessage.set(null);
+
     // 1. Validaciones de seguridad y negocio
     if (this.confirmacion !== 'compra') {
       this.errorMessage.set('Debe aceptar los términos y condiciones antes de terminar.');
@@ -91,6 +92,7 @@ export class Cart implements OnInit {
       return;
     }
 
+
     /**
     * 2. Mapeo del Payload basado en StoreOrderDetail
     * Adaptamos los datos de la interfaz de la imagen al formato que 
@@ -98,7 +100,7 @@ export class Cart implements OnInit {
     */
     const payload = {
       storeOrderId: this.cart.id,
-      title: `Pedido CinePass #${this.cart.id}`, 
+      title: `Pedido CinePass #${this.cart.id}`,
       userEmail: this.cart.userEmail,
       items: this.cart.items.map((item: OrderItems) => ({
         id: item.id,
@@ -115,11 +117,11 @@ export class Cart implements OnInit {
       totalAmountInPoints: this.cart.totalAmountInPoints
     };
 
-    
+
 
     this.paymentStoreService.crearPreferencia(payload).subscribe({
       next: (response) => {
-        
+
 
         // Inicializar Mercado Pago una sola vez
         const mp = this.paymentStoreService.inicializarMercadoPago();
@@ -131,7 +133,7 @@ export class Cart implements OnInit {
         });
 
         // Redirige a Mercado Pago
-        window.location.href = response.initPoint; 
+        window.location.href = response.initPoint;
       },
       error: (err) => {
         console.error('Error al generar la preferencia:', err);
@@ -150,10 +152,41 @@ export class Cart implements OnInit {
     }, 1200); // efecto de cargando (1000 = 1seg)
   }
 
+  user: any;
+
   ngOnInit(): void {
+
     this.cargarCarrito();
 
     this.usuarioLogueado = this.authService.isLoggedIn();
+
+    if (this.usuarioLogueado) {
+      this.userService.getMyProfile().subscribe({
+        next: (data) => {
+          this.user = data;
+        }
+      });
+    }
   }
 
+  pagarConPuntos() {
+
+    this.userService.descontarPuntos(this.cart.totalAmountInPoints)
+      .subscribe({
+        next: () => {
+
+          alert("Compra realizada con puntos.");
+
+          //  endpoint que confirma la compra
+          // y vacía el carrito pero todavia no esta 
+
+        },
+        error: (err) => {
+          console.error(err);
+          alert("No se pudo realizar la compra.");
+        }
+      });
+
+  }
 }
+

@@ -342,3 +342,14 @@ h2{
     width: 100%;
   }
 }
+.btn-pago:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    filter: grayscale(70%);
+    transform: none;
+    box-shadow: none;
+}
+.btn-pago:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
