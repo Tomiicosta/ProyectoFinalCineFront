@@ -16,6 +16,7 @@ import { UserService } from '../../services/user/user';
 export class Login implements OnInit {
 
   tipoDeCampo : boolean = false;
+  cargando: boolean = false;
 
   readonly ruta_ojo_cerrado = "img/password/eye-closed.svg";
   readonly ruta_ojo_abierto = "img/password/eye-open-svgrepo-com.svg";
@@ -61,6 +62,8 @@ export class Login implements OnInit {
       return;
     }
 
+    this.cargando = true;
+
     this.authService.login(this.formLogin.value.User, this.formLogin.value.Password).subscribe({
       next: () => {
 
@@ -72,9 +75,10 @@ export class Login implements OnInit {
         } else {
           this.router.navigate(['/']);
         }
-        
+
       },
       error: () => {
+        this.cargando = false;
         this.toastr.error('Error de autenticación. Verifica tus credenciales.');
       }
     });
