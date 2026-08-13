@@ -16,6 +16,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ForgotPassword {
 
   enviado: boolean = false;
+  cargando: boolean = false;
 
   Email: FormControl;
   formForgotPassword: FormGroup;
@@ -38,11 +39,15 @@ export class ForgotPassword {
       return;
     }
 
+    this.cargando = true;
+
     this.authService.forgotPassword(this.Email.value).subscribe({
       next: () => {
+        this.cargando = false;
         this.enviado = true;
       },
       error: (error: HttpErrorResponse) => {
+        this.cargando = false;
         this.errorHandlerService.handleHttpError(error);
       }
     });
