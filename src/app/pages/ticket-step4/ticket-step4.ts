@@ -1,5 +1,4 @@
-import { Component, computed, OnInit, signal, WritableSignal } from '@angular/core';
-import { AuthService } from '../../services/AuthService/auth-service';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { TicketService } from '../../services/ticket/ticket-service';
 import { PaymentService } from '../../services/payment/payment-service';
 import { Router } from '@angular/router';
@@ -11,10 +10,6 @@ import { CinemaService } from '../../services/cinema/cinema-service';
 import { Compra } from '../../models/compra';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user/user';
-import { Butaca } from '../../models/butaca';
-
-// declarar MercadoPago globalmente
-declare var MercadoPago: any;
 
 @Component({
   selector: 'app-ticket-step4',
@@ -25,33 +20,24 @@ declare var MercadoPago: any;
 })
 export class TicketStep4 implements OnInit {
 
-  usuarioLogueado: boolean = false;
+  // Nota: esta ruta tiene AuthGuard (ver app.routes.ts), por lo que acá
+  // el usuario SIEMPRE está logueado. No hace falta manejar el caso contrario.
   funcionCaducada: boolean = false;
-  confirmacion: string | null = null;
+  terminosAceptados: boolean = false;
   peliculaSeleccionada: Movie | undefined;
   funcionSeleccionada: Funcion | undefined;
   compra! : Compra | undefined;
   totalButacasSeleccionadas : number = 0;
   butacasFilasLetras : string = "";
 
-  // modal de Login / Register / Funcion caducada antes de finalizar compra
-  mostrarModal = false;
-  cargandoRedireccionLogin = false;
-  cargandoRedireccionRegister = false;
+  cargandoPago = false;
   cargandoRedireccionCaducado = false;
+  mostrarTerminos = false;
 
   // Signal para mostrar mensajes de error en la UI
   errorMessage: WritableSignal<string | null> = signal(null);
 
-  compraInfo: any = {
-    nombre: '',
-    precio: 0,
-    preferenceId: null
-  };
-
-
   constructor(
-    private authService: AuthService,
     private pagoService: PaymentService,
     private location: Location,
     private router: Router,
@@ -66,17 +52,16 @@ export class TicketStep4 implements OnInit {
   ngOnInit(): void {
 
     this.totalButacasSeleccionadas = this.ticketService.totalButacas;
-  
-    //  Verificar sesión
-    this.usuarioLogueado = this.authService.isLoggedIn();
 
-    // Verifica si ya habia una compra, pelicula y funcion seleccionada previamente
+    // Verifica si ya habia una compra, pelicula y funcion seleccionada previamente.
+    // Si falta algo, o la función ya pasó, tratamos ambos casos igual: bloqueamos
+    // con el modal y mandamos a elegir de nuevo (antes solo se bloqueaba si la
+    // función existía y estaba vencida, dejando la página rota si no había datos).
     const savedCompra = localStorage.getItem("compra");
     const savedPelicula = localStorage.getItem("peliculaSeleccionada");
     const savedFuncion = localStorage.getItem("funcion");
 
     if (savedCompra && savedPelicula && savedFuncion) {
-      // Setea la Compra, Pelicula y Funcion previamente definida
       const compra = JSON.parse(savedCompra);
       const pelicula = JSON.parse(savedPelicula);
       const funcion = JSON.parse(savedFuncion);
@@ -85,48 +70,38 @@ export class TicketStep4 implements OnInit {
       this.ticketService.setPeliculaSeleccionada(pelicula);
       this.ticketService.setFuncion(funcion);
 
-      // Verifica si la función ya expiró
       const fechaFuncion = new Date(`${funcion.date}T${funcion.time}`);
       this.funcionCaducada = fechaFuncion.getTime() < Date.now();
-      if (this.funcionCaducada) {
-        this.mostrarModal = true;   // muestra el modal
-      }
-
     } else {
       this.funcionCaducada = true; // no hay función guardada
     }
 
+    if (this.funcionCaducada) {
+      return;
+    }
 
-    // Intentar obtener usuario
+    // Completa el email del comprador con el del usuario logueado
     this.userService.getMyProfile().subscribe({
       next: (user) => {
-        // Si está logueado
         const compra = this.ticketService.getCompra();
         if (compra) {
-          // SETEA EL EMAIL DEL USUARIO
           compra.userEmail = user.email;
           this.ticketService.setCompra(compra);
         }
       },
-      error: (err) => {
-        if (err.status === 403) {
-          // SI NO está logueado
-          this.mostrarModal = true;   // muestra el modal
-          return;
-        }
-        console.error(err);
-      }
+      error: (err) => console.error(err)
     });
 
     //  Cargar datos
     this.funcionSeleccionada = this.ticketService.getFuncion();
     this.peliculaSeleccionada = this.ticketService.getPeliculaSeleccionada()
-    
+
     if (!this.peliculaSeleccionada || !this.funcionSeleccionada) {
       console.warn('No se encontraron datos de película o función seleccionadas.');
+      this.funcionCaducada = true;
       return;
     }
- 
+
     this.butacasFilasLetras = this.ticketService.getButacasFilasLetras();
     //  Obtener sala
     this.cinemaService.getSala(this.funcionSeleccionada.cinemaId).subscribe({
@@ -135,14 +110,6 @@ export class TicketStep4 implements OnInit {
     });
 
     this.getCompra();
-
-    //  Inicializar datos de compra
-    this.compraInfo = {
-      nombre: this.peliculaSeleccionada.title,
-      precio: this.calcularTotal(),
-      preferenceId: null
-    };
-
   }
 
   
@@ -164,25 +131,15 @@ export class TicketStep4 implements OnInit {
    *  Se ejecuta al hacer clic en "FINALIZAR"
    */
   iniciarPago(): void {
-    // Seguimiento en consola
-    console.log('FINALIZAR PRESIONADO', this.compra)
-    
-    // Limpia error previo
-    this.errorMessage.set(null); 
-    
-    if(this.confirmacion !== 'compra'){
-      this.errorMessage.set('Debe aceptar los terminos y condiciones antes de terminar.');
+    this.errorMessage.set(null);
+
+    if (!this.terminosAceptados) {
+      this.errorMessage.set('Debe aceptar los términos y condiciones antes de continuar.');
       return;
     }
-
-    if (!this.usuarioLogueado) {
-      this.redirigirLogin();
-      return;
-    }
-
 
     if (!this.compra) {
-      console.error('No hay datos de compra disponibles.');
+      this.errorMessage.set('No hay datos de compra disponibles. Volvé a seleccionar tus butacas.');
       return;
     }
 
@@ -196,26 +153,17 @@ export class TicketStep4 implements OnInit {
       functionId: this.compra.functionId
     };
 
-    
+    this.cargandoPago = true;
 
     this.pagoService.crearPreferencia(payload).subscribe({
       next: (response) => {
-        
-
-        // Inicializar Mercado Pago una sola vez
-        const mp = this.pagoService.inicializarMercadoPago();
-
-        // Renderizar el botón/ventana de pago
-        mp.bricks().create('wallet', 'wallet_container', {
-          initialization: { preferenceId: response.preferenceId },
-          customization: { texts: { valueProp: 'smart_option' } },
-        });
-
-        // Redirige a Mercado Pago
-        window.location.href = response.initPoint; 
+        // Redirige al checkout de Mercado Pago
+        window.location.href = response.initPoint;
       },
       error: (err) => {
         console.error('Error al generar la preferencia:', err);
+        this.cargandoPago = false;
+        this.errorMessage.set('No pudimos iniciar el pago. Intentá nuevamente.');
       }
     });
   }
@@ -265,52 +213,21 @@ export class TicketStep4 implements OnInit {
     this.location.back();
   }
 
-  // boton para confirmar inicio de sesion si esta deslogueado
-  redirigirLogin() {
-    this.cargandoRedireccionLogin = true;
-
-    setTimeout(() => {
-      // Construye URL a donde debe volver
-      this.router.navigate(['/login'], {
-        queryParams: { returnUrl: '/ticket/step4' }
-      });
-    }, 1200); // efecto de cargando (1000 = 1seg)
-  }
-
-  redirigirRegister() {
-    this.cargandoRedireccionRegister = true;
-
-    setTimeout(() => {
-      // Construye URL a donde debe volver
-      this.router.navigate(['/register'], {
-        queryParams: { returnUrl: '/ticket/step4' }
-      });
-    }, 1200); // efecto de cargando (1000 = 1seg)
-  }
-
   redirigirStep2() {
     this.cargandoRedireccionCaducado = true;
 
     setTimeout(() => {
-      // Construye URL a donde debe volver
       this.router.navigate(['/ticket/step2']);
     }, 1200); // efecto de cargando (1000 = 1seg)
   }
 
-  confirmarPaso4(): void {
-    if (!this.confirmacion) {
-      alert('Debe seleccionar un tipo de operación.');
-      return;
-    }
-
-    if (this.confirmacion === 'compra') {
-      this.iniciarPago();
-    } else {
-      this.router.navigate(['/confirmacion-reserva']);
-    }
+  abrirTerminos(): void {
+    this.mostrarTerminos = true;
   }
 
-  
+  cerrarTerminos(): void {
+    this.mostrarTerminos = false;
+  }
 }
 
 
