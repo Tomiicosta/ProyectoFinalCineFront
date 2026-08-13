@@ -1,6 +1,16 @@
 <main>
 <section class="registerPage">
     <div class="container">
+        <div class="icon-wrap">
+          <div class="icon-glow"></div>
+          <svg class="user-plus-icon" viewBox="0 0 56 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="20" cy="14" r="8" fill="none" stroke="currentColor" stroke-width="3"/>
+            <path d="M4 42c0-9 7-14.5 16-14.5s16 5.5 16 14.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="46" y1="10" x2="46" y2="24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="39" y1="17" x2="53" y2="17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+
         <h2>Registro</h2>
         <form class = "registerForm" [formGroup]="formRegister" (ngSubmit)="onSubmit()">
             <fieldset class="field">
@@ -89,7 +99,14 @@
                 }
             </fieldset>
                
-            <button class="btnRegister" type="submit" [disabled]= "formRegister.invalid" >Registrarse</button>
+            <button class="btnRegister" type="submit" [disabled]="formRegister.invalid || cargando">
+              @if (cargando) {
+                <span class="spinner" aria-hidden="true"></span>
+                <span>Registrando...</span>
+              } @else {
+                <span>Registrarse</span>
+              }
+            </button>
         </form>
     </div>
 </section>
