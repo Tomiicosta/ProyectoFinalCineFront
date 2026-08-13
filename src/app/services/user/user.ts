@@ -22,6 +22,13 @@ export class UserService {
     return this.http.get<Ticket[]>('http://localhost:8080/api/tickets');
   }
 
+  descontarPuntos(puntos: number) {
+  return this.http.put<any>(
+    '/api/userManagement/me/points',
+    { puntos }
+  );
+}
+
   claimReward(
   rewardName: string,
   pointsRequired: number
