@@ -47,6 +47,7 @@
             alt="Mercado Pago" />
           FINALIZAR COMPRA
         </button>
+        <p class="payment-error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
         <button id="btn-points" class="btn-pago"
           [disabled]="!usuarioLogueado || !user || user.puntos < cart.totalAmountInPoints" (click)="pagarConPuntos()">
 
