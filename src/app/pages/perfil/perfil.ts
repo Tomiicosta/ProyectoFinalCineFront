@@ -14,6 +14,9 @@ import { SeatService } from '../../services/seat-service';
 import { Butaca } from '../../models/butaca';
 import { FunctionService } from '../../services/function/function-service';
 import { Funcion } from '../../models/funcion';
+import { ActivatedRoute, Router } from '@angular/router';
+import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
+import { StoreOrderList } from '../../models/StoreModels/storeOrderList';
 
 interface EditUser {
   name: string;
@@ -35,6 +38,8 @@ interface EditUser {
 export class  Perfil implements OnInit {
 
   showTickets = false;
+  showPurchases = false;
+  purchases: StoreOrderList[] = [];
   tickets: Ticket[] = [];
   selectedIndex: number | null = null;
   selectedTicket: Ticket | null = null;
@@ -68,11 +73,48 @@ export class  Perfil implements OnInit {
     private errorHandlerService: ErrorHandler,
     private cinemaService: CinemaService,
     private seatService: SeatService,
-    private functionService: FunctionService
+    private functionService: FunctionService,
+    private storeOrderService: StoreOrderService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
   
   ngOnInit(): void {
     this.loadProfile();
+    this.checkSuccessfulPurchase();
+  }
+
+  private checkSuccessfulPurchase(): void {
+    if (this.route.snapshot.queryParamMap.get('compra') !== 'tienda') return;
+    this.toastr.success('¡Compra de tienda confirmada! Ya podés verla abajo.');
+    this.router.navigate([], { relativeTo: this.route, queryParams: {}, replaceUrl: true });
+    this.openStorePurchases();
+  }
+
+  togglePurchases(): void {
+    this.showPurchases = !this.showPurchases;
+    this.showTickets = false;
+    this.editMode = false;
+    if (this.showPurchases && this.purchases.length === 0) this.loadStorePurchases();
+  }
+
+  closePurchases(): void {
+    this.showPurchases = false;
+  }
+
+  private openStorePurchases(): void {
+    this.showTickets = false;
+    this.editMode = false;
+    this.showPasswordForm = false;
+    this.showPurchases = true;
+    this.loadStorePurchases();
+  }
+
+  private loadStorePurchases(): void {
+    this.storeOrderService.getHistory().subscribe({
+      next: (data) => this.purchases = data,
+      error: (err) => console.error('Error cargando compras de tienda:', err)
+    });
   }
   
   //traer datos del usuario loggeado
@@ -102,6 +144,7 @@ export class  Perfil implements OnInit {
     if (this.editMode) {
       // cierro tickets
       this.showTickets = false;
+      this.showPurchases = false;
       this.selectedIndex = null;
       this.selectedTicket = null;
       this.selectedSala = null;
@@ -228,6 +271,7 @@ export class  Perfil implements OnInit {
 
   toggleTickets(): void {
     this.showTickets = !this.showTickets;
+    this.showPurchases = false;
 
     if (this.showTickets) {
       // Al abrir tickets, cierro edición

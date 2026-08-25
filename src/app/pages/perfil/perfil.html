@@ -1,7 +1,7 @@
 <main id="perfilPage">
 
   <!-- Encabezado -->
-  <section class="profile-header" [class.has-panel]="editMode || showTickets">
+  <section class="profile-header" [class.has-panel]="editMode || showTickets || showPurchases">
     <h1>Mi perfil</h1>
 
     @if (user) {
@@ -14,7 +14,7 @@
   <!-- Contenido principal -->
   @if (user) {
 
-  <section class="profile-content" [class.has-panel]="editMode || showTickets">
+  <section class="profile-content" [class.has-panel]="editMode || showTickets || showPurchases">
 
     <!-- COLUMNA IZQUIERDA -->
     <div class="profile-summary">
@@ -59,6 +59,9 @@
           @if (user.role === "CLIENT") {
           <button type="button" class="secondary-action" (click)="toggleTickets()">
             {{ showTickets ? 'Ocultar entradas' : 'Ver mis entradas' }}
+          </button>
+          <button type="button" class="secondary-action" (click)="togglePurchases()">
+            {{ showPurchases ? 'Ocultar compras' : 'Ver mis compras' }}
           </button>
           }
         </div>
@@ -122,6 +125,40 @@
     </section>
     }
 
+    @if (showPurchases) {
+    <section class="tickets-section">
+      <div class="tickets-header">
+        <h2>Mis compras de tienda</h2>
+        <button type="button" class="tickets-back" (click)="closePurchases()">Volver</button>
+      </div>
+
+      @if (purchases.length > 0) {
+        @for (purchase of purchases; track purchase.id) {
+        <div class="ticket-detail">
+          <p><strong>Pedido:</strong> #{{ purchase.id }}</p>
+          <p><strong>Código de compra:</strong> {{ purchase.purchaseCode || 'Pendiente' }}</p>
+          <p>
+            <strong>Comprado el:</strong>
+            {{ formatearFecha(purchase.createdAtDate) }} a las {{ formatearHora(purchase.createdAtTime) }} hs
+          </p>
+          <p><strong>Forma de pago:</strong> {{ purchase.paidPoints ? 'Puntos' : 'Mercado Pago' }}</p>
+          <p><strong>Total:</strong> $ {{ purchase.totalAmount }}</p>
+
+          <ul>
+            @for (item of purchase.items; track item.id) {
+            <li>
+              <strong>{{ item.productName }}</strong> — {{ item.quantity }} unidad(es),
+              subtotal $ {{ item.subtotal }}
+            </li>
+            }
+          </ul>
+        </div>
+        }
+      } @else {
+        <p>No tenés compras de tienda registradas.</p>
+      }
+    </section>
+    }
     <!-- FORMULARIO DE EDICIÓN -->
     @if (editMode) {
     <section class="profile-form-section">

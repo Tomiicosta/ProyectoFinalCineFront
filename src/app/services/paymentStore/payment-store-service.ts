@@ -34,4 +34,15 @@ export class PaymentStoreService {
   crearPreferencia(payload: any): Observable<{ preferenceId: string; initPoint: string }> {
     return this.http.post<{ preferenceId: string; initPoint: string }>(`/api/paymentStore/create`, payload);
   }
+
+  pagarConPuntos(storeOrderId: number): Observable<{
+    paymentStoreId: number;
+    storeOrderId: number;
+    status: string;
+    paidPoints: boolean;
+    purchaseCode: string;
+    remainingPoints: number;
+  }> {
+    return this.http.post<any>(`/api/paymentStore/points/${storeOrderId}`, {});
+  }
 }
