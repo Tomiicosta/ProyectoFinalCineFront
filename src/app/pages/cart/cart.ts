@@ -171,22 +171,25 @@ export class Cart implements OnInit {
 
   pagarConPuntos() {
 
-    this.userService.descontarPuntos(this.cart.totalAmountInPoints)
-      .subscribe({
-        next: () => {
+    if (!this.usuarioLogueado || !this.cart?.id) {
+      this.redirigirLogin();
+      return;
+    }
 
-          alert("Compra realizada con puntos.");
-
-          //  endpoint que confirma la compra
-          // y vacía el carrito pero todavia no esta 
-
+    this.paymentStoreService.pagarConPuntos(this.cart.id).subscribe({
+        next: (response) => {
+          if (this.user) this.user.puntos = response.remainingPoints;
+          this.storeOrderService.actualizarContador(0);
+          this.router.navigate(['/profile'], {
+            queryParams: { compra: 'tienda', codigo: response.purchaseCode }
+          });
         },
         error: (err) => {
           console.error(err);
-          alert("No se pudo realizar la compra.");
+          const detail = typeof err?.error === 'string' ? err.error : err?.error?.message;
+          alert(detail || 'No se pudo realizar la compra con puntos.');
         }
       });
 
   }
 }
-

@@ -13,6 +13,8 @@ import { CinemaService } from '../../services/cinema/cinema-service';
 import { Sala } from '../../models/sala';
 import { FunctionService } from '../../services/function/function-service';
 import { Funcion } from '../../models/funcion';
+import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
+import { StoreOrderList } from '../../models/StoreModels/storeOrderList';
 
 interface EditUser {
   name: string;
@@ -34,6 +36,8 @@ interface EditUser {
 export class  Perfil implements OnInit {
 
   showTickets = false;
+  showPurchases = false;
+  purchases: StoreOrderList[] = [];
   tickets: Ticket[] = [];
   selectedIndex: number | null = null;
   selectedTicket: Ticket | null = null;
@@ -67,31 +71,67 @@ export class  Perfil implements OnInit {
     private errorHandlerService: ErrorHandler,
     private cinemaService: CinemaService,
     private functionService: FunctionService,
+    private storeOrderService: StoreOrderService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadProfile();
-    this.chequearCompraExitosa();
+    this.checkSuccessfulPurchase();
   }
 
-  // Si venimos del redirect de Mercado Pago tras una compra confirmada,
-  // avisamos con un toast y abrimos directamente la entrada recién comprada.
-  private chequearCompraExitosa(): void {
-    if (this.route.snapshot.queryParamMap.get('compra') !== 'exito') return;
+  private checkSuccessfulPurchase(): void {
+    const purchaseType = this.route.snapshot.queryParamMap.get('compra');
 
-    this.toastr.success('¡Compra confirmada! Ya podés ver tu entrada abajo.');
+    if (purchaseType === 'tienda') {
+      this.toastr.success('¡Compra de tienda confirmada! Ya podés verla abajo.');
+      this.clearPurchaseQueryParams();
+      this.openStorePurchases();
+      return;
+    }
 
-    // Limpia el query param para que un refresh no vuelva a disparar el toast
+    if (purchaseType === 'exito') {
+      this.toastr.success('¡Compra confirmada! Ya podés ver tu entrada abajo.');
+      this.clearPurchaseQueryParams();
+      this.openLatestTicket();
+    }
+  }
+
+  private clearPurchaseQueryParams(): void {
     this.router.navigate([], { relativeTo: this.route, queryParams: {}, replaceUrl: true });
-
-    this.abrirUltimaEntradaComprada();
   }
 
-  private abrirUltimaEntradaComprada(): void {
+  togglePurchases(): void {
+    this.showPurchases = !this.showPurchases;
+    this.showTickets = false;
+    this.editMode = false;
+    if (this.showPurchases && this.purchases.length === 0) this.loadStorePurchases();
+  }
+
+  closePurchases(): void {
+    this.showPurchases = false;
+  }
+
+  private openStorePurchases(): void {
+    this.showTickets = false;
     this.editMode = false;
     this.showPasswordForm = false;
+    this.showPurchases = true;
+    this.loadStorePurchases();
+  }
+
+  private loadStorePurchases(): void {
+    this.storeOrderService.getHistory().subscribe({
+      next: (data) => this.purchases = data,
+      error: (err) => console.error('Error cargando compras de tienda:', err)
+    });
+  }
+
+  private openLatestTicket(): void {
+    this.editMode = false;
+    this.showPasswordForm = false;
+    this.showPurchases = false;
     this.showTickets = true;
 
     this.userService.getMyTickets().subscribe({
@@ -139,6 +179,7 @@ export class  Perfil implements OnInit {
     if (this.editMode) {
       // cierro tickets
       this.showTickets = false;
+      this.showPurchases = false;
       this.selectedIndex = null;
       this.selectedTicket = null;
       this.selectedSala = null;
@@ -265,6 +306,7 @@ export class  Perfil implements OnInit {
 
   toggleTickets(): void {
     this.showTickets = !this.showTickets;
+    this.showPurchases = false;
 
     if (this.showTickets) {
       // Al abrir tickets, cierro edición
