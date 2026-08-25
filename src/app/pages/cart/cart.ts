@@ -21,7 +21,6 @@ export class Cart implements OnInit {
 
   usuarioLogueado: boolean = false;
   cart: any = null;
-  confirmacion: string | null = null;
   // Signal para mostrar mensajes de error en la UI
   errorMessage: WritableSignal<string | null> = signal(null);
   loading: boolean = true;
@@ -76,12 +75,6 @@ export class Cart implements OnInit {
     // Limpia errores previos de la señal o variable
     this.errorMessage.set(null);
 
-    // 1. Validaciones de seguridad y negocio
-    if (this.confirmacion !== 'compra') {
-      this.errorMessage.set('Debe aceptar los términos y condiciones antes de terminar.');
-      return;
-    }
-
     if (!this.cart) {
       console.error('No hay datos de compra disponibles.');
       return;
@@ -121,22 +114,12 @@ export class Cart implements OnInit {
 
     this.paymentStoreService.crearPreferencia(payload).subscribe({
       next: (response) => {
-
-
-        // Inicializar Mercado Pago una sola vez
-        const mp = this.paymentStoreService.inicializarMercadoPago();
-
-        // Renderizar el botón/ventana de pago
-        mp.bricks().create('wallet', 'wallet_container', {
-          initialization: { preferenceId: response.preferenceId },
-          customization: { texts: { valueProp: 'smart_option' } },
-        });
-
-        // Redirige a Mercado Pago
+        // Igual que en la compra de tickets: redirección directa al checkout.
         window.location.href = response.initPoint;
       },
       error: (err) => {
         console.error('Error al generar la preferencia:', err);
+        this.errorMessage.set('No pudimos iniciar el pago. Intentá nuevamente.');
       }
     });
   }
