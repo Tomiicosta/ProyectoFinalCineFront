@@ -19,6 +19,7 @@ export class Register implements OnInit {
 
   tipoDeCampo : boolean = false;
   tipoDeCampoConfirm: boolean = false;
+  cargando: boolean = false;
 
   readonly ruta_ojo_cerrado = "img/password/eye-closed.svg";
   readonly ruta_ojo_abierto = "img/password/eye-open-svgrepo-com.svg";
@@ -85,7 +86,8 @@ export class Register implements OnInit {
   onSubmit(): void {
 
     if (this.formRegister.valid) {
-      
+
+      this.cargando = true;
       const userData: Registro = this.formRegister.value;
 
       this.authService.register(userData).subscribe({
@@ -104,6 +106,7 @@ export class Register implements OnInit {
 
         },
         error: (error: HttpErrorResponse) => {
+          this.cargando = false;
           this.errorHandlerService.handleHttpError(error);
         }
       });

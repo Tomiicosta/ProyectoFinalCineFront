@@ -100,19 +100,19 @@
         <p><strong>Título:</strong> {{ selectedTicket.movieTitle }}</p>
         <p><strong>Sala:</strong> {{ selectedSala?.name }}</p>
         <p>
-          <strong>Fecha:</strong>
-          {{ selectedFuncion ? formatearFecha(selectedFuncion.date) : '-' }}
+          <strong>Fecha y hora:</strong>
+          {{ selectedFuncion ? formatearFecha(selectedFuncion.date) : '-' }} a las {{ selectedFuncion ? formatearHora(selectedFuncion.time) : '-' }} hs
         </p>
+        <p><strong>Precio final:</strong> $ {{ selectedTicket.totalAmount }}</p>
         <p>
-          <strong>Horario:</strong>
-          {{ selectedFuncion ? formatearHora(selectedFuncion.time) : '-' }}
+          <strong>Comprado el:</strong>
+          {{ formatearFecha(selectedTicket.purchaseDate) }} a las {{ formatearHora(selectedTicket.purchaseTime) }} hs
         </p>
-        <p><strong>Precio Total:</strong> $ {{ selectedTicket.totalAmount }}</p>
 
-        <p><strong>Butacas:</strong></p>
+        <p><strong>Butacas seleccionadas:</strong></p>
         <ul>
           @for (code of seatCodes; track $index) {
-          <li>{{ code }}</li>
+          <li>{{ formatearButaca(code) }}</li>
           }
         </ul>
       </div>

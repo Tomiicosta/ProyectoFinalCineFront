@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -13,7 +13,11 @@ import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
 })
-export class ResetPassword implements OnInit {
+export class ResetPassword implements OnInit, OnDestroy {
+
+  cargando: boolean = false;
+  exito: boolean = false;
+  private redirectTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
   tipoDeCampo: boolean = false;
   tipoDeCampoConfirm: boolean = false;
@@ -70,15 +74,23 @@ export class ResetPassword implements OnInit {
       return;
     }
 
+    this.cargando = true;
+
     this.authService.resetPassword(this.token, this.password.value).subscribe({
       next: () => {
-        this.toastr.success('¡Contraseña actualizada con éxito!');
-        this.router.navigate(['/login']);
+        this.cargando = false;
+        this.exito = true;
+        this.redirectTimeoutId = setTimeout(() => this.router.navigate(['/login']), 4500);
       },
       error: (error: HttpErrorResponse) => {
+        this.cargando = false;
         this.errorHandlerService.handleHttpError(error);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.redirectTimeoutId);
   }
 
   verContrasenia(): void {

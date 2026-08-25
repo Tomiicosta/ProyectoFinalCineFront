@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { User } from '../../models/user';
 import { UserService } from '../../services/user/user';
@@ -10,11 +11,8 @@ import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
 import { Ticket } from '../../models/ticket';
 import { CinemaService } from '../../services/cinema/cinema-service';
 import { Sala } from '../../models/sala';
-import { SeatService } from '../../services/seat-service';
-import { Butaca } from '../../models/butaca';
 import { FunctionService } from '../../services/function/function-service';
 import { Funcion } from '../../models/funcion';
-import { ActivatedRoute, Router } from '@angular/router';
 import { StoreOrderService } from '../../services/StoreOrder/store-order-service';
 import { StoreOrderList } from '../../models/StoreModels/storeOrderList';
 
@@ -72,23 +70,36 @@ export class  Perfil implements OnInit {
     private toastr: ToastrService,
     private errorHandlerService: ErrorHandler,
     private cinemaService: CinemaService,
-    private seatService: SeatService,
     private functionService: FunctionService,
     private storeOrderService: StoreOrderService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
-  
+
   ngOnInit(): void {
     this.loadProfile();
     this.checkSuccessfulPurchase();
   }
 
   private checkSuccessfulPurchase(): void {
-    if (this.route.snapshot.queryParamMap.get('compra') !== 'tienda') return;
-    this.toastr.success('¡Compra de tienda confirmada! Ya podés verla abajo.');
+    const purchaseType = this.route.snapshot.queryParamMap.get('compra');
+
+    if (purchaseType === 'tienda') {
+      this.toastr.success('¡Compra de tienda confirmada! Ya podés verla abajo.');
+      this.clearPurchaseQueryParams();
+      this.openStorePurchases();
+      return;
+    }
+
+    if (purchaseType === 'exito') {
+      this.toastr.success('¡Compra confirmada! Ya podés ver tu entrada abajo.');
+      this.clearPurchaseQueryParams();
+      this.openLatestTicket();
+    }
+  }
+
+  private clearPurchaseQueryParams(): void {
     this.router.navigate([], { relativeTo: this.route, queryParams: {}, replaceUrl: true });
-    this.openStorePurchases();
   }
 
   togglePurchases(): void {
@@ -114,6 +125,30 @@ export class  Perfil implements OnInit {
     this.storeOrderService.getHistory().subscribe({
       next: (data) => this.purchases = data,
       error: (err) => console.error('Error cargando compras de tienda:', err)
+    });
+  }
+
+  private openLatestTicket(): void {
+    this.editMode = false;
+    this.showPasswordForm = false;
+    this.showPurchases = false;
+    this.showTickets = true;
+
+    this.userService.getMyTickets().subscribe({
+      next: (data) => {
+        this.tickets = data;
+        if (this.tickets.length === 0) return;
+
+        // La entrada recién comprada es la de mayor ID (la más reciente)
+        let ultimoIndex = 0;
+        this.tickets.forEach((t, i) => {
+          if (t.id > this.tickets[ultimoIndex].id) ultimoIndex = i;
+        });
+
+        this.selectedIndex = ultimoIndex;
+        this.onSelectChange();
+      },
+      error: (err) => console.error('Error cargando tickets:', err)
     });
   }
   
@@ -324,21 +359,9 @@ export class  Perfil implements OnInit {
       error: (err) => console.error('Error cargando función:', err)
     });
 
-    //Pedir cada butaca por id y armar "R{row}C{column}"
-    this.seatCodes = []; // reseteamos
+    // El backend ya manda las butacas formateadas como "R{fila}C{columna}"
+    this.seatCodes = [...this.selectedTicket.seats];
 
-    // Asumo que selectedTicket.seats es number[] con los IDs de las butacas
-    this.selectedTicket.seats.forEach((seatId: number) => {
-      this.seatService.getSeat(seatId).subscribe({
-        next: (seat: Butaca) => {
-          const code = `R${seat.seatRowNumber}C${seat.seatColumnNumber}`;
-          this.seatCodes.push(code);
-        },
-        error: (err) => console.error('Error cargando butaca', seatId, err)
-      });
-    });
-
-    
   }
 
 
@@ -358,6 +381,16 @@ export class  Perfil implements OnInit {
 
   formatearHora(hora: string): string {
     // asumiendo "HH:mm:ss"
-    return hora.slice(0, 5);  
+    return hora.slice(0, 5);
+  }
+
+  // "R6C15" -> "Fila F Butaca 15"
+  formatearButaca(codigo: string): string {
+    const match = codigo.match(/^R(\d+)C(\d+)$/i);
+    if (!match) return codigo;
+
+    const [, fila, columna] = match;
+    const filaLetra = String.fromCharCode(64 + Number(fila)); // 1-based -> 1 => 'A'
+    return `Fila ${filaLetra} · Butaca ${columna}`;
   }
 }
