@@ -44,11 +44,8 @@ export class Cart implements OnInit {
 
   eliminarProducto(itemId: number): void {
     this.storeOrderService.deleteItemFromCart(itemId).subscribe({
-      next: () => {
-        this.cart.items = this.cart.items.filter((item: any) => item.id !== itemId);
-
-        this.storeOrderService.actualizarContador(this.cart.items.length);
-        this.recalcularTotales();
+      next: (cartActualizado) => {
+        this.cart = cartActualizado;
       },
       error: (err) => {
         console.error('Error al eliminar el producto', err);
@@ -57,14 +54,26 @@ export class Cart implements OnInit {
     });
   }
 
-  recalcularTotales() {
-    const itemsValidos = this.cart.items.filter((item: OrderItems) => item && item.historicalPrice !== undefined);
+  incrementarCantidad(item: OrderItems): void {
+    this.cambiarCantidad(item, item.quantity + 1);
+  }
 
-    this.cart.totalAmount = itemsValidos.reduce((acc: number, item: OrderItems) =>
-      acc + (item.historicalPrice * item.quantity), 0);
+  decrementarCantidad(item: OrderItems): void {
+    if (item.quantity <= 1) return; // para bajar de 1, se usa el botón de eliminar
+    this.cambiarCantidad(item, item.quantity - 1);
+  }
 
-    this.cart.totalAmountInPoints = itemsValidos.reduce((acc: number, item: OrderItems) =>
-      acc + (item.historicalPriceInPoints * item.quantity), 0);
+  private cambiarCantidad(item: OrderItems, nuevaCantidad: number): void {
+    this.storeOrderService.updateItemQuantity(item.id, nuevaCantidad).subscribe({
+      next: (cartActualizado) => {
+        this.cart = cartActualizado;
+      },
+      error: (err) => {
+        console.error('Error al actualizar la cantidad', err);
+        const detail = typeof err?.error === 'string' ? err.error : err?.error?.message;
+        alert(detail || 'No se pudo actualizar la cantidad.');
+      }
+    });
   }
 
   iniciarPago(): void {

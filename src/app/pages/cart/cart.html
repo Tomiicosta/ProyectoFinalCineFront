@@ -11,7 +11,14 @@
             <h3>{{ item.productName }}</h3>
             <img class="imagenProducto" [src]="item.imageURL" [alt]="item.productName">
             <p class="item-price">Precio unitario: ${{ item.historicalPrice }}</p>
-            <p class="item-quantity">Cantidad: {{ item.quantity }}</p>
+            <div class="item-quantity">
+              <span>Cantidad:</span>
+              <div class="quantity-stepper">
+                <button type="button" class="btn-qty" (click)="decrementarCantidad(item)" [disabled]="item.quantity <= 1">−</button>
+                <span class="qty-valor">{{ item.quantity }}</span>
+                <button type="button" class="btn-qty" (click)="incrementarCantidad(item)">+</button>
+              </div>
+            </div>
             <p class="item-subtotal">Subtotal: ${{ item.historicalPrice * item.quantity }}</p>
           </div>
 
@@ -32,16 +39,21 @@
         </div>
 
         <hr>
+        
         <div class="summary-total">
-          <span>Total a Pagar:</span>
-          <span class="total-price">${{ cart.totalAmount }}</span>
+          
+          <div class="total-price">
+            <span>Total a pagar: </span>
+            <span>$ {{ cart.totalAmount }} ARS</span>
+          </div>
           <div class="total-price" *ngIf="cart.totalAmountInPoints > 0">
             <span>Valor en puntos: </span>
-            <span class="points-text">{{ cart.totalAmountInPoints }} pts</span>
+            <span class="points-text">{{ cart.totalAmountInPoints }} puntos</span>
           </div>
         </div>
 
-        <button id="btn-step" class="btn-pago" (click)="iniciarPago()" [disabled]="!usuarioLogueado">
+        <div class="summary-btns">
+          <button id="btn-step" class="btn-pago" (click)="iniciarPago()" [disabled]="!usuarioLogueado">
           <img id="img-btn"
             src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.20.1/mercadopago/logo__small.png"
             alt="Mercado Pago" />
@@ -58,6 +70,8 @@
           }}
 
         </button>
+        </div>
+        
       </div>
 
     </div>

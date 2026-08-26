@@ -52,7 +52,22 @@ export class StoreOrderService {
   
 
   // DELETE
-  deleteItemFromCart(itemId: number): Observable<void> {
-    return this.http.delete<void>(`/api/store/cart/items/${itemId}`);
+  deleteItemFromCart(itemId: number): Observable<StoreOrderDetail> {
+    return this.http.delete<StoreOrderDetail>(`/api/store/cart/items/${itemId}`).pipe(
+      tap((cart: StoreOrderDetail) => {
+        const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+        this.cartItemCount.next(totalItems);
+      })
+    );
+  }
+
+  // PUT
+  updateItemQuantity(itemId: number, quantity: number): Observable<StoreOrderDetail> {
+    return this.http.put<StoreOrderDetail>(`/api/store/cart/items/${itemId}`, { quantity }).pipe(
+      tap((cart: StoreOrderDetail) => {
+        const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+        this.cartItemCount.next(totalItems);
+      })
+    );
   }
 }
