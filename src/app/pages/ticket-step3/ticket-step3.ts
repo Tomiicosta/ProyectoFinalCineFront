@@ -12,6 +12,7 @@ import { Sala } from '../../models/sala';
 import { UserService } from '../../services/user/user';
 import { User } from '../../models/user';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/AuthService/auth-service';
 
 @Component({
   selector: 'app-ticket-step3',
@@ -58,7 +59,8 @@ export class TicketStep3 implements OnInit {
     private functionService: FunctionService,
     private cinemaService: CinemaService,
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
 
   ) { }
 
@@ -194,10 +196,17 @@ export class TicketStep3 implements OnInit {
 
     console.log('COMPRA PREVIA GUARDADA', this.ticketService.getCompra());
 
-    // 2. Intentar obtener usuario
+    // 2. Chequeo local primero: si ni siquiera hay sesión, ni tiene sentido
+    // llamar al backend a buscar el email. Evita depender de adivinar qué
+    // status HTTP devuelve el server (401 vs 403) para decidir si mostrar el modal.
+    if (!this.authService.isLoggedIn()) {
+      this.mostrarModalLogin = true;
+      return;
+    }
+
+    // 3. Intentar obtener usuario (para completar el email de la compra)
     this.userService.getMyProfile().subscribe({
       next: (user) => {
-        // Si está logueado
         const compra = this.ticketService.getCompra();
         if (compra) {
           // SETEA EL EMAIL DEL USUARIO
@@ -207,15 +216,13 @@ export class TicketStep3 implements OnInit {
         this.router.navigate(['/ticket/step4']);
       },
       error: (err) => {
-
-        if (err.status === 403) {
-          // SI NO está logueado
-          this.mostrarModalLogin = true;   // muestra el modal
+        if (err.status === 401 || err.status === 403) {
+          // La sesión local decía "logueado" pero el server la rechazó (ej: token vencido)
+          this.mostrarModalLogin = true;
           return;
         }
 
         console.error(err);
-
       }
     });
   }

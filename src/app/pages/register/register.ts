@@ -95,14 +95,10 @@ export class Register implements OnInit {
 
           this.toastr.success("¡Ya estas registrado!");
 
-          if (this.returnUrl) {
-            // Construye URL a donde debe volver
-            this.router.navigate(['/login'], {
-              queryParams: { returnUrl: '/ticket/step4' }
-            });
-          } else {
-            this.router.navigate(['/login']);
-          }
+          // Construye URL a donde debe volver (a donde vino, o "/" por defecto)
+          this.router.navigate(['/login'], {
+            queryParams: { returnUrl: this.returnUrl }
+          });
 
         },
         error: (error: HttpErrorResponse) => {
