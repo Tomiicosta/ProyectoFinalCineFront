@@ -91,6 +91,29 @@
     color: white;
 }
 
+.puntos-disponibles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 30, 30, 0.12);
+  border: 1px solid rgba(255, 30, 30, 0.4);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+
+.puntos-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f5f5f5;
+}
+
+.puntos-valor {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ff4444;
+}
+
 .imagenProducto{
   border-radius: 20px;
   padding: 5px;
