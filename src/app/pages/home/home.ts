@@ -3,6 +3,8 @@ import { MovieService } from '../../services/movie/movie-service';
 import { Router } from '@angular/router';
 import { SlicePipe } from '@angular/common';
 import { ErrorHandler } from '../../services/ErrorHandler/error-handler';
+import { FunctionService } from '../../services/function/function-service';
+import { Funcion } from '../../models/funcion';
 import Movie from '../../models/movie';
 
 @Component({
@@ -14,17 +16,19 @@ import Movie from '../../models/movie';
 export class Home implements OnInit, OnDestroy {
 
   localDate: Date = new Date();
-  indiceActual = 0; 
+  indiceActual = 0;
   autoScrollCartelera!: any;
   autoScrollEstrenos!: any;
+  funciones: Funcion[] = [];
 
   @ViewChild('carruselEstrenos', { static: false }) carruselEstrenos!: ElementRef;
   @ViewChild('carruselCartelera', { static: false }) carruselCartelera!: ElementRef;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     public movieService: MovieService,
-    private errorHandlerService: ErrorHandler
+    private errorHandlerService: ErrorHandler,
+    private functionService: FunctionService
   ) {}
 
   // 🟢 Obtener todas las películas
@@ -32,19 +36,33 @@ export class Home implements OnInit, OnDestroy {
     this.movieService.getMovies().subscribe({
       next: (data) => { this.movieService.moviesCartelera = data  || []},
       error: (e) => { this.errorHandlerService.handleHttpError(e);
-        this.movieService.moviesCartelera = []; 
+        this.movieService.moviesCartelera = [];
       }
     });
   }
 
-  // 🟢 Filtrar próximas películas
-  get upcomingMovies(): Movie[] {
-  const movies = this.movieService.moviesCartelera || [];
+  // 🟢 Obtener todas las funciones (para saber qué películas tienen próximas funciones)
+  getFunciones() {
+    this.functionService.getFunciones().subscribe({
+      next: (data) => { this.funciones = data || []; },
+      error: (e) => { this.funciones = []; }
+    });
+  }
 
-  return movies.filter(movie =>
-    movie?.releaseDate && this.isUpcoming(movie.releaseDate)
-  );
-}
+  // 🟢 Próximos estrenos = películas con al menos una función futura cargada
+  get upcomingMovies(): Movie[] {
+    const movies = this.movieService.moviesCartelera || [];
+
+    const movieIdsConFuncionFutura = new Set(
+      this.funciones
+        .filter(funcion => this.esFuncionFutura(funcion))
+        .map(funcion => funcion.movieId)
+    );
+
+    return movies.filter(movie =>
+      movie?.id !== undefined && movieIdsConFuncionFutura.has(movie.id)
+    );
+  }
 
 
   // 🟢 Ver detalles
@@ -72,10 +90,10 @@ anterior() {
 }
 
 
-  // 🟢 Verificar si la película aún no se estrenó
-  isUpcoming(movieReleaseDate: string): boolean {
-    const release = new Date(movieReleaseDate);
-    return release >= this.localDate;
+  // 🟢 Verificar si una función todavía no pasó
+  private esFuncionFutura(funcion: Funcion): boolean {
+    const fechaHora = new Date(`${funcion.date}T${funcion.time}`);
+    return fechaHora >= this.localDate;
   }
 
   // ==============================
@@ -124,7 +142,8 @@ anterior() {
   // 🕒 Inicialización y auto-scroll
   // ==============================
   ngOnInit() {
-    this.getAllMovies();  
+    this.getAllMovies();
+    this.getFunciones();
 
       setInterval(() => this.siguiente(), 8000);
 

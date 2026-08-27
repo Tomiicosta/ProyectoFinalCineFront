@@ -20,6 +20,13 @@
         }
       </div>
       <aside class = "sidebar-categorias">
+        @if (usuario) {
+          <div class="puntos-disponibles">
+            <span class="puntos-label">Tus puntos</span>
+            <span class="puntos-valor">{{ usuario.puntos }}</span>
+          </div>
+        }
+
         <h3>Categoria</h3>
         <div class="checkbox-group">
             <label><input type="checkbox" name="filtroDisponibles" [(ngModel)] = 'filtroDisponibles' (change)="actualizarFiltroDisponibles()">Todos los productos</label>

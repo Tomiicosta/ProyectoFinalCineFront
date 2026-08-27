@@ -8,6 +8,8 @@ import { StoreOrderService } from '../../services/StoreOrder/store-order-service
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/AuthService/auth-service';
+import { UserService } from '../../services/user/user';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-store',
@@ -23,8 +25,9 @@ export class Store {
   vistaActual: 'disponibles' | 'no disponibles' = 'disponibles';
   selectedProducto: any | null = null;
   detalleProducto: Producto | null = null;
+  usuario: User | null = null;
 
-  constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler, private router: Router, private authService: AuthService){}
+  constructor(public productService: ProductService, private storeOrderService: StoreOrderService, private toastr: ToastrService, private errorHandlerService: ErrorHandler, private router: Router, private authService: AuthService, private userService: UserService){}
 
   verDetalleProducto(producto: Producto) {
     this.router.navigate(['/product-details', producto.id]);
@@ -131,6 +134,16 @@ export class Store {
 
   ngOnInit(): void {
     this.getProductosDisponibles();
+    this.cargarPuntosUsuario();
+  }
+
+  cargarPuntosUsuario(): void {
+    if (!this.authService.isLoggedIn()) return;
+
+    this.userService.getMyProfile().subscribe({
+      next: (data) => { this.usuario = data; },
+      error: (err) => console.error('Error al cargar los puntos del usuario:', err)
+    });
   }
 
 }

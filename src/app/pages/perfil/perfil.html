@@ -142,13 +142,16 @@
             {{ formatearFecha(purchase.createdAtDate) }} a las {{ formatearHora(purchase.createdAtTime) }} hs
           </p>
           <p><strong>Forma de pago:</strong> {{ purchase.paidPoints ? 'Puntos' : 'Mercado Pago' }}</p>
-          <p><strong>Total:</strong> $ {{ purchase.totalAmount }}</p>
+          <p>
+            <strong>Total:</strong>
+            {{ purchase.paidPoints ? (purchase.totalAmountInPoints + ' puntos') : ('$ ' + purchase.totalAmount + ' ARS') }}
+          </p>
 
           <ul>
             @for (item of purchase.items; track item.id) {
             <li>
               <strong>{{ item.productName }}</strong> — {{ item.quantity }} unidad(es),
-              subtotal $ {{ item.subtotal }}
+              subtotal {{ purchase.paidPoints ? (item.subtotalInPoints + ' puntos') : ('$ ' + item.subtotal) }}
             </li>
             }
           </ul>
