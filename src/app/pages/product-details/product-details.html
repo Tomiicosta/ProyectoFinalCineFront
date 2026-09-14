@@ -16,7 +16,7 @@
 
       <div class="price-box">
         <p class="price">Precio: ${{ producto.unitPrice }}</p>
-        <p class="points"> Puntos que suma: {{ producto.priceInPoints }} pts</p>
+        <p class="points"> Valor en puntos: {{ producto.priceInPoints }} pts</p>
       </div>
 
       <p class="stock-info" [ngClass]="{'out-of-stock': producto.stock <= 0}">
